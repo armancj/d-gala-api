@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
-import { ENUM_ENV_NAME } from './common/config/ENUM_ENV_NAME';
+import { EnumEnvName } from './common/config/env-name.enum';
 
 export function AppSwagger(
   app: INestApplication,
@@ -16,7 +16,7 @@ export function AppSwagger(
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(
-    configService.get(ENUM_ENV_NAME.SWAGGER_PREFIX),
+    configService.get(EnumEnvName.SWAGGER_PREFIX),
     app,
     document,
   );

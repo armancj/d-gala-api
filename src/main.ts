@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpExceptionFilter } from './common/interceptors/http-excepción.filtro';
-import { ENUM_ENV_NAME } from './common/config/ENUM_ENV_NAME';
+import { EnumEnvName } from './common/config';
 import { AppSwagger } from './app.swagger';
 import helmet from 'helmet';
 
@@ -15,7 +15,7 @@ async function bootstrap() {
 
   app.enableCors();
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.setGlobalPrefix(configService.get(ENUM_ENV_NAME.GLOBAL_PREFIX));
+  app.setGlobalPrefix(configService.get(EnumEnvName.GLOBAL_PREFIX));
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -26,7 +26,7 @@ async function bootstrap() {
   app.use(helmet());
   AppSwagger(app, configService);
 
-  const port = parseInt(configService.get(ENUM_ENV_NAME.PORT), 10) || 3000;
+  const port = parseInt(configService.get(EnumEnvName.PORT), 10) || 3000;
   await app.listen(port);
   logger.log(`App running at url: ${await app.getUrl()}`);
 

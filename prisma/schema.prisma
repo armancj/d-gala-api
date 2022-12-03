@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  createdAt      DateTime        @default(now())
+  email          String          @unique
+  userName       String?         @unique
+  firstName      String?
+  lastName       String?
+  phone          String?         @unique
+  role           Role            @default(USER)
+  status         UserStatus      @default(ACTIVE)
+  posts          Post[]
+  profile        Profile?
+  emailConfirmed emailConfirmed?
+  deleted        Boolean         @default(false)
+
+  @@unique([firstName, lastName])
+}
+
+model emailConfirmed {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  email     String      @unique
+  code      Int         @unique
+  status    EmailStatus @default(REGISTER_SEND_EMAIL)
+  user      User        @relation(fields: [userId], references: [id])
+  userId    Int         @unique
+}
+
+model Profile {
+  id     Int    @id @default(autoincrement())
+  bio    String
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @unique
+}
+
+model Post {
+  id         Int                 @id @default(autoincrement())
+  createdAt  DateTime            @default(now())
+  title      String
+  published  Boolean?            @default(false)
+  author     User?               @relation(fields: [authorId], references: [id])
+  authorId   Int?
+  categories CategoriesOnPosts[]
+  comments   Comment[] // A post can have many comments
+  keywords   String[] // A scalar list
+}
+
+model Comment {
+  id      Int     @id @default(autoincrement())
+  content String?
+  Post    Post?   @relation(fields: [postId], references: [id]) // A comment can have one post
+  postId  Int?
+}
+
+model Category {
+  id        Int                 @id @default(autoincrement())
+  createdAt DateTime            @default(now())
+  name      String
+  parentId  Int?
+  parent    Category?           @relation("GeneralCategory", fields: [parentId], references: [id])
+  children  Category[]          @relation("GeneralCategory")
+  posts     CategoriesOnPosts[]
+  product   Product[]
+}
+
+model CategoriesOnPosts {
+  id         Int      @id @default(autoincrement())
+  post       Post     @relation(fields: [postId], references: [id])
+  postId     Int // relation scalar field (used in the `@relation` attribute above)
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String
+}
+
+model Product {
+  id         Int           @id @default(autoincrement())
+  createdAt  DateTime      @default(now())
+  name       String
+  content    String
+  quantity   Int           @default(0)
+  status     ProductStatus @default(IN_SUPPLIER)
+  photo      Photo[]
+  category   Category?     @relation(fields: [categoryId], references: [id])
+  categoryId Int?
+}
+
+model Photo {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name      String
+  space     Float
+  height    Int
+  width     Int
+  url       String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int      @unique
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUADMIN
+  WORKER
+}
+
+enum UserStatus {
+  ACTIVE
+  DEACTIVE
+}
+
+enum EmailStatus {
+  REGISTER_SEND_EMAIL
+  EMAIL_VALID
+  CHANGE_EMAIL
+}
+
+enum ProductStatus {
+  IN_SUPPLIER
+  IN_FALT
+  IN_COMPENSE
+}

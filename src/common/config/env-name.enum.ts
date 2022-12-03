@@ -1,4 +1,4 @@
-export enum ENUM_ENV_NAME {
+export enum EnumEnvName {
   SWAGGER_PREFIX = 'SWAGGER_PREFIX',
   GLOBAL_PREFIX = 'GLOBAL_PREFIX',
   PORT = 'PORT',
