@@ -29,13 +29,14 @@ model User {
 }
 
 model emailConfirmed {
-  id        Int         @id @default(autoincrement())
-  createdAt DateTime    @default(now())
-  email     String      @unique
-  code      Int         @unique
-  status    EmailStatus @default(REGISTER_SEND_EMAIL)
-  user      User        @relation(fields: [userId], references: [id])
-  userId    Int         @unique
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  email        String      @unique
+  code         Int         @unique
+  codeExpireAt DateTime
+  status       EmailStatus @default(REGISTER_SEND_EMAIL)
+  user         User        @relation(fields: [userId], references: [id])
+  userId       Int         @unique
 }
 
 model Profile {

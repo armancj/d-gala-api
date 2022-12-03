@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
-import { PrismaService } from './prisma.service/prisma.service';
 import { UserModule } from './user/user.module';
+import { CommonModule } from './common/common.module';
+import { PrismaModule } from './prisma/prisma.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -16,12 +17,13 @@ import * as Joi from 'joi';
         PORT: Joi.number().default(3000),
         SWAGGER_PREFIX: Joi.string().required(),
         GLOBAL_PREFIX: Joi.string().required(),
-        DATABASE_URL: Joi.link().required(),
+        DATABASE_URL: Joi.string().required(),
       }),
     }),
     UserModule,
+    CommonModule,
+    PrismaModule,
   ],
   controllers: [AppController],
-  providers: [PrismaService],
 })
 export class AppModule {}
