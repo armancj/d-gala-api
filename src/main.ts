@@ -1,8 +1,39 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { HttpExceptionFilter } from './common/interceptors/http-excepción.filtro';
+import { ENUM_ENV_NAME } from './common/config/ENUM_ENV_NAME';
+import { AppSwagger } from './app.swagger';
+import helmet from 'helmet';
 
+declare const module: any;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  const logger = new Logger(bootstrap.name);
+  const configService = app.get(ConfigService);
+
+  app.enableCors();
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.setGlobalPrefix(configService.get(ENUM_ENV_NAME.GLOBAL_PREFIX));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      forbidNonWhitelisted: true,
+      enableDebugMessages: true,
+    }),
+  );
+  app.use(helmet());
+  AppSwagger(app, configService);
+
+  const port = parseInt(configService.get(ENUM_ENV_NAME.PORT), 10) || 3000;
+  await app.listen(port);
+  logger.log(`App running at url: ${await app.getUrl()}`);
+
+  //webpack
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
-bootstrap();
+bootstrap().then(() => console.log('Server executed successfully'));
