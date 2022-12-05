@@ -17,13 +17,15 @@ model User {
   userName       String?         @unique
   firstName      String?
   lastName       String?
+  password       String?
+  salt           String?
   phone          String?         @unique
   role           Role            @default(USER)
   status         UserStatus      @default(ACTIVE)
   posts          Post[]
   profile        Profile?
   emailConfirmed emailConfirmed?
-  deleted        Boolean         @default(false) @private
+  deleted        Boolean         @default(false)
 }
 
 model emailConfirmed {
@@ -54,6 +56,7 @@ model Post {
   categories CategoriesOnPosts[]
   comments   Comment[] // A post can have many comments
   keywords   String[] // A scalar list
+  deleted    Boolean             @default(false)
 }
 
 model Comment {
@@ -72,6 +75,7 @@ model Category {
   children  Category[]          @relation("GeneralCategory")
   posts     CategoriesOnPosts[]
   product   Product[]
+  deleted   Boolean             @default(false)
 }
 
 model CategoriesOnPosts {
@@ -94,6 +98,7 @@ model Product {
   photo      Photo[]
   category   Category?     @relation(fields: [categoryId], references: [id])
   categoryId Int?
+  deleted    Boolean       @default(false)
 }
 
 model Photo {

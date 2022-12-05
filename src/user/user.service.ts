@@ -6,7 +6,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UserPayload } from './interface/user-payload';
 import { HandlerError } from '../common/utils/handler-error';
 import { GetAllResponseDto } from '../common/dto';
-import { UserResponse } from "./interface/user.response";
 
 @Injectable()
 export class UserService {
@@ -35,7 +34,7 @@ export class UserService {
     });
   }
 
-  private getSelectUser(user?: UserPayload) {
+  getSelectUser(user?: UserPayload) {
     if (user?.role === Role.ADMIN || Role.SUADMIN) return undefined;
     return {
       id: true,
@@ -76,7 +75,13 @@ export class UserService {
   async userWhereUnique(
     params: Prisma.UserFindUniqueArgs,
   ): Promise<User | null> {
-    return this.prisma.user.findUnique(params);
+    return await this.prisma.user.findUnique(params);
+  }
+
+  async userFindFirstArgs(
+    params: Prisma.UserFindFirstArgsBase,
+  ): Promise<User | null> {
+    return await this.prisma.user.findFirst(params);
   }
 
   async userWhereUniqueOrThrow(

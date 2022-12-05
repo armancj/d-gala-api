@@ -4,6 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { CommonModule } from './common/common.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { PostsModule } from './posts/posts.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -23,6 +25,8 @@ import * as Joi from 'joi';
     UserModule,
     CommonModule,
     PrismaModule,
+    PostsModule,
+    AuthenticationModule,
   ],
   controllers: [AppController],
 })
