@@ -6,6 +6,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UserPayload } from './interface/user-payload';
 import { HandlerError } from '../common/utils/handler-error';
 import { GetAllResponseDto } from '../common/dto';
+import { UserResponse } from "./interface/user.response";
 
 @Injectable()
 export class UserService {

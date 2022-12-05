@@ -12,8 +12,13 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { GetAllQueryDto } from '../common/dto';
+import {
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
+import { UserResponse } from './interface/user.response';
+import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
 
 @ApiTags('User')
 @Controller('user')
@@ -21,12 +26,15 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  @ApiCreatedResponse({ type: CreateUserDto })
+  @ApiCreatedResponse({
+    type: UserResponse,
+  })
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Get()
+  @ApiOkResponse({ type: GetAllResponseDto })
   findAll(@Query() query: GetAllQueryDto) {
     return this.userService.findAll({ skip: +query?.skip, take: +query?.take });
   }
