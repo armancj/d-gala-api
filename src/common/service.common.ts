@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as pcg from 'generate-pincode';
+import { format } from 'date-fns';
 
 @Injectable()
 export class CommonService {
@@ -47,4 +48,18 @@ export class CommonService {
     });
     return cad;
   }
+
+  betweenDates(from: Date | string, to: Date | string) {
+    return Between(
+      format(
+        typeof from === 'string' ? new Date(from) : from,
+        'YYYY-MM-DD HH:MM:SS',
+      ),
+      format(typeof to === 'string' ? new Date(to) : to, 'YYYY-MM-DD HH:MM:SS'),
+    );
+  }
 }
+function Between(arg0: any, arg1: any) {
+    throw new Error('Function not implemented.');
+}
+

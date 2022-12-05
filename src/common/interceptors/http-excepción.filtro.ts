@@ -25,11 +25,11 @@ export class HttpExceptionFilter<T extends HttpException>
     if (httpStatus < HttpStatus.INTERNAL_SERVER_ERROR) {
       error =
         typeof response === 'string'
-          ? { message: exceptionResponse }
+          ? { message: [exceptionResponse] }
           : (exceptionResponse as object);
       this.logger.warn(exception, exception.name);
     } else {
-      error = { statusCode: httpStatus, message: exception.message };
+      error = { statusCode: httpStatus, message: [exception.message] };
       this.logger.error(exception, exception.stack, exception.name);
     }
 

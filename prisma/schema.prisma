@@ -24,8 +24,6 @@ model User {
   profile        Profile?
   emailConfirmed emailConfirmed?
   deleted        Boolean         @default(false)
-
-  @@unique([firstName, lastName])
 }
 
 model emailConfirmed {
