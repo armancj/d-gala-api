@@ -5,6 +5,7 @@ import {
   HttpException,
   HttpStatus,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 
 export function HandlerError(error: any, message?: string) {
@@ -13,6 +14,8 @@ export function HandlerError(error: any, message?: string) {
     if (error.code === EnumPrismaError.UniqueConstraintViolation) {
       throw new ConflictException(message);
     }
+    if (error.code === EnumPrismaError.NOT_FOUND)
+      throw new NotFoundException(error.message);
     throw new InternalServerErrorException(`Prisma error: ${error.message}`);
   }
   throw new HttpException(

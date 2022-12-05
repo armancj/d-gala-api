@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, Role, User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserPayload } from './interface/user-payload';
 import { HandlerError } from '../common/utils/handler-error';
@@ -13,55 +13,114 @@ export class UserService {
   async create(
     createUserDto: CreateUserDto,
     user?: UserPayload,
-  ): Promise<User | void> {
-    return await this.prisma.user
-      .create({ data: { ...createUserDto } })
-      .catch((err) =>
-        HandlerError(err, `Email. username or Phone is duplicated`),
-      );
+  ): Promise<User> {
+    return await this.createUser({
+      data: { ...createUserDto },
+      select: this.getSelectUser(user),
+    });
   }
 
   async findAll(params: {
     skip?: number;
     take?: number;
-    cursor?: Prisma.UserWhereUniqueInput;
-    where?: Prisma.UserWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
+    user?: UserPayload;
   }): Promise<GetAllResponseDto> {
-    const { skip, cursor, where, orderBy } = params;
-    const take = params.take === -1 ? undefined : params.take;
-    const total = await this.prisma.user.count();
-    const data = await this.prisma.user
-      .findMany({
-        skip,
-        take,
-        cursor,
-        where,
-        orderBy,
-      })
-      .catch((err) => HandlerError(err));
+    const { skip, take, user } = params;
+    return await this.users({
+      take,
+      skip,
+      select: this.getSelectUser(user),
+      where: { deleted: false },
+    });
+  }
+
+  private getSelectUser(user?: UserPayload) {
+    if (user?.role === Role.ADMIN || Role.SUADMIN) return undefined;
     return {
-      data,
-      count: (data as User[]).length || 0,
-      total,
+      id: true,
+      createdAt: true,
+      email: true,
+      userName: true,
+      firstName: true,
+      lastName: true,
+      phone: true,
+      role: true,
     };
   }
 
-  async findOne(
-    UserWhereUniqueInput: Prisma.UserWhereUniqueInput,
-  ): Promise<User | void> {
-    return this.prisma.user
-      .findUnique({
-        where: UserWhereUniqueInput,
-      })
-      .catch((err) => HandlerError(err));
+  async findOne(id: number, user?: UserPayload): Promise<User> {
+    return await this.userWhereUniqueOrThrow({
+      where: { id },
+      select: this.getSelectUser(user),
+    });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    const where: Prisma.UserWhereUniqueInput = { id };
+    return this.prisma.user.update({
+      data: updateUserDto,
+      where,
+    });
   }
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  async userWhereUnique(
+    params: Prisma.UserFindUniqueArgs,
+  ): Promise<User | null> {
+    return this.prisma.user.findUnique(params);
+  }
+
+  async userWhereUniqueOrThrow(
+    params: Prisma.UserFindUniqueOrThrowArgs,
+  ): Promise<User> {
+    const user = await this.prisma.user
+      .findUniqueOrThrow(params)
+      .catch((err) =>
+        HandlerError(
+          err,
+          `The user not found in the Site. Please select a other user id`,
+        ),
+      );
+    return user as User;
+  }
+
+  async users(params: Prisma.UserFindManyArgs): Promise<GetAllResponseDto> {
+    if (params?.take === -1) delete params.take;
+    const data = (await this.prisma.user
+      .findMany(params)
+      .catch((err) => HandlerError(err))) as unknown as User[];
+    const total = await this.prisma.user.count({ where: { deleted: false } });
+    const count = data.length;
+    return { data, count, total };
+  }
+
+  async createUser(params: Prisma.UserCreateArgs): Promise<User> {
+    return (await this.prisma.user
+      .create(params)
+      .catch((err) =>
+        HandlerError(err, `Email. username or Phone is duplicated`),
+      )) as unknown as Promise<User>;
+  }
+
+  async updateUser(params: Prisma.UserUpdateArgs): Promise<User> {
+    return (await this.prisma.user
+      .update(params)
+      .catch((err) =>
+        HandlerError(err, `Email. username or Phone is duplicated`),
+      )) as unknown as Promise<User>;
+  }
+
+  async deleteUser(params: Prisma.UserDeleteArgs): Promise<User> {
+    return this.prisma.user
+      .delete(params)
+      .catch((err) =>
+        HandlerError(
+          err,
+          `The user not found in the Site. Please select a other user id`,
+        ),
+      ) as unknown as User;
   }
 }

@@ -23,7 +23,7 @@ model User {
   posts          Post[]
   profile        Profile?
   emailConfirmed emailConfirmed?
-  deleted        Boolean         @default(false)
+  deleted        Boolean         @default(false) @private
 }
 
 model emailConfirmed {
