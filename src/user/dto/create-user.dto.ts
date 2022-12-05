@@ -1,4 +1,3 @@
-import * as Prisma from '@prisma/client';
 import {
   IsEmail,
   IsEnum,
@@ -7,7 +6,6 @@ import {
   IsString,
 } from 'class-validator';
 import { EnumUserRole } from '../enum/user-role.enum';
-import { EnumUserStatus } from '../enum/user-status.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {

@@ -55,16 +55,21 @@ export class UserService {
     });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    const where: Prisma.UserWhereUniqueInput = { id };
-    return this.prisma.user.update({
-      data: updateUserDto,
-      where,
-    });
+  update(id: number, updateUserDto: UpdateUserDto, user?: UserPayload) {
+    let data: Prisma.UserUpdateArgs;
+    if (user?.role === Role.ADMIN || user.role === Role.SUADMIN) {
+      data = { where: { id }, data: { ...updateUserDto } };
+    }
+    if (user?.role === Role.WORKER || user.role === Role.USER) {
+      const { status, role, ...rest } = updateUserDto;
+      data = { where: { id }, data: { ...rest } };
+    }
+    data = { where: { id }, data: { ...updateUserDto } };
+    return this.prisma.user.update(data);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.updateUser({ where: { id }, data: { deleted: true } });
   }
 
   async userWhereUnique(
