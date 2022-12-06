@@ -6,14 +6,19 @@ import { CommonModule } from './common/common.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './authentication/auth.module';
-import * as Joi from 'joi';
+import { SearchModule } from './search/search.module';
+import { JwtAuthGuard, RolesGuard } from './authentication/guard';
+import { ExceptionLoggerFilter } from './common/filter/exception-logger.filter';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import authConfig from './authentication/config/auth.config';
+import searchConfig from './search/config/search.config';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [authConfig],
+      load: [authConfig, searchConfig],
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
           .valid('development', 'production', 'test', 'provision')
@@ -23,6 +28,9 @@ import authConfig from './authentication/config/auth.config';
         GLOBAL_PREFIX: Joi.string().required(),
         DATABASE_URL: Joi.string().required(),
         JWT_SECRET_KEY: Joi.string().required(),
+        ELASTIC_SEARCH_NODE: Joi.string().required(),
+        ELASTIC_SEARCH_USERNAME: Joi.string().required(),
+        ELASTIC_SEARCH_PASSWORD: Joi.string().required(),
       }),
     }),
     UserModule,
@@ -30,7 +38,22 @@ import authConfig from './authentication/config/auth.config';
     PrismaModule,
     PostsModule,
     AuthModule,
+    SearchModule,
   ],
   controllers: [AppController],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: ExceptionLoggerFilter,
+    },
+  ],
 })
 export class AppModule {}

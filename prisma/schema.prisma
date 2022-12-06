@@ -14,10 +14,10 @@ model User {
   id             Int             @id @default(autoincrement())
   createdAt      DateTime        @default(now())
   email          String          @unique
-  userName       String?         @unique
-  firstName      String?
-  lastName       String?
-  password       String?
+  username       String?         @unique
+  firstname      String?
+  lastname       String?
+  password       String
   salt           String?
   phone          String?         @unique
   role           Role            @default(USER)

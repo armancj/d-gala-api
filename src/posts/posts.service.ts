@@ -5,13 +5,33 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Post } from '@prisma/client';
 import { HandlerError } from '../common/utils/handler-error';
 import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
+import { PostsSearchService } from './posts-search/posts-search.service';
 
 @Injectable()
 export class PostsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private postsSearchService: PostsSearchService,
+  ) {}
 
   createPost(createPostDto: CreatePostDto) {
-    return this.createPosts({ data: createPostDto as unknown as Post });
+    return this.createPosts({ data: createPostDto as unknown as Post }).then(
+      async (post) => {
+        await this.postsSearchService.indexPost(post);
+        return post;
+      },
+    );
+  }
+
+  async searchForPosts(text: string) {
+    const results = await this.postsSearchService.search(text);
+    const ids = results.map((result) => result.id);
+    if (!ids.length) {
+      return [];
+    }
+    return this.posts({
+      where: { id: { in: ids } },
+    });
   }
 
   async getAllPosts(query: GetAllQueryDto) {
@@ -23,11 +43,21 @@ export class PostsService {
   }
 
   replacePost(id: number, updatePostDto: UpdatePostDto) {
-    return this.updatePosts({ where: { id }, data: updatePostDto });
+    return this.updatePosts({ where: { id }, data: updatePostDto }).then(
+      async (values) => {
+        await this.postsSearchService.update(values);
+        return values;
+      },
+    );
   }
 
   deletePost(id: number) {
-    return this.updatePosts({ where: { id }, data: { deleted: true } });
+    return this.updatePosts({ where: { id }, data: { deleted: true } }).then(
+      async (value) => {
+        await this.postsSearchService.remove(id);
+        return value;
+      },
+    );
   }
 
   async postWhereUnique(

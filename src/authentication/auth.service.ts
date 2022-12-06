@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { RegisterUserDto } from './dto';
-import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { UserPayload } from '../user/interface/user-payload';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
     const password = await bcrypt.hash(registrationData.password, salt);
     return await this.userService.createUser({
       data: { ...registrationData, password, salt },
-      select: this.userService.getSelectUser(),
+      select: this.userService.getSelectUser(registrationData?.role),
     });
   }
 
@@ -28,21 +29,26 @@ export class AuthService {
     return null;
   }
 
-  async validateUser(userName: string, pass: string): Promise<any> {
+  async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.userService.userFindFirstArgs({
-      where: { OR: [{ userName }, { email: userName }] },
+      where: {
+        OR: [{ username: username }, { email: username }, { phone: username }],
+      },
     });
     if (user && (await this.verifyPassword(pass, user?.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
+      const { password, salt, deleted, ...result } = user;
       return result;
     }
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+  async login(user: UserPayload) {
+    const payload: UserPayload = {
+      ...user,
+    };
     return {
+      payload,
       access_token: this.jwtService.sign(payload),
     };
   }

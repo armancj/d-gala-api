@@ -4,7 +4,7 @@ import { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options
 export default registerAs('auth', () => {
   const dataJwt: JwtModuleOptions = {
     secret: `${process.env.JWT_SECRET_KEY}`,
-    signOptions: { expiresIn: '60s' },
+    signOptions: { expiresIn: '60d' },
   };
   return dataJwt;
 });

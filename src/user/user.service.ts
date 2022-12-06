@@ -16,7 +16,7 @@ export class UserService {
   ): Promise<User> {
     return await this.createUser({
       data: { ...createUserDto },
-      select: this.getSelectUser(user),
+      select: this.getSelectUser(user?.role),
     });
   }
 
@@ -29,29 +29,32 @@ export class UserService {
     return await this.users({
       take,
       skip,
-      select: this.getSelectUser(user),
+      select: this.getSelectUser(user?.role),
       where: { deleted: false },
     });
   }
 
-  getSelectUser(user?: UserPayload) {
-    if (user?.role === Role.ADMIN || Role.SUADMIN) return undefined;
+  getSelectUser(role?: Role) {
+    if (role && [Role.ADMIN, Role.SUADMIN].includes(role as any)) {
+      return undefined;
+    }
     return {
       id: true,
       createdAt: true,
       email: true,
-      userName: true,
-      firstName: true,
-      lastName: true,
+      username: true,
+      firstname: true,
+      lastname: true,
       phone: true,
       role: true,
+      status: true,
     };
   }
 
   async findOne(id: number, user?: UserPayload): Promise<User> {
     return await this.userWhereUniqueOrThrow({
       where: { id },
-      select: this.getSelectUser(user),
+      select: this.getSelectUser(user?.role),
     });
   }
 
@@ -64,7 +67,6 @@ export class UserService {
       const { status, role, ...rest } = updateUserDto;
       data = { where: { id }, data: { ...rest } };
     }
-    data = { where: { id }, data: { ...updateUserDto } };
     return this.prisma.user.update(data);
   }
 
