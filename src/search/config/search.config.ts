@@ -7,6 +7,10 @@ export default registerAs('search', () => {
       username: process.env.ELASTIC_SEARCH_USERNAME,
       password: process.env.ELASTIC_SEARCH_PASSWORD,
     },
+    maxRetries: 5,
+    requestTimeout: 60000,
+    sniffOnStart: true,
+    //name: process.env.ELASTIC_SEARCH_NAME,
   };
   return elasticSearch;
 });

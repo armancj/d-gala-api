@@ -15,7 +15,7 @@ export class UserService {
     user?: UserPayload,
   ): Promise<User> {
     return await this.createUser({
-      data: { ...createUserDto },
+      data: { ...createUserDto, password: '12344567' },
       select: this.getSelectUser(user?.role),
     });
   }

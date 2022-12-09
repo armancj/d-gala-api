@@ -1,10 +1,10 @@
 import { Global, Module } from '@nestjs/common';
 import { SearchService } from './search.service';
-import { SearchController } from './search.controller';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { ConfigService } from '@nestjs/config';
 import { ElasticsearchModuleOptions } from '@nestjs/elasticsearch/dist/interfaces/elasticsearch-module-options.interface';
 import { SearchEnvEnum } from './config/search-env.enum';
+import { SearchController } from './search.controller';
 
 @Global()
 @Module({
@@ -17,6 +17,6 @@ import { SearchEnvEnum } from './config/search-env.enum';
   ],
   controllers: [SearchController],
   providers: [SearchService],
-  exports: [ElasticsearchModule],
+  exports: [],
 })
 export class SearchModule {}
