@@ -4,12 +4,15 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserPayload } from '../user/interface/user-payload';
+import { ConfigService } from '@nestjs/config';
+import { EnumEnvAuth } from './config/env-auth.enum';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
   public async register(registrationData: RegisterUserDto) {
     const salt = await bcrypt.genSalt();
@@ -50,6 +53,30 @@ export class AuthService {
     return {
       payload,
       access_token: this.jwtService.sign(payload),
+      refresh_Token: this.getRefreshToken(user),
     };
+  }
+
+  async getRefreshToken(user: UserPayload) {
+    const payload = { id: user.id };
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: `${this.configService.get<string>(
+        EnumEnvAuth.JWT_SECRET_REFRESH_KEY,
+      )}`,
+      expiresIn: `${this.configService.get<string>(
+        EnumEnvAuth.JWT_TOKEN_REFRESH_EXPIRATION_TIME,
+      )}`,
+    });
+    await this.setCurrentRefreshToken(refreshToken, user.id);
+    return refreshToken;
+  }
+
+  async setCurrentRefreshToken(refreshToken: string, userId: number) {
+    const salt = await bcrypt.genSalt();
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, salt);
+    await this.userService.updateUser({
+      where: { id: userId },
+      data: { currentHashedRefreshToken },
+    });
   }
 }

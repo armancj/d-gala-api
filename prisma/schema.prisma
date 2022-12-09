@@ -11,21 +11,22 @@ datasource db {
 }
 
 model User {
-  id             Int             @id @default(autoincrement())
-  createdAt      DateTime        @default(now())
-  email          String          @unique
-  username       String?         @unique
-  firstname      String?
-  lastname       String?
-  password       String
-  salt           String?
-  phone          String?         @unique
-  role           Role            @default(USER)
-  status         UserStatus      @default(ACTIVE)
-  posts          Post[]
-  profile        Profile?
-  emailConfirmed emailConfirmed?
-  deleted        Boolean         @default(false)
+  id                        Int             @id @default(autoincrement())
+  createdAt                 DateTime        @default(now())
+  email                     String          @unique
+  username                  String?         @unique
+  firstname                 String?
+  lastname                  String?
+  password                  String
+  salt                      String?
+  phone                     String?         @unique
+  role                      Role            @default(USER)
+  status                    UserStatus      @default(ACTIVE)
+  posts                     Post[]
+  profile                   Profile?
+  emailConfirmed            emailConfirmed?
+  deleted                   Boolean         @default(false)
+  currentHashedRefreshToken String?
 }
 
 model emailConfirmed {
