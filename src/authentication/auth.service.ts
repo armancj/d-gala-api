@@ -40,7 +40,7 @@ export class AuthService {
     });
     if (user && (await this.verifyPassword(pass, user?.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, salt, deleted, ...result } = user;
+      const { password, salt, deleted, currentHashedRefreshToken, ...result } = user;
       return result;
     }
     return null;
@@ -53,7 +53,7 @@ export class AuthService {
     return {
       payload,
       access_token: this.jwtService.sign(payload),
-      refresh_Token: this.getRefreshToken(user),
+      refresh_Token: await this.getRefreshToken(user),
     };
   }
 

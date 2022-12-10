@@ -9,4 +9,5 @@ export interface UserPayload {
   phone: string;
   role: Role;
   status: UserStatus;
+  createdAt: Date;
 }
