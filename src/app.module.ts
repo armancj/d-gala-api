@@ -48,10 +48,6 @@ import * as Joi from 'joi';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-    {
-      provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
     {

@@ -3,11 +3,10 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
+import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
 import { EnumEnvName } from './common/config';
 import { AppSwagger } from './app.swagger';
 import helmet from 'helmet';
-import { ExcludeNullInterceptor } from './common/interceptors/exclude-null.interceptor';
-import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
 
 declare const module: any;
 async function bootstrap() {
@@ -17,10 +16,7 @@ async function bootstrap() {
 
   app.enableCors();
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(
-    new ExcludeNullInterceptor(),
-    new LoggingInterceptor(),
-  );
+  app.useGlobalInterceptors(new LoggingInterceptor());
   app.setGlobalPrefix(configService.get(EnumEnvName.GLOBAL_PREFIX));
   app.useGlobalPipes(
     new ValidationPipe({

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { RegisterUserDto } from './dto';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { UserPayload } from '../user/interface/user-payload';
 import { ConfigService } from '@nestjs/config';
 import { EnumEnvAuth } from './config/env-auth.enum';
+import { UserStatus } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +41,8 @@ export class AuthService {
     });
     if (user && (await this.verifyPassword(pass, user?.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, salt, deleted, currentHashedRefreshToken, ...result } = user;
+      const { password, salt, deleted, currentHashedRefreshToken, ...result } =
+        user;
       return result;
     }
     return null;
@@ -78,5 +80,24 @@ export class AuthService {
       where: { id: userId },
       data: { currentHashedRefreshToken },
     });
+  }
+
+  async getUserIfRefreshTokenMatches(refreshToken: string, userId: number) {
+    const user = await this.userService.userFindFirstArgs({
+      where: { id: userId, deleted: false, status: UserStatus.ACTIVE },
+    });
+    if (!user)
+      throw new NotFoundException(
+        `User not found. please contact to administrator`,
+      );
+
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.currentHashedRefreshToken,
+    );
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
   }
 }

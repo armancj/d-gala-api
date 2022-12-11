@@ -1,2 +1,2 @@
 export { RegisterUserDto } from './register-user.dto';
-export { LoginDto } from './login.dto';
+export { LoginDto, RefreshTokenDto } from './login.dto';

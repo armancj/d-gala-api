@@ -7,7 +7,7 @@ export interface UserPayload {
   firstname: string;
   lastname: string;
   phone: string;
-  role: Role;
-  status: UserStatus;
-  createdAt: Date;
+  role: string;
+  status: string;
+  createdAt: string;
 }

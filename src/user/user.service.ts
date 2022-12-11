@@ -34,7 +34,7 @@ export class UserService {
     });
   }
 
-  getSelectUser(role?: Role) {
+  getSelectUser(role?: string) {
     if (role && [Role.ADMIN, Role.SUADMIN].includes(role as any)) {
       return undefined;
     }
