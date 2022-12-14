@@ -9,14 +9,14 @@ import {
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './authentication/guard';
 import { AuthService } from './authentication/auth.service';
-import { Auth, GetUser, Public } from './authentication/decorator';
+import { GetUser, Public } from './authentication/decorator';
 import {
   LoginDto,
   RefreshTokenDto,
   RegisterUserDto,
 } from './authentication/dto';
 import { UserPayload } from './user/interface/user-payload';
-import { EnumUserRole } from './user/enum/user-role.enum';
+import { JwtRefreshAuthGuard } from './authentication/guard/jwt-refresh-auth.guard';
 
 @ApiTags('App')
 @Controller()
@@ -42,20 +42,12 @@ export class AppController {
   async register(@Body() registerUserDto: RegisterUserDto) {
     return this.authService.register(registerUserDto);
   }
-  @Auth(
-    EnumUserRole.ADMIN,
-    EnumUserRole.SUADMIN,
-    EnumUserRole.WORKER,
-    EnumUserRole.USER,
-  )
+
+  @Public()
   @ApiBody({ type: RefreshTokenDto })
+  @UseGuards(JwtRefreshAuthGuard)
   @Get('refresh')
-  refresh(@GetUser() user: UserPayload, @Body() refresh: RefreshTokenDto) {
-    this.authService
-      .getUserIfRefreshTokenMatches(refresh.refresh_token, user.id)
-      .catch((err) => {
-        console.log(err);
-      });
+  refresh(@GetUser() user: UserPayload) {
     return this.authService.login(user);
   }
 }

@@ -6,7 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options.interface';
 import { EnumEnvAuth } from './config/env-auth.enum';
-import { LocalStrategy, JwtStrategy } from './strategies';
+import { LocalStrategy, JwtStrategy, JwtRefreshStrategy } from './strategies';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { LocalStrategy, JwtStrategy } from './strategies';
         config.get<JwtModuleOptions>(EnumEnvAuth.APP_CONFIG_AUTH),
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
