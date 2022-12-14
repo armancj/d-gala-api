@@ -6,8 +6,8 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
-} from '@nestjs/common';
+  Query, CacheInterceptor, UseInterceptors
+} from "@nestjs/common";
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -24,6 +24,7 @@ export class PostsController {
     return this.postsService.createPost(createPostDto);
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Get()
   getAllPosts(
     @Query() query: GetAllQueryDto,

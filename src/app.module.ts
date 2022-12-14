@@ -7,7 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './authentication/auth.module';
 import { SearchModule } from './search/search.module';
-import { JwtAuthGuard, RolesGuard } from './authentication/guard';
+import { JwtAuthGuard } from './authentication/guard';
 import { ExceptionLoggerFilter } from './common/filter/exception-logger.filter';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import authConfig from './authentication/config/auth.config';

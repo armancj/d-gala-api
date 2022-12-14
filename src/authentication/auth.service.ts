@@ -98,7 +98,8 @@ export class AuthService {
 
     if (isRefreshTokenMatching) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, salt, deleted, currentHashedRefreshToken, ...result } = user;
+      const { password, salt, deleted, currentHashedRefreshToken, ...result } =
+        user;
       return result;
     }
   }
