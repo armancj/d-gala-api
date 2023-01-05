@@ -122,6 +122,9 @@ model Photo {
   productId Int      @unique
 }
 
+model log {
+}
+
 enum Role {
   USER
   ADMIN
