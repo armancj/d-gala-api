@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
-import { EnumEnvName } from './common/config/env-name.enum';
+import { EnumEnvName } from './common/config';
 
 export function AppSwagger(
   app: INestApplication,

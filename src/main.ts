@@ -7,6 +7,7 @@ import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
 import { EnumEnvName } from './common/config';
 import { AppSwagger } from './app.swagger';
 import helmet from 'helmet';
+import {DataResponseInterceptor} from "./common/interceptors/data_response.interceptor";
 
 declare const module: any;
 async function bootstrap() {
@@ -16,7 +17,7 @@ async function bootstrap() {
 
   app.enableCors();
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalInterceptors(new LoggingInterceptor(), new DataResponseInterceptor());
   app.setGlobalPrefix(configService.get(EnumEnvName.GLOBAL_PREFIX));
   app.useGlobalPipes(
     new ValidationPipe({
