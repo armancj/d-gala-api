@@ -76,15 +76,16 @@ model Comment {
 }
 
 model Category {
-  id        Int                 @id @default(autoincrement())
-  createdAt DateTime            @default(now())
-  name      String
-  parentId  Int?
-  parent    Category?           @relation("GeneralCategory", fields: [parentId], references: [id])
-  children  Category[]          @relation("GeneralCategory")
-  posts     CategoriesOnPosts[]
-  product   Product[]
-  deleted   Boolean             @default(false)
+  id              Int                 @id @default(autoincrement())
+  createdAt       DateTime            @default(now())
+  name            String
+  generalCategory Boolean             @default(true)
+  parentId        Int?
+  parent          Category?           @relation("GeneralCategory", fields: [parentId], references: [id])
+  children        Category[]          @relation("GeneralCategory")
+  posts           CategoriesOnPosts[]
+  product         Product[]
+  deleted         Boolean             @default(false)
 }
 
 model CategoriesOnPosts {
@@ -120,9 +121,6 @@ model Photo {
   url       String
   product   Product  @relation(fields: [productId], references: [id])
   productId Int      @unique
-}
-
-model log {
 }
 
 enum Role {

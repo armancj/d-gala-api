@@ -6,6 +6,7 @@ import {ApiTags} from "@nestjs/swagger";
 import {Public} from "../authentication/decorator";
 
 @ApiTags('Category')
+@Public()
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -15,7 +16,6 @@ export class CategoryController {
     return this.categoryService.create(createCategoryDto);
   }
 
-  @Public()
   @Get()
   findAll() {
     return this.categoryService.findAll();

@@ -1,26 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { Category } from '@prisma/client';
+import { HandlerError } from '../common/utils/handler-error';
 
 @Injectable()
 export class CategoryService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(private prisma: PrismaService) {}
+  create(createCategoryDto: CreateCategoryDto): Promise<Category> {
+    return this.prisma.category.create({
+      data: createCategoryDto,
+    });
   }
 
-  findAll() {
-    return `This action returns all category`;
+  findAll(): Promise<Category[]> {
+    return this.prisma.category.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} category`;
+    return this.prisma.category
+      .findUniqueOrThrow({
+        where: { id },
+        include: { product: true },
+      })
+      .catch((err) =>
+        HandlerError(
+          err,
+          `The category not found in the Site. Please select a other category id`,
+        ),
+      );
   }
 
   update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+    return this.prisma.category
+      .update({
+        where: { id },
+        data: updateCategoryDto,
+      })
+      .catch((err) =>
+        HandlerError(
+          err,
+          `The category not found in the Site. Please select a other category id`,
+        ),
+      );
   }
 
   remove(id: number) {
-    return `This action removes a #${id} category`;
+    return this.prisma.category.delete({ where: { id } });
   }
 }

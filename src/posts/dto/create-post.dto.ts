@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUrl,
 } from 'class-validator';
 
 export class CreatePostDto {
@@ -26,4 +27,8 @@ export class CreatePostDto {
   @IsString()
   @IsNotEmpty()
   keywords: string[];
+
+  @IsString({ each: true })
+  @IsOptional()
+  content: string[];
 }

@@ -1,4 +1,9 @@
-import {MiddlewareConsumer, Module, NestModule, RequestMethod} from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
@@ -11,7 +16,7 @@ import { JwtAuthGuard } from './authentication/guard';
 import { ExceptionLoggerFilter } from './common/filter/exception-logger.filter';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { CategoryModule } from './category/category.module';
-import {LoggerMiddleware} from "./common/midleware/logger.middleware";
+import { LoggerMiddleware } from './common/midleware/logger.middleware';
 import authConfig from './authentication/config/auth.config';
 import searchConfig from './search/config/search.config';
 import * as Joi from 'joi';
@@ -59,10 +64,10 @@ import * as Joi from 'joi';
     },
   ],
 })
-export class AppModule implements NestModule  {
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-        .apply(LoggerMiddleware)
-        .forRoutes({ path: 'category', method: RequestMethod.GET });
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: 'category', method: RequestMethod.GET });
   }
 }

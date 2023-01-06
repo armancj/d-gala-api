@@ -1,9 +1,14 @@
-interface ProductInterface {
-
-}
-
+import { IsBoolean, IsNumber, IsOptional, IsString, ValidateIf } from "class-validator";
 export class CreateCategoryDto {
-    name: string;
-    parentId: number;
-    productID:   ProductInterface[];
+  @IsString()
+  name: string;
+
+
+  @IsOptional()
+  @IsBoolean()
+  generalCategory: boolean;
+
+  @ValidateIf((params) => params.generalCategory=== false)
+  @IsNumber()
+  parentId: number;
 }

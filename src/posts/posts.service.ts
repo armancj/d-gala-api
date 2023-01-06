@@ -2,23 +2,33 @@ import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, Post } from '@prisma/client';
+import { Prisma, Post, Comment } from '@prisma/client';
 import { HandlerError } from '../common/utils/handler-error';
 import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
 
 @Injectable()
 export class PostsService {
-  constructor(
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   createPost(createPostDto: CreatePostDto) {
-    return this.createPosts({ data: createPostDto as unknown as Post }).then(
-      async (post) => {
-        //await this.postsSearchService.indexPost(post);
-        return post;
+    const { content, ...rest } = createPostDto;
+    const comments: Comment[] = content.map((c) => {
+      return {
+        content: c,
+      } as Comment;
+    });
+    return this.createPosts({
+      data: {
+        ...(rest as unknown as Post),
+        comments: {
+          createMany: { data: comments },
+        },
       },
-    );
+      include: { comments: true },
+    }).then(async (post) => {
+      //await this.postsSearchService.indexPost(post);
+      return post;
+    });
   }
 
   async searchForPosts(text: string) {
@@ -81,7 +91,7 @@ export class PostsService {
   async posts(params: Prisma.PostFindManyArgs): Promise<GetAllResponseDto> {
     if (params?.take === -1) delete params.take;
     const data = (await this.prisma.post
-      .findMany(params)
+      .findMany()
       .catch((err) => HandlerError(err))) as unknown as Post[];
     const total = await this.prisma.post.count({ where: { deleted: false } });
     const count = data.length;
