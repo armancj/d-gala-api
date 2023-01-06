@@ -17,6 +17,7 @@ import { ExceptionLoggerFilter } from './common/filter/exception-logger.filter';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { CategoryModule } from './category/category.module';
 import { LoggerMiddleware } from './common/midleware/logger.middleware';
+import { BrandsModule } from './brands/brands.module';
 import authConfig from './authentication/config/auth.config';
 import searchConfig from './search/config/search.config';
 import * as Joi from 'joi';
@@ -51,6 +52,7 @@ import * as Joi from 'joi';
     AuthModule,
     SearchModule,
     CategoryModule,
+    BrandsModule,
   ],
   controllers: [AppController],
   providers: [

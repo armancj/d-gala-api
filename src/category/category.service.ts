@@ -8,10 +8,14 @@ import { HandlerError } from '../common/utils/handler-error';
 @Injectable()
 export class CategoryService {
   constructor(private prisma: PrismaService) {}
-  create(createCategoryDto: CreateCategoryDto): Promise<Category> {
+  create(createCategoryDto: CreateCategoryDto) {
     return this.prisma.category.create({
       data: createCategoryDto,
-    });
+    }).catch((err) =>
+        HandlerError(
+            err
+        ),
+    );
   }
 
   findAll(): Promise<Category[]> {
