@@ -9,13 +9,11 @@ import { HandlerError } from '../common/utils/handler-error';
 export class CategoryService {
   constructor(private prisma: PrismaService) {}
   create(createCategoryDto: CreateCategoryDto) {
-    return this.prisma.category.create({
-      data: createCategoryDto,
-    }).catch((err) =>
-        HandlerError(
-            err
-        ),
-    );
+    return this.prisma.category
+      .create({
+        data: createCategoryDto,
+      })
+      .catch((err) => HandlerError(err));
   }
 
   findAll(): Promise<Category[]> {

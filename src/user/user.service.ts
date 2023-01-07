@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Prisma, Role, User } from '@prisma/client';
@@ -6,6 +6,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UserPayload } from './interface/user-payload';
 import { HandlerError } from '../common/utils/handler-error';
 import { GetAllResponseDto } from '../common/dto';
+import { EnumUserRole } from './enum/user-role.enum';
 
 @Injectable()
 export class UserService {
@@ -35,10 +36,7 @@ export class UserService {
   }
 
   getSelectUser(role?: string) {
-    if (role && [Role.ADMIN, Role.SUADMIN].includes(role as any)) {
-      return undefined;
-    }
-    return {
+    const data = {
       id: true,
       createdAt: true,
       email: true,
@@ -49,6 +47,14 @@ export class UserService {
       role: true,
       status: true,
     };
+    if (role && [Role.ADMIN, Role.SUADMIN].includes(role as any)) {
+      return {
+        ...data,
+        deleted: true,
+        currentHashedRefreshToken: true,
+      };
+    }
+    return data;
   }
 
   async findOne(id: number, user?: UserPayload): Promise<User> {
@@ -106,8 +112,7 @@ export class UserService {
       .findMany(params)
       .catch((err) => HandlerError(err))) as unknown as User[];
     const total = await this.prisma.user.count({ where: { deleted: false } });
-    const count = data.length;
-    return { data, count, total };
+    return { data, total };
   }
 
   async createUser(params: Prisma.UserCreateArgs): Promise<User> {
@@ -135,5 +140,11 @@ export class UserService {
           `The user not found in the Site. Please select a other user id`,
         ),
       ) as unknown as User;
+  }
+
+  async findOneUserInit(su_admin: EnumUserRole.SUADMIN) {
+    const user = await this.userFindFirstArgs({ where: { role: su_admin } });
+    if (user) throw new ConflictException(`Already have a user super admin`);
+    return true;
   }
 }

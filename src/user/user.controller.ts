@@ -12,13 +12,12 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import {
-  ApiCreatedResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
 import { UserResponse } from './interface/user.response';
 import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
+import { Roles } from '../authentication/decorator';
+import { EnumUserRole } from './enum/user-role.enum';
 
 @ApiTags('User')
 @Controller('user')
@@ -29,6 +28,7 @@ export class UserController {
   @ApiCreatedResponse({
     type: UserResponse,
   })
+  @Roles(EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }

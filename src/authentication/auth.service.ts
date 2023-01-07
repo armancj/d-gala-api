@@ -7,6 +7,7 @@ import { UserPayload } from '../user/interface/user-payload';
 import { ConfigService } from '@nestjs/config';
 import { EnumEnvAuth } from './config/env-auth.enum';
 import { UserStatus } from '@prisma/client';
+import { EnumUserRole } from '../user/enum/user-role.enum';
 
 @Injectable()
 export class AuthService {
@@ -15,12 +16,17 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
-  public async register(registrationData: RegisterUserDto) {
+  public async register(
+    registrationData: RegisterUserDto,
+    userRole?: EnumUserRole.SUADMIN,
+  ) {
+    const role: EnumUserRole = userRole ? userRole : EnumUserRole.USER;
+
     const salt = await bcrypt.genSalt();
     const password = await bcrypt.hash(registrationData.password, salt);
     return await this.userService.createUser({
-      data: { ...registrationData, password, salt },
-      select: this.userService.getSelectUser(registrationData?.role),
+      data: { ...registrationData, password, salt, role },
+      select: this.userService.getSelectUser(role),
     });
   }
 
@@ -102,5 +108,10 @@ export class AuthService {
         user;
       return result;
     }
+  }
+
+  async registerInit(registerUserDto: RegisterUserDto) {
+    await this.userService.findOneUserInit(EnumUserRole.SUADMIN);
+    return this.register(registerUserDto, EnumUserRole.SUADMIN);
   }
 }

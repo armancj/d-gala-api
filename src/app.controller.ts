@@ -17,7 +17,7 @@ import {
 } from './authentication/dto';
 import { UserPayload } from './user/interface/user-payload';
 import { JwtRefreshAuthGuard } from './authentication/guard/jwt-refresh-auth.guard';
-import {Response, Request} from 'express';
+import { Response, Request } from 'express';
 
 @ApiTags('App')
 @Controller()
@@ -39,9 +39,16 @@ export class AppController {
     return this.authService.login(user);
   }
 
+  @Public()
   @Post('auth/register')
   async register(@Body() registerUserDto: RegisterUserDto) {
     return this.authService.register(registerUserDto);
+  }
+
+  @Public()
+  @Post('auth/register_init')
+  async registerCpanel(@Body() registerUserDto: RegisterUserDto) {
+    return this.authService.registerInit(registerUserDto);
   }
 
   @Public()

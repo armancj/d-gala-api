@@ -1,5 +1,5 @@
 export class GetAllResponseDto {
   data: any[];
-  count: number;
+  count?: number;
   total: number;
 }
