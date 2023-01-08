@@ -7,6 +7,7 @@ import { UserPayload } from './interface/user-payload';
 import { HandlerError } from '../common/utils/handler-error';
 import { GetAllResponseDto } from '../common/dto';
 import { EnumUserRole } from './enum/user-role.enum';
+import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 
 @Injectable()
 export class UserService {
@@ -35,7 +36,7 @@ export class UserService {
     });
   }
 
-  getSelectUser(role?: string) {
+  getSelectUser(role?: string, relation?: boolean[]) {
     const data = {
       id: true,
       createdAt: true,
@@ -57,10 +58,10 @@ export class UserService {
     return data;
   }
 
-  async findOne(id: number, user?: UserPayload): Promise<User> {
-    return await this.userWhereUniqueOrThrow({
+  async findOne(id: number, user?: UserPayload) {
+    return await this.userWhereUnique({
       where: { id },
-      select: this.getSelectUser(user?.role),
+      select: { ...this.getSelectUser(user?.role), profile: true },
     });
   }
 
@@ -88,8 +89,15 @@ export class UserService {
 
   async userFindFirstArgs(
     params: Prisma.UserFindFirstArgsBase,
-  ): Promise<User | null> {
-    return await this.prisma.user.findFirst(params);
+  ): Promise<User | void> {
+    return await this.prisma.user
+      .findFirst(params)
+      .catch((err) =>
+        HandlerError(
+          err,
+          `The user not found in the Site. Please select a other user id`,
+        ),
+      );
   }
 
   async userWhereUniqueOrThrow(
@@ -146,5 +154,20 @@ export class UserService {
     const user = await this.userFindFirstArgs({ where: { role: su_admin } });
     if (user) throw new ConflictException(`Already have a user super admin`);
     return true;
+  }
+
+  updateProfileUser(id: number, updateUserProfileDto: UpdateUserProfileDto) {
+    return this.updateUser({
+      where: { id },
+      data: {
+        ...updateUserProfileDto,
+        profile: {
+          connectOrCreate: {
+            where: { userId: id },
+            create: { bio: updateUserProfileDto.bio },
+          },
+        },
+      },
+    });
   }
 }

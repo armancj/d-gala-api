@@ -53,7 +53,7 @@ export class PostsService {
   replacePost(id: number, updatePostDto: UpdatePostDto) {
     return this.updatePosts({ where: { id }, data: updatePostDto }).then(
       async (values) => {
-        //await this.postsSearchService.update(values);
+        //await this.postsSearchService.updateUser(values);
         return values;
       },
     );
@@ -62,7 +62,7 @@ export class PostsService {
   deletePost(id: number) {
     return this.updatePosts({ where: { id }, data: { deleted: true } }).then(
       async (value) => {
-        //await this.postsSearchService.remove(id);
+        //await this.postsSearchService.removeUser(id);
         return value;
       },
     );

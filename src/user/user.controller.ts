@@ -16,8 +16,10 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
 import { UserResponse } from './interface/user.response';
 import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
-import { Roles } from '../authentication/decorator';
+import { GetUser, Roles } from '../authentication/decorator';
 import { EnumUserRole } from './enum/user-role.enum';
+import { UserPayload } from './interface/user-payload';
+import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -29,28 +31,41 @@ export class UserController {
     type: UserResponse,
   })
   @Roles(EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
-  create(@Body() createUserDto: CreateUserDto) {
+  createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Get()
   @ApiOkResponse({ type: GetAllResponseDto })
-  findAll(@Query() query: GetAllQueryDto) {
+  findAllUser(@Query() query: GetAllQueryDto) {
     return this.userService.findAll({ skip: +query?.skip, take: +query?.take });
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOneUser(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findOne(+id);
   }
 
+  @Get('profile')
+  getProfile(@GetUser() user: UserPayload) {
+    return this.userService.findOne(user.id);
+  }
+
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }
 
+  @Patch('update-profile')
+  updateProfile(
+    @GetUser() user: UserPayload,
+    @Body() updateUserProfileDto: UpdateUserProfileDto,
+  ) {
+    return this.userService.updateProfileUser(user.id, updateUserProfileDto);
+  }
+
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  removeUser(@Param('id') id: string) {
     return this.userService.remove(+id);
   }
 }
