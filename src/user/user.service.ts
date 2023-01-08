@@ -156,16 +156,21 @@ export class UserService {
     return true;
   }
 
-  updateProfileUser(id: number, updateUserProfileDto: UpdateUserProfileDto) {
+  updateProfileUser(
+    user: UserPayload,
+    updateUserProfileDto: UpdateUserProfileDto,
+  ) {
+    const { bio, ...rest } = updateUserProfileDto;
     return this.updateUser({
-      where: { id },
+      where: { id: user.id },
+      select: {
+        ...this.getSelectUser(user?.role),
+        profile: { select: { bio: true } },
+      },
       data: {
-        ...updateUserProfileDto,
+        ...rest,
         profile: {
-          connectOrCreate: {
-            where: { userId: id },
-            create: { bio: updateUserProfileDto.bio },
-          },
+          upsert: { create: { bio }, update: { bio } },
         },
       },
     });

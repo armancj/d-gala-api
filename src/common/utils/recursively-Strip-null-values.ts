@@ -1,4 +1,7 @@
+import { isDate } from "class-validator";
+
 export function RecursivelyStripNullValues(value: unknown): unknown {
+  if (isDate(value)) return value;
   if (Array.isArray(value)) {
     return value.map(RecursivelyStripNullValues);
   }
@@ -10,7 +13,5 @@ export function RecursivelyStripNullValues(value: unknown): unknown {
       ]),
     );
   }
-  if (value !== null) {
-    return value;
-  }
+  return value === null ? '' : value;
 }
