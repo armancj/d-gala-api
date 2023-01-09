@@ -8,6 +8,7 @@ import {
   Delete,
   ParseIntPipe,
   Query,
+  Version,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,7 +23,7 @@ import { UserPayload } from './interface/user-payload';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 
 @ApiTags('User')
-@Controller('user')
+@Controller({path:'user', version: '1'})
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

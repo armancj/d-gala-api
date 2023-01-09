@@ -20,7 +20,7 @@ import { JwtRefreshAuthGuard } from './authentication/guard/jwt-refresh-auth.gua
 import { Response, Request } from 'express';
 
 @ApiTags('App')
-@Controller()
+@Controller({version: '1'})
 export class AppController {
   constructor(private authService: AuthService) {}
 

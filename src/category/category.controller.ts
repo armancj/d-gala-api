@@ -7,7 +7,7 @@ import {Public} from "../authentication/decorator";
 
 @ApiTags('Category')
 @Public()
-@Controller('category')
+@Controller({path:'category', version: '1'})
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
