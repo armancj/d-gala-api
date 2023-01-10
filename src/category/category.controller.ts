@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, Query} from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import {ApiTags} from "@nestjs/swagger";
 import {Public} from "../authentication/decorator";
+import {GetAllQueryDto} from "../common/dto";
 
 @ApiTags('Category')
 @Public()
@@ -13,12 +14,12 @@ export class CategoryController {
 
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoryService.create(createCategoryDto);
+    return this.categoryService.createCategory(createCategoryDto);
   }
 
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  findAll(@Query() getAllQueryDto: GetAllQueryDto) {
+    return this.categoryService.findAllCategory(getAllQueryDto);
   }
 
   @Get(':id')

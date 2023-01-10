@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { EnumPrismaError } from './prisma-error.enum';
 import {
+  BadRequestException,
   ConflictException,
   HttpException,
   HttpStatus,
@@ -11,16 +12,21 @@ import {
 
 export function HandlerError(error: any, message?: string) {
   const logger = new Logger(HandlerError.name);
-  logger.error(error);
+  logger.error(`${error.message}, code: ${error.code} `);
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     // The .code property can be accessed in a type-safe manner
     if (error.code === EnumPrismaError.UniqueConstraintViolation) {
       throw new ConflictException(message);
     }
+
+    if (error.code === EnumPrismaError.ForeignKeyConstraintFailed) {
+      throw new BadRequestException(message);
+    }
+
     if (error.code === EnumPrismaError.NOT_FOUND)
       throw new NotFoundException(error.message);
 
-    throw new InternalServerErrorException(`Prisma error: ${error.message}`);
+    throw new InternalServerErrorException(`Prisma error: ${error.message}, code:${error.code}`);
   }
   throw new HttpException(
     error.message,
