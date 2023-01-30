@@ -4,46 +4,35 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
+import { join } from 'path';
+import { JwtAuthGuard } from './authentication/guard';
+import { AppController } from './app.controller';
+import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { CommonModule } from './common/common.module';
-import { PrismaModule } from './prisma/prisma.module';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './authentication/auth.module';
 import { SearchModule } from './search/search.module';
-import { JwtAuthGuard } from './authentication/guard';
 import { ExceptionLoggerFilter } from './common/filter/exception-logger.filter';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { CategoryModule } from './category/category.module';
 import { LoggerMiddleware } from './common/midleware/logger.middleware';
 import { BrandsModule } from './brands/brands.module';
+import { validationSchema } from './config/validation.schema';
 import authConfig from './authentication/config/auth.config';
 import searchConfig from './search/config/search.config';
-import * as Joi from 'joi';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [authConfig, searchConfig],
-      validationSchema: Joi.object({
-        NODE_ENV: Joi.string()
-          .valid('development', 'production', 'test', 'provision')
-          .default('development'),
-        PORT: Joi.number().default(3000),
-        SWAGGER_PREFIX: Joi.string().required(),
-        GLOBAL_PREFIX: Joi.string().required(),
-        DATABASE_URL: Joi.string().required(),
-        JWT_SECRET_KEY: Joi.string().required(),
-        JWT_SECRET_REFRESH_KEY: Joi.string().required(),
-        JWT_TOKEN_EXPIRATION_TIME: Joi.string().required(),
-        JWT_TOKEN_REFRESH_EXPIRATION_TIME: Joi.string().required(),
-        ELASTIC_SEARCH_NODE: Joi.string().required(),
-        ELASTIC_SEARCH_USERNAME: Joi.string().required(),
-        ELASTIC_SEARCH_PASSWORD: Joi.string().required(),
-        ELASTIC_SEARCH_NAME: Joi.string().required(),
-      }),
+      validationSchema,
     }),
     UserModule,
     CommonModule,
