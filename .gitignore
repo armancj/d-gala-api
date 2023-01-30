@@ -38,4 +38,4 @@ lerna-debug.log*
 *.env
 
 # POSTGRES - DATA SAFE
-/.postgres_db
+/postgres_db
