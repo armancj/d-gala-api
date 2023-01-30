@@ -23,7 +23,7 @@ import { UserPayload } from './interface/user-payload';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 
 @ApiTags('User')
-@Controller({path:'user', version: '1'})
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

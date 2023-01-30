@@ -8,7 +8,7 @@ import {GetAllQueryDto} from "../common/dto";
 
 @ApiTags('Category')
 @Public()
-@Controller({path:'category', version: '1'})
+@Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 

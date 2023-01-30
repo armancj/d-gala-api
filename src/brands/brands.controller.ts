@@ -5,7 +5,7 @@ import { UpdateBrandDto } from './dto/update-brand.dto';
 import {ApiTags} from "@nestjs/swagger";
 
 @ApiTags('Brands')
-@Controller({path:'brands', version: '1'})
+@Controller('brands')
 export class BrandsController {
   constructor(private readonly brandsService: BrandsService) {}
 

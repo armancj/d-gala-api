@@ -2,10 +2,10 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { SearchService } from './search.service';
 import { Public } from '../authentication/decorator';
 import { DataBodySearchDto } from './dto/data-body-search.dto';
-import {ApiTags} from "@nestjs/swagger";
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Search')
-@Controller({path:'search', version: '1'})
+@Controller('search')
 export class SearchController {
   constructor(private readonly search: SearchService) {}
 
