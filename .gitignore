@@ -37,5 +37,8 @@ lerna-debug.log*
 # IDE - Envirotment
 *.env
 
-# POSTGRES - DATA SAFE
+# POSTGRES - DATA SAVE
 /postgres_db
+
+# STORAGE - DATA SAVE
+/storage
