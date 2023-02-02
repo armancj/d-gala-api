@@ -16,4 +16,6 @@ export const validationSchema = Joi.object({
   ELASTIC_SEARCH_USERNAME: Joi.string().required(),
   ELASTIC_SEARCH_PASSWORD: Joi.string().required(),
   ELASTIC_SEARCH_NAME: Joi.string().required(),
+  MINIO_ROOT_USER: Joi.string().required(),
+  MINIO_ROOT_PASSWORD: Joi.string().required(),
 });

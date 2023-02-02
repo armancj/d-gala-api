@@ -5,6 +5,9 @@ services:
     depends_on:
       - db
       - s3
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: d_gala-docker
     container_name: d_gala_app
     restart: always
@@ -20,7 +23,7 @@ services:
 
   db:
     image: postgres
-    restart: always
+    restart: always # necessary since it's failing to start sometimes
     ports:
       - "5432:5432"
     environment:
@@ -31,11 +34,17 @@ services:
       - ./postgres_db:/var/lib/postgresql/data
 
   s3:
-    image: minio/minio
+    image: minio/minio:latest
+    restart: always # necessary since it's failing to start sometimes
+    command: server --address ":9001" --console-address ":9000" /data
+    expose:
+      - "9000"
+      - "9001"
     ports:
       - "9000:9000"
+      - "9001:9001"
     environment:
-      MINIO_ACCESS_KEY: minio_access_key
-      MINIO_SECRET_KEY: minio_secret_key
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     volumes:
       - ./storage/minio:/data

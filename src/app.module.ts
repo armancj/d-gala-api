@@ -22,6 +22,7 @@ import { LoggerMiddleware } from './common/midleware/logger.middleware';
 import { BrandsModule } from './brands/brands.module';
 import { validationSchema } from './config/validation.schema';
 import { SeedModule } from './seed/seed.module';
+import { MinioStorageModule } from './minio-storage/minio-storage.module';
 import authConfig from './authentication/config/auth.config';
 import searchConfig from './search/config/search.config';
 
@@ -44,6 +45,7 @@ import searchConfig from './search/config/search.config';
     CategoryModule,
     BrandsModule,
     SeedModule,
+    MinioStorageModule,
   ],
   controllers: [AppController],
   providers: [
