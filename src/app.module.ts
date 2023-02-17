@@ -17,12 +17,13 @@ import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './authentication/auth.module';
 import { SearchModule } from './search/search.module';
 import { ExceptionLoggerFilter } from './common/filter/exception-logger.filter';
-import { CategoryModule } from './category/category.module';
+import { CategoryModule } from './products/category/category.module';
 import { LoggerMiddleware } from './common/midleware/logger.middleware';
-import { BrandsModule } from './brands/brands.module';
+import { BrandsModule } from './products/brands/brands.module';
 import { validationSchema } from './config/validation.schema';
 import { SeedModule } from './seed/seed.module';
 import { MinioStorageModule } from './minio-storage/minio-storage.module';
+import { ProductsModule } from './products/products.module';
 import authConfig from './authentication/config/auth.config';
 import searchConfig from './search/config/search.config';
 
@@ -46,6 +47,7 @@ import searchConfig from './search/config/search.config';
     BrandsModule,
     SeedModule,
     MinioStorageModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [
