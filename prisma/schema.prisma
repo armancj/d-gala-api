@@ -103,7 +103,10 @@ model Product {
   createdAt  DateTime      @default(now())
   name       String
   content    String
-  quantity   Int           @default(0)
+  slug String
+  gender  GenderType
+  tags          String[]
+  stock   Int           @default(0)
   status     ProductStatus @default(IN_SUPPLIER)
   photo      Photo[]
   category   Category?     @relation(fields: [categoryId], references: [id])
@@ -145,4 +148,11 @@ enum ProductStatus {
   IN_SUPPLIER
   IN_FALT
   IN_COMPENSE
+}
+
+enum GenderType {
+  men
+  women
+  kid
+  unisex
 }
