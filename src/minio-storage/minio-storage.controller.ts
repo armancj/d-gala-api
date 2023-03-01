@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { MinioStorageService } from './minio-storage.service';
 import { CreateMinioStorageDto } from './dto/create-minio-storage.dto';
 import { UpdateMinioStorageDto } from './dto/update-minio-storage.dto';
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Storage')
 @Controller('minio-storage')
 export class MinioStorageController {
   constructor(private readonly minioStorageService: MinioStorageService) {}

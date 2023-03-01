@@ -32,7 +32,7 @@ export class CategoryService {
 
   async findAllCategory(getAllQueryDto: GetAllQueryDto) {
     const findCategory: GetAllResponseDto = {
-      data: await this.prisma.category.findMany(),
+      data: await this.prisma.category.findMany({skip: getAllQueryDto.skip, take: getAllQueryDto.take}),
       total: await this.prisma.category.count(),
     };
     return findCategory;

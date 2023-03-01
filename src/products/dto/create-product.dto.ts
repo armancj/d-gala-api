@@ -1,6 +1,6 @@
-import { GenderType } from '../enum/gender-type.enum';
-import { ProductStatus } from '../enum/product-status.enum';
-import {IsArray, IsIn, IsNumber, IsOptional, IsPositive, IsString, MaxLength, Min, MinLength} from 'class-validator';
+import {GenderType} from '../enum/gender-type.enum';
+import {ProductStatus} from '../enum/product-status.enum';
+import {IsArray, IsIn, IsNumber, IsOptional, IsPositive, IsString, MaxLength, Min, MinLength,} from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
@@ -18,7 +18,7 @@ export class CreateProductDto {
   @MinLength(4)
   readonly slug: string;
 
-  @IsIn([GenderType] )
+  @IsIn([GenderType.kid, GenderType.unisex, GenderType.men, GenderType.women])
   readonly gender: GenderType;
 
   @IsArray()
@@ -29,7 +29,7 @@ export class CreateProductDto {
   @Min(0)
   readonly stock: number;
 
-  @IsIn([GenderType] )
+  @IsIn([GenderType])
   readonly status: ProductStatus;
 
   @IsNumber()
