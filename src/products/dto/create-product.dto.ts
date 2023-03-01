@@ -1,6 +1,16 @@
-import {GenderType} from '../enum/gender-type.enum';
-import {ProductStatus} from '../enum/product-status.enum';
-import {IsArray, IsIn, IsNumber, IsOptional, IsPositive, IsString, MaxLength, Min, MinLength,} from 'class-validator';
+import { GenderType } from '../enum/gender-type.enum';
+import { ProductStatus } from '../enum/product-status.enum';
+import {
+  IsArray,
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MaxLength,
+  Min,
+  MinLength,
+} from 'class-validator';
 
 export class CreateProductDto {
   @IsString()

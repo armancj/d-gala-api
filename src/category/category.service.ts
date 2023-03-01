@@ -2,7 +2,6 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Category } from '@prisma/client';
 import { HandlerError } from '../common/utils/handler-error';
 import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
 
@@ -32,7 +31,10 @@ export class CategoryService {
 
   async findAllCategory(getAllQueryDto: GetAllQueryDto) {
     const findCategory: GetAllResponseDto = {
-      data: await this.prisma.category.findMany({skip: getAllQueryDto.skip, take: getAllQueryDto.take}),
+      data: await this.prisma.category.findMany({
+        skip: getAllQueryDto.skip,
+        take: getAllQueryDto.take,
+      }),
       total: await this.prisma.category.count(),
     };
     return findCategory;

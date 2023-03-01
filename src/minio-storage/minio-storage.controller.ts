@@ -1,8 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MinioStorageService } from './minio-storage.service';
 import { CreateMinioStorageDto } from './dto/create-minio-storage.dto';
 import { UpdateMinioStorageDto } from './dto/update-minio-storage.dto';
-import {ApiTags} from "@nestjs/swagger";
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Storage')
 @Controller('minio-storage')
@@ -25,7 +33,10 @@ export class MinioStorageController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMinioStorageDto: UpdateMinioStorageDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateMinioStorageDto: UpdateMinioStorageDto,
+  ) {
     return this.minioStorageService.update(+id, updateMinioStorageDto);
   }
 
