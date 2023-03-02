@@ -2,7 +2,7 @@ import { GenderType } from '../enum/gender-type.enum';
 import { ProductStatus } from '../enum/product-status.enum';
 import {
   IsArray,
-  IsIn,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsPositive,
@@ -28,7 +28,7 @@ export class CreateProductDto {
   @MinLength(4)
   readonly slug: string;
 
-  @IsIn([GenderType.kid, GenderType.unisex, GenderType.men, GenderType.women])
+  @IsEnum(GenderType)
   readonly gender: GenderType;
 
   @IsArray()
@@ -39,7 +39,7 @@ export class CreateProductDto {
   @Min(0)
   readonly stock: number;
 
-  @IsIn([GenderType])
+  @IsEnum(GenderType)
   readonly status: ProductStatus;
 
   @IsNumber()

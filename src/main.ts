@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
 import { EnumEnvName } from './common/config';
-import { Swagger } from './swagger';
+import { AppSwagger } from './app.swagger';
 import { DataResponseInterceptor } from './common/interceptors/data_response.interceptor';
 import { ExcludeNullInterceptor } from './common/interceptors/exclude-null.interceptor';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
@@ -44,7 +44,7 @@ async function bootstrap() {
     }),
   );
   app.use(helmet());
-  Swagger(app, configService);
+  AppSwagger(app, configService);
 
   const port = parseInt(configService.get(EnumEnvName.PORT), 10) || 3000;
   await repl(AppModule);

@@ -3,7 +3,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 import { EnumEnvName } from './common/config';
 
-export function Swagger(app: INestApplication, configService: ConfigService) {
+export function AppSwagger(
+  app: INestApplication,
+  configService: ConfigService,
+) {
   const config = new DocumentBuilder()
     .setTitle('D Gala - API Documentation')
     .setDescription('The documentation D Gala')

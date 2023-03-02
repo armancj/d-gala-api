@@ -11,8 +11,14 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiTags } from '@nestjs/swagger';
-import { GetAllQueryDto } from '../common/dto';
+import {
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { QueryProductsDto } from './dto/query-products.dto';
+import { Response } from '../common/interceptors/data_response.interceptor';
+import { Observable } from 'rxjs';
 
 @ApiTags('Products')
 @Controller('products')
@@ -20,13 +26,20 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
+  @ApiCreatedResponse({
+    description: 'Product created successfully',
+    type: Observable<Response<CreateProductDto>>,
+  })
+  @ApiConflictResponse({
+    description: 'The product is duplicated',
+  })
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
 
   @Get()
-  findAll(@Query() getAllQueryDto: GetAllQueryDto) {
-    return this.productsService.findAll(getAllQueryDto);
+  findAll(@Query() queryProductsDto: QueryProductsDto) {
+    return this.productsService.findAll(queryProductsDto);
   }
 
   @Get(':id')

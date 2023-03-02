@@ -3,7 +3,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HandlerError } from '../common/utils/handler-error';
-import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
+import { GetAllResponseDto } from '../common/dto';
+import { QueryProductsDto } from './dto/query-products.dto';
 
 @Injectable()
 export class ProductsService {
@@ -11,20 +12,17 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto) {
     await this.findOneProductName(createProductDto.name);
-    return this.prisma.product
-      .create({ data: { ...createProductDto } })
-      .catch((err) =>
-        HandlerError(
-          err,
-          `The category general parent id: ${createProductDto.name} is incorrect. Please select a other category id`,
-        ),
-      );
+    return this.prisma.product.create({ data: { ...createProductDto } });
   }
 
-  async findAll(getAllQueryDto: GetAllQueryDto) {
+  async findAll(getAllQueryDto: QueryProductsDto) {
     const findCategory: GetAllResponseDto = {
       data: await this.prisma.product.findMany({
-        where: { deleted: false },
+        where: {
+          deleted: false,
+          gender: getAllQueryDto.gender,
+          status: getAllQueryDto.status,
+        },
         skip: getAllQueryDto.skip,
         take: getAllQueryDto.take,
       }),
