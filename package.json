@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.5.0",
+    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
@@ -44,6 +45,7 @@
     "class-validator": "^0.13.2",
     "date-fns": "^2.29.3",
     "generate-pincode": "^6.0.0",
+    "googleapis": "^114.0.0",
     "helmet": "^6.0.1",
     "joi": "^17.7.0",
     "nestjs-minio-client": "^2.0.0",

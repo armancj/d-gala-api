@@ -21,10 +21,10 @@ import { CategoryModule } from './products/category/category.module';
 import { LoggerMiddleware } from './common/midleware/logger.middleware';
 import { validationSchema } from './config/validation.schema';
 import { SeedModule } from './seed/seed.module';
-import { MinioStorageModule } from './minio-storage/minio-storage.module';
 import { ProductsModule } from './products/products.module';
 import authConfig from './authentication/config/auth.config';
 import searchConfig from './search/config/search.config';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -46,6 +46,7 @@ import searchConfig from './search/config/search.config';
     SeedModule,
     //MinioStorageModule,
     ProductsModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [

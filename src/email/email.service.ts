@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
-import { CustomResult } from '../common/dto/commonResult.dto';
+import { CustomResult } from '../common/dto';
 import { ConfigService } from '@nestjs/config';
-import { FROM_EMAIL } from '../config/constants';
+//import { FROM_EMAIL } from '../config/constants';
 
 @Injectable()
 export class EmailService {
@@ -33,7 +33,7 @@ export class EmailService {
     const result = new CustomResult();
     const data: ISendMailOptions = {
       to, //patient email
-      from: this.config.get<string>(FROM_EMAIL),
+      from: 'this.config.get<string>(FROM_EMAIL)',
       subject,
       template,
       html,
@@ -44,14 +44,14 @@ export class EmailService {
     this.mailerService
       .sendMail(data)
       .then((resultMessage) => {
-        result.successfully = true;
+        result.result.successfully = true;
         result.result = resultMessage;
         return result;
       })
       .catch((error) => {
         console.log(`Error: ${error}`);
-        result.successfully = false;
-        result.message = error.message;
+        result.result.successfully = false;
+        result.result.message = error.message;
         return result;
       });
   }
