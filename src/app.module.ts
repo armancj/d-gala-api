@@ -19,7 +19,6 @@ import { SearchModule } from './search/search.module';
 import { ExceptionLoggerFilter } from './common/filter/exception-logger.filter';
 import { CategoryModule } from './products/category/category.module';
 import { LoggerMiddleware } from './common/midleware/logger.middleware';
-import { BrandsModule } from './products/brands/brands.module';
 import { validationSchema } from './config/validation.schema';
 import { SeedModule } from './seed/seed.module';
 import { MinioStorageModule } from './minio-storage/minio-storage.module';
@@ -44,9 +43,8 @@ import searchConfig from './search/config/search.config';
     AuthModule,
     SearchModule,
     CategoryModule,
-    BrandsModule,
     SeedModule,
-    MinioStorageModule,
+    //MinioStorageModule,
     ProductsModule,
   ],
   controllers: [AppController],

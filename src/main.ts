@@ -17,6 +17,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger(bootstrap.name);
   const configService = app.get(ConfigService);
+  app.enableCors();
 
   app.enableVersioning({
     type: VersioningType.URI,
@@ -24,7 +25,6 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
-  app.enableCors();
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(
     new LoggingInterceptor(),

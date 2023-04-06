@@ -19,7 +19,7 @@ import { UserPayload } from './user/interface/user-payload';
 import { JwtRefreshAuthGuard } from './authentication/guard/jwt-refresh-auth.guard';
 
 @ApiTags('App')
-@Controller({version: '1'})
+@Controller({ version: '1' })
 export class AppController {
   constructor(private authService: AuthService) {}
 

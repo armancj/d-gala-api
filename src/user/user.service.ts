@@ -84,7 +84,7 @@ export class UserService {
   async userWhereUnique(
     params: Prisma.UserFindUniqueArgs,
   ): Promise<User | null> {
-    return await this.prisma.user.findUnique(params);
+    return this.prisma.user.findUnique(params);
   }
 
   async userFindFirstArgs(
@@ -124,6 +124,8 @@ export class UserService {
   }
 
   async createUser(params: Prisma.UserCreateArgs): Promise<User> {
+    if (params?.data?.email)
+      params.data.email = params.data.email.toLowerCase();
     return (await this.prisma.user
       .create(params)
       .catch((err) =>

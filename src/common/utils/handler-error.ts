@@ -26,7 +26,9 @@ export function HandlerError(error: any, message?: string) {
     if (error.code === EnumPrismaError.NOT_FOUND)
       throw new NotFoundException(error.message);
 
-    throw new InternalServerErrorException(`Prisma error: ${error.message}, code:${error.code}`);
+    throw new InternalServerErrorException(
+      `Prisma error: ${error.message}, code:${error.code}`,
+    );
   }
   throw new HttpException(
     error.message,
