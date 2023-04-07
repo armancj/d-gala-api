@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { UserPayload } from '../user/interface/user-payload';
 import { ConfigService } from '@nestjs/config';
 import { EnumEnvAuth } from './config/env-auth.enum';
-import { UserStatus } from '@prisma/client';
+import { UserStatus, User } from '@prisma/client';
 import { EnumUserRole } from '../user/enum/user-role.enum';
 
 @Injectable()
@@ -24,10 +24,16 @@ export class AuthService {
 
     const salt = await bcrypt.genSalt();
     const password = await bcrypt.hash(registrationData.password, salt);
-    return await this.userService.createUser({
-      data: { ...registrationData, password, salt, role },
-      select: this.userService.getSelectUser(role),
-    });
+    return await this.userService
+      .createUser({
+        data: { ...registrationData, password, salt, role } as User,
+        select: this.userService.getSelectUser(role),
+      })
+      .then(async (result) => {
+        return {
+          ...result,
+        };
+      });
   }
 
   private async verifyPassword(

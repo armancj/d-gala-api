@@ -3,7 +3,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Prisma, Role, User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserPayload } from './interface/user-payload';
 import { HandlerError } from '../common/utils/handler-error';
 import { GetAllResponseDto } from '../common/dto';
 import { EnumUserRole } from './enum/user-role.enum';
@@ -12,12 +11,9 @@ import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
-  async create(
-    createUserDto: CreateUserDto,
-    user?: UserPayload,
-  ): Promise<User> {
+  async create(createUserDto: CreateUserDto, user?: User): Promise<User> {
     return await this.createUser({
-      data: { ...createUserDto, password: '12344567' },
+      data: { ...createUserDto, password: '12344567' } as User,
       select: this.getSelectUser(user?.role),
     });
   }
@@ -25,7 +21,7 @@ export class UserService {
   async findAll(params: {
     skip?: number;
     take?: number;
-    user?: UserPayload;
+    user?: User;
   }): Promise<GetAllResponseDto> {
     const { skip, take, user } = params;
     return await this.users({
@@ -36,8 +32,8 @@ export class UserService {
     });
   }
 
-  getSelectUser(role?: string, relation?: boolean[]) {
-    const data = {
+  getSelectUser(role?: string) {
+    const data: Prisma.UserSelect = {
       id: true,
       createdAt: true,
       email: true,
@@ -58,21 +54,21 @@ export class UserService {
     return data;
   }
 
-  async findOne(id: number, user?: UserPayload) {
+  async findOne(id: number, user?: User) {
     return await this.userWhereUnique({
       where: { id },
       select: { ...this.getSelectUser(user?.role), profile: true },
     });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto, user?: UserPayload) {
+  update(id: number, updateUserDto: UpdateUserDto, user?: User) {
     let data: Prisma.UserUpdateArgs;
     if (user?.role === Role.ADMIN || user.role === Role.SUADMIN) {
-      data = { where: { id }, data: { ...updateUserDto } };
+      data = { where: { id }, data: { ...updateUserDto } as User };
     }
     if (user?.role === Role.WORKER || user.role === Role.USER) {
       const { status, role, ...rest } = updateUserDto;
-      data = { where: { id }, data: { ...rest } };
+      data = { where: { id }, data: { ...rest } as User };
     }
     return this.prisma.user.update(data);
   }
@@ -158,10 +154,7 @@ export class UserService {
     return true;
   }
 
-  updateProfileUser(
-    user: UserPayload,
-    updateUserProfileDto: UpdateUserProfileDto,
-  ) {
+  updateProfileUser(user: User, updateUserProfileDto: UpdateUserProfileDto) {
     const { bio, ...rest } = updateUserProfileDto;
     return this.updateUser({
       where: { id: user.id },
@@ -174,7 +167,7 @@ export class UserService {
         profile: {
           upsert: { create: { bio }, update: { bio } },
         },
-      },
+      } as unknown as User,
     });
   }
 }

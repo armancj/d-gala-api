@@ -5,14 +5,17 @@ import { PrismaService } from '../prisma/prisma.service';
 import { HandlerError } from '../common/utils/handler-error';
 import { GetAllResponseDto } from '../common/dto';
 import { QueryProductsDto } from './dto/query-products.dto';
+import { Product, User } from '@prisma/client';
 
 @Injectable()
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user: User) {
     await this.findOneProductName(createProductDto.name);
-    return this.prisma.product.create({ data: { ...createProductDto } });
+    return this.prisma.product.create({
+      data: { ...createProductDto } as unknown as Product,
+    });
   }
 
   async findAll(getAllQueryDto: QueryProductsDto) {
@@ -46,7 +49,7 @@ export class ProductsService {
     return this.prisma.product
       .update({
         where: { id },
-        data: updateProductDto,
+        data: updateProductDto as unknown as Product,
       })
       .catch((err) =>
         HandlerError(

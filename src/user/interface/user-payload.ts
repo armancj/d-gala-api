@@ -1,5 +1,3 @@
-import { Role, UserStatus } from '@prisma/client';
-
 export interface UserPayload {
   id: number;
   email: string;

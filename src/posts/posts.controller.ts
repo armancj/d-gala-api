@@ -7,8 +7,8 @@ import {
   Param,
   Delete,
   Query,
-  CacheInterceptor,
   UseInterceptors,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -26,7 +26,6 @@ export class PostsController {
     return this.postsService.createPost(createPostDto);
   }
 
-  @UseInterceptors(CacheInterceptor)
   @Get()
   getAllPosts(
     @Query() query: GetAllQueryDto,
@@ -39,17 +38,20 @@ export class PostsController {
   }
 
   @Get(':id')
-  getPostById(@Param('id') id: string) {
+  getPostById(@Param('id', ParseIntPipe) id: string) {
     return this.postsService.getPostById(+id);
   }
 
   @Patch(':id')
-  replacePost(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  replacePost(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updatePostDto: UpdatePostDto,
+  ) {
     return this.postsService.replacePost(+id, updatePostDto);
   }
 
   @Delete(':id')
-  deletePost(@Param('id') id: string) {
+  deletePost(@Param('id', ParseIntPipe) id: string) {
     return this.postsService.deletePost(+id);
   }
 }

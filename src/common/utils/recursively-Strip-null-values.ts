@@ -1,4 +1,4 @@
-import { isDate } from "class-validator";
+import { isDate } from 'class-validator';
 
 export function RecursivelyStripNullValues(value: unknown): unknown {
   if (isDate(value)) return value;

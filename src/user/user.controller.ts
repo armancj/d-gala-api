@@ -21,6 +21,7 @@ import { Auth, GetUser } from '../authentication/decorator';
 import { EnumUserRole } from './enum/user-role.enum';
 import { UserPayload } from './interface/user-payload';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
+import { User } from '@prisma/client';
 
 @ApiTags('User')
 @Controller('users')
@@ -54,19 +55,19 @@ export class UserController {
 
   @Patch('update-profile')
   updateProfile(
-    @GetUser() user: UserPayload,
+    @GetUser() user: User,
     @Body() updateUserProfileDto: UpdateUserProfileDto,
   ) {
     return this.userService.updateProfileUser(user, updateUserProfileDto);
   }
 
   @Patch(':id')
-  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  updateUser(@Param('id', ParseIntPipe) id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
-  removeUser(@Param('id') id: string) {
+  removeUser(@Param('id', ParseIntPipe) id: string) {
     return this.userService.remove(+id);
   }
 }

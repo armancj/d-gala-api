@@ -39,7 +39,7 @@ export class CreateProductDto {
   @Min(0)
   readonly stock: number;
 
-  @IsEnum(GenderType)
+  @IsEnum(ProductStatus)
   readonly status: ProductStatus;
 
   @IsNumber()

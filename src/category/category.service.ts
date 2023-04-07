@@ -44,7 +44,7 @@ export class CategoryService {
     return this.prisma.category
       .findUniqueOrThrow({
         where: { id },
-        include: { product: true },
+        include: { products: true },
       })
       .catch((err) =>
         HandlerError(
@@ -77,7 +77,7 @@ export class CategoryService {
     generalCategory: boolean,
   ) {
     const categoryType =
-      generalCategory === true ? 'general category' : 'sub-category';
+      generalCategory === true ? 'general category' : 'id-category';
 
     await this.prisma.category
       .findFirst({ where: { name, generalCategory } })
