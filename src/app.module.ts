@@ -4,10 +4,10 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import { join } from 'path';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
-import { join } from 'path';
 import { JwtAuthGuard } from './authentication/guard';
 import { AppController } from './app.controller';
 import { PrismaModule } from './prisma/prisma.module';
@@ -18,13 +18,13 @@ import { AuthModule } from './authentication/auth.module';
 import { SearchModule } from './search/search.module';
 import { ExceptionLoggerFilter } from './common/filter/exception-logger.filter';
 import { CategoryModule } from './products/category/category.module';
-import { LoggerMiddleware } from './common/midleware/logger.middleware';
-import { validationSchema } from './config/validation.schema';
 import { SeedModule } from './seed/seed.module';
+import { LoggerMiddleware } from './common/midleware/logger.middleware';
 import { ProductsModule } from './products/products.module';
+import { MailerModule } from './mailer/mailer.module';
+import { validationSchema } from './config/validation.schema';
 import authConfig from './authentication/config/auth.config';
 import searchConfig from './search/config/search.config';
-import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -44,9 +44,8 @@ import { EmailModule } from './email/email.module';
     SearchModule,
     CategoryModule,
     SeedModule,
-    //MinioStorageModule,
     ProductsModule,
-    EmailModule,
+    MailerModule,
   ],
   controllers: [AppController],
   providers: [
