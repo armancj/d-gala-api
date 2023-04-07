@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextIndex"]
 }
 
 datasource db {
@@ -19,15 +20,17 @@ model User {
   lastname                  String?
   password                  String
   salt                      String?
-  phone                     String?          @unique
+  phone                     phoneConfirmed?
   role                      Role             @default(USER)
   status                    UserStatus       @default(ACTIVE)
   posts                     Post[]
+  product                   Product[]
   profile                   Profile?
   emailConfirmed            emailConfirmed?
   deleted                   Boolean          @default(false)
   currentHashedRefreshToken String?
   privateMessages           PrivateMessage[]
+  updatedAt                 DateTime         @updatedAt
 }
 
 model emailConfirmed {
@@ -39,20 +42,38 @@ model emailConfirmed {
   status       EmailStatus @default(REGISTER_SEND_EMAIL)
   user         User        @relation(fields: [userId], references: [id])
   userId       Int         @unique
+  updatedAt    DateTime    @updatedAt
+}
+
+model phoneConfirmed {
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  phone        String      @unique
+  code         Int         @unique
+  codeExpireAt DateTime
+  status       EmailStatus @default(REGISTER_SEND_EMAIL)
+  user         User        @relation(fields: [userId], references: [id])
+  userId       Int         @unique
+  updatedAt    DateTime    @updatedAt
 }
 
 model PrivateMessage {
-  id      Int    @id @default(autoincrement())
-  user    User   @relation(fields: [userId], references: [id])
-  userId  Int
-  message String
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Profile {
-  id     Int    @id @default(autoincrement())
-  bio    String
-  user   User   @relation(fields: [userId], references: [id])
-  userId Int    @unique
+  id        Int      @id @default(autoincrement())
+  bio       String
+  address   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique
+  photo     Photo?
+  updatedAt DateTime @updatedAt
 }
 
 model Post {
@@ -66,13 +87,16 @@ model Post {
   comments   Comment[] // A post can have many comments
   keywords   String[] // A scalar list
   deleted    Boolean             @default(false)
+  updatedAt  DateTime            @updatedAt
 }
 
 model Comment {
-  id      Int     @id @default(autoincrement())
-  content String?
-  Post    Post?   @relation(fields: [postId], references: [id]) // A comment can have one post
-  postId  Int?
+  id        Int      @id @default(autoincrement())
+  content   String?
+  Post      Post?    @relation(fields: [postId], references: [id]) // A comment can have one post
+  postId    Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
@@ -84,8 +108,9 @@ model Category {
   parent          Category?           @relation("GeneralCategory", fields: [parentId], references: [id])
   children        Category[]          @relation("GeneralCategory")
   posts           CategoriesOnPosts[]
-  product         Product[]
+  products        Product[]           @relation("ProductCategory")
   deleted         Boolean             @default(false)
+  updatedAt       DateTime            @updatedAt
 }
 
 model CategoriesOnPosts {
@@ -96,22 +121,62 @@ model CategoriesOnPosts {
   categoryId Int // relation scalar field (used in the `@relation` attribute above)
   assignedAt DateTime @default(now())
   assignedBy String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Product {
   id         Int           @id @default(autoincrement())
   createdAt  DateTime      @default(now())
-  name       String
-  content    String
-  slug       String
+  updatedAt  DateTime      @updatedAt
+  name       String        @unique
+  content    String?       @db.Text
+  price      Float
+  slug       String        @unique()
+  sizes      String[]
+  start      Int           @default(3)
+  viewCount  Int           @default(0)
   gender     GenderType
   tags       String[]
   stock      Int           @default(0)
   status     ProductStatus @default(IN_SUPPLIER)
   photo      Photo[]
-  category   Category?     @relation(fields: [categoryId], references: [id])
-  categoryId Int?
+  reviews    Review[]
+  reviewsTotal Int
+  categories Category[]    @relation("ProductCategory")
   deleted    Boolean       @default(false)
+  user       User?         @relation(fields: [userId], references: [id])
+  userId     Int?
+  items       OrderItem[]
+
+  @@index([name, userId])
+}
+
+model Order {
+  id       Int          @id @default(autoincrement())
+  user     String
+  items    OrderItem[]
+  subtotal Float
+}
+
+model OrderItem {
+  id       Int      @id @default(autoincrement())
+  order    Order    @relation(fields: [orderId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
+  quantity Int
+  price    Float
+  orderId  Int
+  productId Int
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int     @default(1)
+  text      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
 }
 
 model Photo {
@@ -124,6 +189,9 @@ model Photo {
   url       String
   product   Product  @relation(fields: [productId], references: [id])
   productId Int      @unique
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId Int      @unique
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {

@@ -28,7 +28,7 @@ services:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     volumes:
-      - ./storage/minio:/data
+      - ./storage/Minio:/data
 
   elasticsearch:
     image: elasticsearch:7.17.8

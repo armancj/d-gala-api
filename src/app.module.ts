@@ -25,6 +25,7 @@ import { MailerModule } from './mailer/mailer.module';
 import { validationSchema } from './config/validation.schema';
 import authConfig from './authentication/config/auth.config';
 import searchConfig from './search/config/search.config';
+import { MinioModule } from './minio/minio.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import searchConfig from './search/config/search.config';
     SeedModule,
     ProductsModule,
     MailerModule,
+    MinioModule,
   ],
   controllers: [AppController],
   providers: [

@@ -2,20 +2,18 @@ import {
   BadRequestException,
   HttpException,
   HttpStatus,
-  Inject,
   Injectable,
 } from '@nestjs/common';
-import { MINIO_CONNECTION } from 'nestjs-minio';
-import { Client } from 'minio';
 import { ConfigService } from '@nestjs/config';
 import { Stream } from 'stream';
 import { APP_CONFIG_MINIO, MINIO_BUCKET } from './config/constant';
 import * as process from 'process';
+import { MinioService as Minio, MinioClient, MinioCopyConditions, ExtraConfiguration } from 'nestjs-minio-client';
 
 @Injectable()
 export class MinioService {
   constructor(
-    @Inject(MINIO_CONNECTION) private readonly minioClient: Client,
+    private readonly minioClient: Minio,
     private readonly configService: ConfigService,
   ) {}
 
@@ -35,7 +33,7 @@ export class MinioService {
     bucketName?: string,
   ) {
     const bucket = bucketName || this.configService.get<string>(MINIO_BUCKET);
-    return this.minioClient.putObject(bucket, fileName, stream);
+    return this.minioClient.client.putObject(bucket, fileName, stream);
   }
 
   async load(
@@ -45,7 +43,7 @@ export class MinioService {
     bucketName: string = this.configService.get<string>(MINIO_BUCKET),
   ): Promise<Stream | any> {
     try {
-      const file: Stream = await this.minioClient.getObject(
+      const file: Stream = await this.minioClient.client.getObject(
         bucketName,
         productId + '/' + fileName,
       );
@@ -71,7 +69,10 @@ export class MinioService {
   async loadFile(fileName: string, bucketName?: string): Promise<Stream | any> {
     const bucket = bucketName || this.configService.get<string>('MINIO_BUCKET');
     try {
-      const file: Stream = await this.minioClient.getObject(bucket, fileName);
+      const file: Stream = await this.minioClient.client.getObject(
+        bucket,
+        fileName,
+      );
       const encode = await this.streamToString(file, 'base64');
       const mimeType = await this.getMimeType(fileName);
       const type = `data:${mimeType};charset=utf-8;base64,`;
@@ -99,7 +100,7 @@ export class MinioService {
 
   public async getMimeType(filename: string): Promise<string | null> {
     let mimeType = null;
-    const mimeType2 = await this.minioClient.statObject(
+    const mimeType2 = await this.minioClient.client.statObject(
       process.env.MINIO_BUCKET,
       filename,
     );
@@ -131,16 +132,16 @@ export class MinioService {
   }
 
   async getBuckets() {
-    return this.minioClient.listBuckets();
+    return this.minioClient.client.listBuckets();
   }
   async create(): Promise<void> {
     const bucketName = this.configService.get<string>(MINIO_BUCKET);
     if (!bucketName)
       throw new BadRequestException('No MINIO_BUCKET environment found');
-    return await this.minioClient.makeBucket(bucketName, 'us-east-1');
+    return await this.minioClient.client.makeBucket(bucketName, 'us-east-1');
   }
   async delete(objetName: string, baseBucket: string = this._baseBucket) {
-    this.minioClient.removeObject(baseBucket, objetName, (err) => {
+    this.minioClient.client.removeObject(baseBucket, objetName, (err) => {
       if (err)
         throw new HttpException(
           'Oops Something wrong happened',
