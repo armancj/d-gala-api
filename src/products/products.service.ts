@@ -13,9 +13,15 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto, user: User) {
     await this.findOneProductName(createProductDto.name);
-    return this.prisma.product.create({
-      data: { ...createProductDto } as unknown as Product,
-    });
+    return this.prisma.product
+      .create({
+        data: {
+          ...createProductDto,
+          categories: { connect: { id: createProductDto.categoryId } },
+          user: { connect: { id: user.id } },
+        } as unknown as Product,
+      })
+      .catch((err) => HandlerError(err));
   }
 
   async findAll(getAllQueryDto: QueryProductsDto) {

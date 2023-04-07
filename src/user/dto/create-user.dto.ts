@@ -7,7 +7,6 @@ import {
 } from 'class-validator';
 import { EnumUserRole } from '../enum/user-role.enum';
 import { ApiProperty } from '@nestjs/swagger';
-
 export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()

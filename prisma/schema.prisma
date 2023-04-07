@@ -132,18 +132,18 @@ model Product {
   updatedAt    DateTime      @updatedAt
   name         String        @unique
   content      String?       @db.Text
-  price        Float
+  price        Float         @default(0) @db.DoublePrecision
   slug         String        @unique()
-  sizes        String[]
+  sizes        String[]      @default([])
   start        Int           @default(3)
   viewCount    Int           @default(0)
   gender       GenderType
-  tags         String[]
+  tags         String[]      @default([])
   stock        Int           @default(0)
   status       ProductStatus @default(IN_SUPPLIER)
   photo        Photo[]
   reviews      Review[]
-  reviewsTotal Int
+  reviewsTotal Int           @default(0)
   categories   Category[]    @relation("ProductCategory")
   deleted      Boolean       @default(false)
   user         User?         @relation(fields: [userId], references: [id])
