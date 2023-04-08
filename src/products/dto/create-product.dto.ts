@@ -50,4 +50,9 @@ export class CreateProductDto {
   @IsPositive()
   @IsOptional()
   price: number;
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  sizes: string[];
 }
