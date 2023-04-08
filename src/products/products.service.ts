@@ -14,7 +14,7 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto, user: User) {
     const product: Prisma.ProductCreateInput = {
-      categories: { connect: { id: createProductDto.categoryId } },
+      //categories: { connect: { id: createProductDto.categoryId } },
       content: createProductDto.content,
       gender: createProductDto.gender,
       items: undefined,
@@ -37,7 +37,7 @@ export class ProductsService {
       .create({
         data: {
           ...product,
-          user: { connect: { id: user.id } },
+          //user: { connect: { id: user.id } },
         },
       })
       .catch((err) =>
