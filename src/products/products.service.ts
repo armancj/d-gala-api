@@ -13,42 +13,28 @@ export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
   async create(createProductDto: CreateProductDto, user: User) {
+    const { categoryName, ...rest } = createProductDto;
     const product: Prisma.ProductCreateInput = {
       categories: {
         connectOrCreate: {
-          where: { id: createProductDto.categoryId },
+          where: { name: createProductDto?.gender },
           create: { name: createProductDto.gender, generalCategory: false },
         },
       },
-      content: createProductDto.content,
-      gender: createProductDto.gender,
-      items: undefined,
-      name: createProductDto.name,
-      photo: undefined,
-      price: createProductDto.price,
-      reviews: undefined,
-      reviewsTotal: 0,
-      sizes: undefined,
-      slug: createProductDto.slug,
-      start: 0,
-      status: undefined,
-      stock: 0,
-      tags: undefined,
-      updatedAt: undefined,
-      viewCount: 0,
+      user: { connect: { id: user.id } },
+      ...rest,
     };
 
     return this.prisma.product
       .create({
         data: {
           ...product,
-          user: { connect: { id: user.id } },
         },
       })
       .catch((err) =>
         HandlerError(
           err,
-          `Category with id ${createProductDto.categoryId} not found`,
+          `Category with id ${createProductDto.categoryName} not found`,
         ),
       );
   }

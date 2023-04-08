@@ -2,7 +2,7 @@ import { GenderType } from '../enum/gender-type.enum';
 import { ProductStatus } from '../enum/product-status.enum';
 import {
   IsArray,
-  IsEnum,
+  IsEnum, IsNotEmpty,
   IsNumber,
   IsOptional,
   IsPositive,
@@ -41,10 +41,10 @@ export class CreateProductDto {
   @IsEnum(ProductStatus)
   readonly status: ProductStatus;
 
-  @IsNumber()
-  @IsPositive()
+  @IsString()
+  @IsNotEmpty()
   @IsOptional()
-  readonly categoryId: number;
+  categoryName?: string;
 
   @IsNumber()
   @IsPositive()

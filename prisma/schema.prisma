@@ -103,7 +103,7 @@ model Comment {
 model Category {
   id              Int                 @id @default(autoincrement())
   createdAt       DateTime            @default(now())
-  name            String
+  name            String              @unique()
   generalCategory Boolean             @default(true)
   parentId        Int?
   parent          Category?           @relation("GeneralCategory", fields: [parentId], references: [id])
