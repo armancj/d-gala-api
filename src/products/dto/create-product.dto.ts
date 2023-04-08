@@ -13,7 +13,7 @@ import {
 } from 'class-validator';
 export class CreateProductDto {
   @IsString()
-  @MaxLength(25)
+  @MaxLength(80)
   @MinLength(4)
   readonly name: string;
 
@@ -23,7 +23,7 @@ export class CreateProductDto {
   readonly content: string;
 
   @IsString()
-  @MaxLength(25)
+  @MaxLength(80)
   @MinLength(4)
   readonly slug: string;
 
@@ -45,4 +45,9 @@ export class CreateProductDto {
   @IsPositive()
   @IsOptional()
   readonly categoryId: number;
+
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  price: number;
 }

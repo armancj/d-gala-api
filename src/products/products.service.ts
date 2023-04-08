@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -6,22 +6,46 @@ import { HandlerError } from '../common/utils/handler-error';
 import { GetAllResponseDto } from '../common/dto';
 import { QueryProductsDto } from './dto/query-products.dto';
 import { Product, User } from '@prisma/client';
+import { Prisma } from '.prisma/client';
 
 @Injectable()
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
   async create(createProductDto: CreateProductDto, user: User) {
-    await this.findOneProductName(createProductDto.name);
+    const product: Prisma.ProductCreateInput = {
+      categories: { connect: { id: createProductDto.categoryId } },
+      content: createProductDto.content,
+      gender: createProductDto.gender,
+      items: undefined,
+      name: createProductDto.name,
+      photo: undefined,
+      price: createProductDto.price,
+      reviews: undefined,
+      reviewsTotal: 0,
+      sizes: undefined,
+      slug: createProductDto.slug,
+      start: 0,
+      status: undefined,
+      stock: 0,
+      tags: undefined,
+      updatedAt: undefined,
+      viewCount: 0,
+    };
+
     return this.prisma.product
       .create({
         data: {
-          ...createProductDto,
-          categories: { connect: { id: createProductDto.categoryId } },
+          ...product,
           user: { connect: { id: user.id } },
-        } as unknown as Product,
+        },
       })
-      .catch((err) => HandlerError(err));
+      .catch((err) =>
+        HandlerError(
+          err,
+          `Category with id ${createProductDto.categoryId} not found`,
+        ),
+      );
   }
 
   async findAll(getAllQueryDto: QueryProductsDto) {
@@ -77,12 +101,5 @@ export class ProductsService {
           `The product id: ${id} is incorrect or not exists. Please select a other product id`,
         ),
       );
-  }
-
-  private async findOneProductName(name: string): Promise<void> {
-    const productFounds = await this.prisma.product.findFirst({
-      where: { name, deleted: false },
-    });
-    if (productFounds) throw new ConflictException('The product is duplicated');
   }
 }
