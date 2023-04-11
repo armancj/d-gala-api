@@ -4,7 +4,6 @@ import {
   Get,
   HttpCode,
   Post,
-  SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';

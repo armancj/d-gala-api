@@ -30,7 +30,7 @@ async function bootstrap() {
     new LoggingInterceptor(),
     new DataResponseInterceptor(),
     new ExcludeNullInterceptor(),
-    new TimeoutInterceptor(),
+    //new TimeoutInterceptor(),
   );
   app.setGlobalPrefix(configService.get(EnumEnvName.GLOBAL_PREFIX));
   app.useGlobalPipes(

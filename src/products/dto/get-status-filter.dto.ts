@@ -5,9 +5,9 @@ import { ProductStatus } from '../enum/product-status.enum';
 export class GetStatusFilterDto {
   @IsIn([GenderType.kid, GenderType.unisex, GenderType.men, GenderType.women])
   @IsOptional()
-  readonly gender: GenderType;
+  readonly gender?: GenderType;
 
   @IsOptional()
   @IsIn([GenderType])
-  readonly status: ProductStatus;
+  readonly status?: ProductStatus;
 }

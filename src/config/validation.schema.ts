@@ -18,4 +18,8 @@ export const validationSchema = Joi.object({
   ELASTIC_SEARCH_NAME: Joi.string().required(),
   MINIO_ROOT_USER: Joi.string().required(),
   MINIO_ROOT_PASSWORD: Joi.string().required(),
+  MINIO_BUCKET: Joi.string()
+    .lowercase()
+    .replace(/[^a-z]+/g, '')
+    .required(),
 });

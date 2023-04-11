@@ -4,17 +4,18 @@ import {
   Get,
   Param,
   Post,
-  UploadedFile,
   UseInterceptors,
   Res,
+  UseFilters, UploadedFiles,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { FilesService } from './files.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { fileFilter, filename } from './helpers';
-import { diskStorage } from 'multer';
 import { ConfigService } from '@nestjs/config';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from './interceptors/files.interceptor';
+import { FilesUploadDto } from './dto/file-upload.dto';
+import { Public } from '../authentication/decorator';
+import { FilesFilter } from './filters/files.filter';
 
 @ApiTags('Files - Download and Upload')
 @Controller('files')
@@ -29,23 +30,16 @@ export class FilesController {
     res.sendFile(this.filesService.getStaticFile(fileName));
   }
 
-  @Post()
-  @UseInterceptors(
-    FileInterceptor('file', {
-      fileFilter,
-      //limits: { fileSize: 1000 },
-      storage: diskStorage({
-        destination: './static/products',
-        filename,
-      }),
-    }),
-  )
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    if (!file)
-      throw new BadRequestException('make sure that the file has been image');
-    console.log(file);
-    return {
-      secureUrl: `${this.configServices.get('HOST_API')}/${file.filename}`,
-    };
+  @Public()
+  @Post('upload')
+  @UseFilters(new FilesFilter())
+  @UseInterceptors(FileInterceptor())
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'List of cats',
+    type: FilesUploadDto,
+  })
+  async uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
+    return this.filesService.uploadFile(files);
   }
 }
