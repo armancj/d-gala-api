@@ -185,13 +185,11 @@ model Photo {
   createdAt DateTime @default(now())
   name      String
   space     Float
-  height    Int
-  width     Int
   url       String
-  product   Product  @relation(fields: [productId], references: [id])
-  productId Int      @unique
+  product   Product? @relation(fields: [productId], references: [id])
+  productId Int?     @unique
   profile   Profile? @relation(fields: [profileId], references: [id])
-  profileId Int      @unique
+  profileId Int?     @unique
   updatedAt DateTime @updatedAt
 }
 
