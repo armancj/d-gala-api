@@ -11,7 +11,7 @@ export const filesInterceptor = () =>
   });
 
 export const fileInterceptor = () =>
-  FileInterceptor('files', {
+  FileInterceptor('file', {
     fileFilter,
     storage: diskStorage({
       filename,

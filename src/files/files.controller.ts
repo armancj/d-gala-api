@@ -1,27 +1,31 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Param,
-  Post,
-  UseInterceptors,
-  Res,
-  UseFilters,
-  UploadedFiles,
-  StreamableFile,
   ParseIntPipe,
+  Post,
+  Query,
+  Res,
+  StreamableFile,
   UploadedFile,
-  BadRequestException,
+  UploadedFiles,
+  UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { FilesService } from './files.service';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   fileInterceptor,
   filesInterceptor,
 } from './interceptors/files.interceptor';
-import { FilesUploadDto } from './dto/file-upload.dto';
-import { Public } from '../authentication/decorator';
+import { FilesUploadDto, FileUploadDto } from './dto/file-upload.dto';
 import { FilesFilter } from './filters/files.filter';
+import { MinioPolicy } from './enum/minio-policy.enum';
+import { Auth, GetUser, Public } from '../authentication/decorator';
+import { EnumUserRole } from '../user/enum/user-role.enum';
+import { User } from '@prisma/client';
 
 @ApiTags('Files - Download and Upload')
 @Controller('files')
@@ -41,30 +45,38 @@ export class FilesController {
     return new StreamableFile(file);
   }
 
-  @Public()
-  @Post('upload/profileId')
+  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
+  @ApiQuery({ name: 'policyEnable', enum: MinioPolicy })
+  @Post('access/policy')
+  accessPolicy(
+    @Query('policyEnable') policyEnable: MinioPolicy = MinioPolicy.public,
+  ) {
+    return this.filesService.changePolicy(policyEnable);
+  }
+
+  @Post('upload/profile')
   @UseInterceptors(fileInterceptor())
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'List of cats',
-    type: FilesUploadDto,
+    description: 'Image of User Profile',
+    type: FileUploadDto,
   })
   async uploadFile(
-    @Param('profileId', ParseIntPipe) productId: number,
+    @GetUser() user: User,
     @UploadedFile() file: Express.Multer.File,
   ) {
     if (!file)
       throw new BadRequestException('make sure that the file has been image');
-    return await this.filesService.uploadFileToProfile(file, productId);
+    return await this.filesService.uploadFileToProfile(file, user.id);
   }
 
   @Public()
-  @Post('uploads/productId')
+  @Post('uploads/:productId')
   @UseFilters(new FilesFilter())
   @UseInterceptors(filesInterceptor())
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'List of cats',
+    description: 'Images of Products',
     type: FilesUploadDto,
   })
   async uploadsFile(

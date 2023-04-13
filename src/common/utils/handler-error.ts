@@ -6,15 +6,10 @@ import {
   HttpException,
   HttpStatus,
   InternalServerErrorException,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 
 export function HandlerError(error: any, message?: string) {
-  const logger = new Logger(HandlerError.name);
-  logger.error(`${error.message}, code: ${error.code} `);
-  console.error(error);
-
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     // The .code property can be accessed in a type-safe manner
     if (error.code === EnumPrismaError.UniqueConstraintViolation) {
@@ -26,7 +21,7 @@ export function HandlerError(error: any, message?: string) {
     }
 
     if (error.code === EnumPrismaError.NOT_FOUND)
-      throw new NotFoundException(error.message);
+      throw new NotFoundException(message);
 
     throw new InternalServerErrorException(
       `Prisma error: ${error.message}, code:${error.code}`,

@@ -191,6 +191,8 @@ model Photo {
   profile   Profile? @relation(fields: [profileId], references: [id])
   profileId Int?     @unique
   updatedAt DateTime @updatedAt
+
+  @@index([productId, profileId])
 }
 
 enum Role {
