@@ -57,7 +57,10 @@ export class UserService {
   async findOne(id: number, user?: User) {
     return await this.userWhereUnique({
       where: { id },
-      select: { ...this.getSelectUser(user?.role), profile: true },
+      select: {
+        ...this.getSelectUser(user?.role),
+        profile: { include: { photo: { select: { name: true, url: true } } } },
+      },
     });
   }
 
@@ -67,6 +70,7 @@ export class UserService {
       data = { where: { id }, data: { ...updateUserDto } as User };
     }
     if (user?.role === Role.WORKER || user.role === Role.USER) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { status, role, ...rest } = updateUserDto;
       data = { where: { id }, data: { ...rest } as User };
     }
