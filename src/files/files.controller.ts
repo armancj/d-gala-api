@@ -1,6 +1,7 @@
 import {
   BadRequestException,
-  Controller, Delete,
+  Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -94,6 +95,7 @@ export class FilesController {
   }
 
   @Delete('delete/photo/:fileName')
+  @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'delete Image',
