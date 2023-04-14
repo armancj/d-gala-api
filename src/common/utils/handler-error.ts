@@ -9,7 +9,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-export function HandlerError(error: any, message?: string) {
+export function HandlerError(error: any, message?: string): never {
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     // The .code property can be accessed in a type-safe manner
     if (error.code === EnumPrismaError.UniqueConstraintViolation) {
