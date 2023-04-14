@@ -183,12 +183,12 @@ model Review {
 model Photo {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  name      String
+  name      String   @unique
   space     Float
   url       String
   product   Product? @relation(fields: [productId], references: [id])
   productId Int?     @unique
-  profile   Profile? @relation(fields: [profileId], references: [id])
+  profile   Profile? @relation(fields: [profileId], references: [id], onUpdate: Cascade)
   profileId Int?     @unique
   updatedAt DateTime @updatedAt
 
