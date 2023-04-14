@@ -1,22 +1,36 @@
 import { createReadStream } from 'fs';
 import {
   BadGatewayException,
+  ConflictException,
   Injectable,
   NotFoundException,
   StreamableFile,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { MinioService } from 'nestjs-minio-client';
 import { ConfigService } from '@nestjs/config';
 import { MINIO_ENV } from './config/constant';
 import { PrismaService } from '../prisma/prisma.service';
-import {Photo, Profile} from '@prisma/client';
 import { HandlerError } from '../common/utils/handler-error';
 import { appConstant } from '../config/app.constant';
-import { MinioPolicy } from './enum/minio-policy.enum';
+import { MinioPolicy, MinioRoute } from './enum/minio.enum';
+import { Photo, Prisma, User } from '@prisma/client';
+import { EnumUserRole } from '../user/enum/user-role.enum';
 
 interface PhotoIdInterface {
   productId?: number;
   profileId?: number;
+}
+
+interface PhotoInterface {
+  photo: Photo & {
+    product: Prisma.ProductGetPayload<
+      { product: boolean; profile: boolean }['product']
+    > | null;
+    profile: Prisma.ProfileGetPayload<
+      { product: boolean; profile: boolean }['profile']
+    > | null;
+  };
 }
 
 @Injectable()
@@ -25,9 +39,7 @@ export class FilesService {
     private readonly minioService: MinioService,
     private readonly _configService: ConfigService,
     private readonly prisma: PrismaService,
-  ) {
-    console.log(minioService);
-  }
+  ) {}
 
   get bucket(): string {
     return this._configService.get<string>(MINIO_ENV.MINIO_BUCKET);
@@ -47,7 +59,7 @@ export class FilesService {
       await this.createOrExistsBucket(this.bucket);
       return await this.minioService.client.getObject(this.bucket, fileName);
     } catch (e) {
-      console.log(e);
+      throw new NotFoundException(`Not found image with name : ${fileName}`);
     }
   }
 
@@ -58,7 +70,7 @@ export class FilesService {
     await this.createOrExistsBucket(this.bucket);
     return Promise.all(
       files.map(async (file) => {
-        return await this.photoToBd(file, '/product/', {
+        return await this.photoToBd(file, MinioRoute.product, {
           productId,
         });
       }),
@@ -68,15 +80,18 @@ export class FilesService {
   async uploadFileToProfile(file: Express.Multer.File, id: number) {
     await this.createOrExistsBucket(this.bucket);
     const profileId: number = await this.findProfileIdByUserID(id);
-    return await this.photoToBd(file, '/profile/', { profileId });
+    return await this.photoToBd(file, MinioRoute.profile, { profileId });
   }
 
   private async findProfileIdByUserID(id: number): Promise<number> {
     const profile = await this.prisma.profile.findFirst({
       where: { user: { id } },
-      select: { id: true },
+      include: { photo: true },
     });
     if (!profile) throw new NotFoundException(`Need Create to profile first`);
+
+    if (profile?.photo)
+      throw new ConflictException(`You Have to a photo upload in the profile`);
     return profile.id;
   }
 
@@ -173,5 +188,45 @@ export class FilesService {
         throw new BadGatewayException(err);
       });
     return `The bucket: ${this.bucket} is change to ${policyEnable}`;
+  }
+
+  async deletePhotoByFilename(fileName: string, user: User) {
+    const findOnePhoto = await this.prisma.photo
+      .findUniqueOrThrow({
+        where: { name: fileName },
+        include: { profile: true, product: true },
+      })
+      .catch((err) => HandlerError(err));
+    return await this.deleteProfilePhoto({ photo: findOnePhoto }, user);
+  }
+
+  private async deleteProfilePhoto(data: PhotoInterface, user: User) {
+    const photoName = this.getPhotoNameProductOrProfile(data, user);
+    try {
+      const photoDelete = await this.prisma.photo.delete({
+        where: {
+          profileId: data.photo.profile.id || undefined,
+        },
+      });
+      await this.deleteFileMinioStorage(photoName);
+      return photoDelete;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  private getPhotoNameProductOrProfile(data: PhotoInterface, user: User) {
+    if (data.photo?.profile) {
+      if (data.photo.profile.userId !== user.id)
+        throw new UnauthorizedException(`User only delete owner profile image`);
+      return MinioRoute.profile + data.photo.name;
+    }
+    if (data.photo?.product) {
+      if (user.role.includes(EnumUserRole.USER))
+        throw new UnauthorizedException(
+          `Only delete product image by user with role: ${EnumUserRole.SUADMIN}, ${EnumUserRole.ADMIN} or ${EnumUserRole.WORKER}`,
+        );
+      return MinioRoute.product + data.photo.name;
+    }
   }
 }
