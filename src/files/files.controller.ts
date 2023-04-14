@@ -1,6 +1,6 @@
 import {
   BadRequestException,
-  Controller,
+  Controller, Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -15,14 +15,20 @@ import {
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { FilesService } from './files.service';
-import { ApiBody, ApiConsumes, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   fileInterceptor,
   filesInterceptor,
 } from './interceptors/files.interceptor';
 import { FilesUploadDto, FileUploadDto } from './dto/file-upload.dto';
 import { FilesFilter } from './filters/files.filter';
-import { MinioPolicy } from './enum/minio-policy.enum';
+import { MinioPolicy } from './enum/minio.enum';
 import { Auth, GetUser, Public } from '../authentication/decorator';
 import { EnumUserRole } from '../user/enum/user-role.enum';
 import { User } from '@prisma/client';
@@ -33,7 +39,7 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Public()
-  @Get(':fileName')
+  @Get('download/photo/:fileName')
   async getFile(
     @Res({ passthrough: true }) res: Response,
     @Param('fileName') fileName: string,
@@ -54,8 +60,9 @@ export class FilesController {
     return this.filesService.changePolicy(policyEnable);
   }
 
-  @Post('upload/profile')
+  @Post('upload/photo/profile')
   @UseInterceptors(fileInterceptor())
+  @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Image of User Profile',
@@ -71,7 +78,7 @@ export class FilesController {
   }
 
   @Public()
-  @Post('uploads/:productId')
+  @Post('uploads/photo/:productId')
   @UseFilters(new FilesFilter())
   @UseInterceptors(filesInterceptor())
   @ApiConsumes('multipart/form-data')
@@ -84,5 +91,18 @@ export class FilesController {
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
     return await this.filesService.uploadsFileToProduct(files, productId);
+  }
+
+  @Delete('delete/photo/:fileName')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'delete Image',
+    type: FileUploadDto,
+  })
+  async deletePhoto(
+    @GetUser() user: User,
+    @Param('fileName') fileName: string,
+  ) {
+    return await this.filesService.deletePhotoByFilename(fileName, user);
   }
 }
