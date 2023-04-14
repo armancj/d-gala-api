@@ -78,10 +78,10 @@ export class FilesController {
     return await this.filesService.uploadFileToProfile(file, user.id);
   }
 
-  @Public()
   @Post('uploads/photo/:productId')
   @UseFilters(new FilesFilter())
   @UseInterceptors(filesInterceptor())
+  @Auth(EnumUserRole.WORKER, EnumUserRole.ADMIN, EnumUserRole.SUADMIN)
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Images of Products',

@@ -55,9 +55,13 @@ export class FilesService {
   }
 
   async downloadFile(fileName: string) {
+    const photo = await this.findOnePhotoByName(fileName);
+    let routePhoto;
+    if (photo?.product) routePhoto = MinioRoute.product + fileName;
+    if (photo?.profile) routePhoto = MinioRoute.profile + fileName;
     try {
       await this.createOrExistsBucket(this.bucket);
-      return await this.minioService.client.getObject(this.bucket, fileName);
+      return await this.minioService.client.getObject(this.bucket, routePhoto);
     } catch (e) {
       throw new NotFoundException(`Not found image with name : ${fileName}`);
     }
@@ -191,13 +195,17 @@ export class FilesService {
   }
 
   async deletePhotoByFilename(fileName: string, user: User) {
-    const findOnePhoto = await this.prisma.photo
+    const findOnePhoto = await this.findOnePhotoByName(fileName);
+    return await this.deleteProfilePhoto({ photo: findOnePhoto }, user);
+  }
+
+  private async findOnePhotoByName(fileName: string) {
+    return await this.prisma.photo
       .findUniqueOrThrow({
         where: { name: fileName },
         include: { profile: true, product: true },
       })
       .catch((err) => HandlerError(err));
-    return await this.deleteProfilePhoto({ photo: findOnePhoto }, user);
   }
 
   private async deleteProfilePhoto(data: PhotoInterface, user: User) {
