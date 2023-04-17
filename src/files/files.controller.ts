@@ -33,6 +33,7 @@ import { MinioPolicy } from './enum/minio.enum';
 import { Auth, GetUser, Public } from '../authentication/decorator';
 import { EnumUserRole } from '../user/enum/user-role.enum';
 import { User } from '@prisma/client';
+import { FileExcludeInterceptor } from './interceptors/file-exclude.interceptor';
 
 @ApiTags('Files - Download and Upload')
 @Controller('files')
@@ -40,6 +41,7 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Public()
+  @UseInterceptors(new FileExcludeInterceptor())
   @Get('download/photo/:fileName')
   async getFile(
     @Res({ passthrough: true }) res: Response,
