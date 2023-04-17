@@ -13,6 +13,7 @@ export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createProductDto: CreateProductDto, user: User) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { categoryName, ...rest } = createProductDto;
     const product: Prisma.ProductCreateInput = {
       categories: {
@@ -41,7 +42,7 @@ export class ProductsService {
 
   async findAll(getAllQueryDto: QueryProductsDto) {
     const findCategory: GetAllResponseDto = {
-      data: await this.prisma.product.findMany({
+      result: await this.prisma.product.findMany({
         where: {
           deleted: false,
           gender: getAllQueryDto.gender,

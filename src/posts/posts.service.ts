@@ -95,7 +95,7 @@ export class PostsService {
       .catch((err) => HandlerError(err))) as unknown as Post[];
     const total = await this.prisma.post.count({ where: { deleted: false } });
     const count = data.length;
-    return { data, count, total };
+    return { result: data, count, total };
   }
 
   async createPosts(params: Prisma.PostCreateArgs): Promise<Post> {

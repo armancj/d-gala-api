@@ -1,14 +1,11 @@
 import { NestFactory, repl } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {ExecutionContext, Logger, ValidationPipe, VersioningType} from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
-import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
+import { LoggingInterceptor, TimeoutInterceptor } from './common/interceptors';
 import { EnumEnvName } from './common/config';
 import { AppSwagger } from './app.swagger';
-import { DataResponseInterceptor } from './common/interceptors/data_response.interceptor';
-import { ExcludeNullInterceptor } from './common/interceptors/exclude-null.interceptor';
-import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import helmet from 'helmet';
 
 declare const module: any;
@@ -28,8 +25,8 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(
     new LoggingInterceptor(),
-    new DataResponseInterceptor(),
-    new ExcludeNullInterceptor(),
+    //new DataResponseInterceptor(),
+    //new ExcludeNullInterceptor(),
     new TimeoutInterceptor(),
   );
   app.setGlobalPrefix(configService.get(EnumEnvName.GLOBAL_PREFIX));

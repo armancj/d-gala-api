@@ -31,7 +31,7 @@ export class CategoryService {
 
   async findAllCategory(getAllQueryDto: GetAllQueryDto) {
     const findCategory: GetAllResponseDto = {
-      data: await this.prisma.category.findMany({
+      result: await this.prisma.category.findMany({
         skip: getAllQueryDto.skip,
         take: getAllQueryDto.take,
       }),

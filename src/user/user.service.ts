@@ -120,7 +120,7 @@ export class UserService {
       .findMany(params)
       .catch((err) => HandlerError(err))) as unknown as User[];
     const total = await this.prisma.user.count({ where: { deleted: false } });
-    return { data, total };
+    return { result: data, total };
   }
 
   async createUser(params: Prisma.UserCreateArgs): Promise<User> {
