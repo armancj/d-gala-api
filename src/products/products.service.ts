@@ -7,6 +7,7 @@ import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
 import { QueryProductsDto } from './dto/query-products.dto';
 import { Product, User } from '@prisma/client';
 import { Prisma } from '.prisma/client';
+import { CreateReviewDto } from './dto/create-review.dto';
 
 @Injectable()
 export class ProductsService {
@@ -56,7 +57,7 @@ export class ProductsService {
     return findCategory;
   }
 
-  findOne(id: number) {
+  findOneProduct(id: number) {
     return this.prisma.product
       .findFirstOrThrow({
         where: { id, deleted: false },
@@ -117,15 +118,22 @@ export class ProductsService {
           viewCount: { increment: 1 },
         },
       });
-      return this.findOne(id);
+      return this.findOneProduct(id);
     });
   }
 
-  async updateReview(id: number, text: string) {
-    const product = await this.findOne(id);
-    return this.prisma.product.update({
-      where: {id},
-      //data: {reviews: {connectOrCreate: {where: {id: product.reviews.}}}},
+  async createReview(
+    id: number,
+    user: User,
+    createReviewDto?: CreateReviewDto,
+  ) {
+    await this.findOneProduct(id);
+    return this.prisma.review.create({
+      data: {
+        product: { connect: { id } },
+        user: { connect: { id: user.id } },
+        ...createReviewDto,
+      },
     });
   }
 }
