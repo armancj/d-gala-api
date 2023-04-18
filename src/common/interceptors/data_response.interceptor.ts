@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Reflector } from '@nestjs/core';
+import { IS_EXCLUDE_KEY } from '../../files/decorators/exlude-interceptor.decorator';
 
 export interface Response<T> {
   data: T;
@@ -15,10 +17,20 @@ export interface Response<T> {
 export class DataResponseInterceptor<T>
   implements NestInterceptor<T, Response<T>>
 {
+  constructor(private reflector: Reflector) {}
+
   intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
+    const isExclude = this.reflector.getAllAndOverride<boolean>(
+      IS_EXCLUDE_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+
+    if (isExclude) {
+      return next.handle();
+    }
     return next.handle().pipe(map((data) => ({ data })));
   }
 }

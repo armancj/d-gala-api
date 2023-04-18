@@ -135,7 +135,7 @@ model Product {
   price        Float         @default(0) @db.DoublePrecision
   slug         String        @unique()
   sizes        String[]      @default([])
-  start        Int           @default(3)
+  stars        Int           @default(3)
   viewCount    Int           @default(0)
   gender       GenderType
   tags         String[]      @default([])

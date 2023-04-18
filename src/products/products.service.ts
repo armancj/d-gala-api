@@ -3,7 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HandlerError } from '../common/utils/handler-error';
-import { GetAllResponseDto } from '../common/dto';
+import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
 import { QueryProductsDto } from './dto/query-products.dto';
 import { Product, User } from '@prisma/client';
 import { Prisma } from '.prisma/client';
@@ -58,7 +58,10 @@ export class ProductsService {
 
   findOne(id: number) {
     return this.prisma.product
-      .findFirstOrThrow({ where: { id, deleted: false } })
+      .findFirstOrThrow({
+        where: { id, deleted: false },
+        include: { photo: { select: { name: true, url: true } }, reviews: {} },
+      })
       .catch((err) =>
         HandlerError(
           err,
@@ -93,5 +96,28 @@ export class ProductsService {
           `The product id: ${id} is incorrect or not exists. Please select a other product id`,
         ),
       );
+  }
+
+  rankinProduct(paginateProduct: GetAllQueryDto) {
+    return this.prisma.product.findMany({
+      orderBy: { reviewsTotal: 'desc' },
+      skip: paginateProduct.skip,
+      take: paginateProduct.take,
+    });
+  }
+
+  async seeOneProduct(id: number) {
+    return await this.prisma.$transaction(async (prisma) => {
+      const findOneProduct = await this.findOne(id);
+
+      prisma.product.update({
+        where: { id },
+        data: {
+          viewCount: { increment: 1 },
+          reviews: { create: { rating: 1 } },
+        },
+      });
+      return findOneProduct;
+    });
   }
 }

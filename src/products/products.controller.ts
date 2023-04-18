@@ -18,10 +18,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { QueryProductsDto } from './dto/query-products.dto';
-import { Auth } from '../authentication/decorator';
+import { Auth, GetUser, Public } from '../authentication/decorator';
 import { EnumUserRole } from '../user/enum/user-role.enum';
-import { GetUser, Public } from '../authentication/decorator';
 import { User } from '@prisma/client';
+import { GetAllQueryDto } from '../common/dto';
+
 @ApiTags('Products')
 @Controller('products')
 export class ProductsController {
@@ -46,9 +47,21 @@ export class ProductsController {
   }
 
   @Public()
+  @Get('ranking')
+  rankinProduct(@Query() paginateProduct: GetAllQueryDto) {
+    return this.productsService.rankinProduct(paginateProduct);
+  }
+
+  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.WORKER)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: string) {
     return this.productsService.findOne(+id);
+  }
+
+  @Public()
+  @Get(':id')
+  seeOneProduct(@Param('id', ParseIntPipe) id: string) {
+    return this.productsService.seeOneProduct(+id);
   }
 
   @Patch(':id')

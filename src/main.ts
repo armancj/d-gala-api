@@ -1,4 +1,4 @@
-import { NestFactory, repl } from '@nestjs/core';
+import { NestFactory, Reflector, repl } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -7,7 +7,7 @@ import {
   DataResponseInterceptor,
   ExcludeNullInterceptor,
   LoggingInterceptor,
-  TimeoutInterceptor
+  TimeoutInterceptor,
 } from './common/interceptors';
 import { EnumEnvName } from './common/config';
 import { AppSwagger } from './app.swagger';
@@ -30,7 +30,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(
     new LoggingInterceptor(),
-    new DataResponseInterceptor(),
+    new DataResponseInterceptor(new Reflector()),
     new ExcludeNullInterceptor(),
     new TimeoutInterceptor(),
   );
