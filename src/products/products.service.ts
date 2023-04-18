@@ -60,7 +60,10 @@ export class ProductsService {
     return this.prisma.product
       .findFirstOrThrow({
         where: { id, deleted: false },
-        include: { photo: { select: { name: true, url: true } }, reviews: {} },
+        include: {
+          photo: { select: { id: true, name: true, url: true } },
+          reviews: { select: { id: true, rating: true } },
+        },
       })
       .catch((err) =>
         HandlerError(
@@ -108,16 +111,21 @@ export class ProductsService {
 
   async seeOneProduct(id: number) {
     return await this.prisma.$transaction(async (prisma) => {
-      const findOneProduct = await this.findOne(id);
-
       prisma.product.update({
         where: { id },
         data: {
           viewCount: { increment: 1 },
-          reviews: { create: { rating: 1 } },
         },
       });
-      return findOneProduct;
+      return this.findOne(id);
+    });
+  }
+
+  async updateReview(id: number, text: string) {
+    const product = await this.findOne(id);
+    return this.prisma.product.update({
+      where: {id},
+      //data: {reviews: {connectOrCreate: {where: {id: product.reviews.}}}},
     });
   }
 }
