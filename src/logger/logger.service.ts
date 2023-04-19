@@ -12,7 +12,7 @@ export class LoggerService {
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly winstonLogger: Logger,
   ) {}
-  log(level: string, message: string, metadata?: any) {
+  log(level: string, message: any, metadata?: any) {
     this.winstonLogger.log(level, message, metadata);
   }
 

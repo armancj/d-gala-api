@@ -16,13 +16,13 @@ export class LoggerMiddleware implements NestMiddleware {
     res: Response;
     next: () => NextFunction;
   }) {
+    console.log(req);
     const { statusCode, statusMessage } = res;
+    const { method, originalUrl, user } = req;
     const contentLength = res.get('content-length');
 
 
-    console.log(req)
-
-    const message = `${res.req?.method} ${res.req?.originalUrl} ${statusCode}`;
+    const message = { method, originalUrl, statusCode };
 
     this.loggerServices.log('info', message);
 
