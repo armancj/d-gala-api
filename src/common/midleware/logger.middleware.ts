@@ -1,4 +1,9 @@
-import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  Logger,
+  NestMiddleware,
+} from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { LoggerService } from '../../logger/logger.service';
 
@@ -7,7 +12,7 @@ export class LoggerMiddleware implements NestMiddleware {
   constructor(private readonly loggerServices: LoggerService) {}
 
   private logger: Logger = new Logger(LoggerMiddleware.name);
-  async use({
+  use({
     req,
     res,
     next,
@@ -18,11 +23,10 @@ export class LoggerMiddleware implements NestMiddleware {
   }) {
     console.log(req);
     const { statusCode, statusMessage } = res;
-    const { method, originalUrl, user } = req;
+    const { method } = req;
     const contentLength = res.get('content-length');
 
-
-    const message = { method, originalUrl, statusCode };
+    const message = { method, statusCode };
 
     this.loggerServices.log('info', message);
 

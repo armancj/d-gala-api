@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
-  Post,
+  Post, Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
@@ -29,7 +29,7 @@ export class AppController {
 
   @Get()
   @Public()
-  getHello(): string {
+  getHello(@Req() req: Request): string {
     return 'Hello World!';
   }
 
