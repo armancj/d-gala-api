@@ -26,6 +26,7 @@ import { validationSchema } from './config/validation.schema';
 import authConfig from './authentication/config/auth.config';
 import searchConfig from './search/config/search.config';
 import { FilesModule } from './files/files.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { FilesModule } from './files/files.module';
     ProductsModule,
     MailerModule,
     FilesModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [
@@ -65,6 +67,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes({ path: 'category', method: RequestMethod.GET });
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

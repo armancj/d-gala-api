@@ -82,9 +82,11 @@ export class UserService {
   }
 
   async userWhereUnique(
-    params: Prisma.UserFindUniqueArgs,
+    params: Prisma.UserFindUniqueOrThrowArgs,
   ): Promise<User | null> {
-    return this.prisma.user.findUnique(params);
+    return this.prisma.user
+      .findUniqueOrThrow(params)
+      .catch((err) => HandlerError(err));
   }
 
   async userFindFirstArgs(

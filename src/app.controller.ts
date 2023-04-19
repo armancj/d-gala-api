@@ -17,11 +17,15 @@ import {
 } from './authentication/dto';
 import { UserPayload } from './user/interface/user-payload';
 import { JwtRefreshAuthGuard } from './authentication/guard/jwt-refresh-auth.guard';
+import { LoggerService } from './logger/logger.service';
 
 @ApiTags('App')
 @Controller({ version: '1' })
 export class AppController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private readonly logger: LoggerService,
+  ) {}
 
   @Get()
   @Public()
