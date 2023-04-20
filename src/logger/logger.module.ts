@@ -7,24 +7,25 @@ import * as winston from 'winston';
 @Module({
   imports: [
     WinstonModule.forRoot({
-      level: 'info',
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.json(),
-        winston.format.colorize(),
+        winston.format.ms(),
+        winston.format.simple(),
       ),
       transports: [
-        new winston.transports.Console({
-          format: winston.format.combine(
-            winston.format.colorize(),
-            winston.format.simple(),
-          ),
-        }),
         new winston.transports.File({
           filename: 'logs/error.log',
           level: 'error',
         }),
-        new winston.transports.File({ filename: 'logs/combined.log' }),
+        new winston.transports.File({
+          filename: 'logs/combined.log',
+          level: 'info',
+        }),
+        new winston.transports.File({
+          filename: 'logs/warn.log',
+          level: 'warn',
+        }),
       ],
     }),
   ],

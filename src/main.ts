@@ -6,12 +6,12 @@ import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import {
   DataResponseInterceptor,
   ExcludeNullInterceptor,
-  LoggingInterceptor,
   TimeoutInterceptor,
 } from './common/interceptors';
 import { EnumEnvName } from './common/config';
 import { AppSwagger } from './app.swagger';
 import helmet from 'helmet';
+import { LoggingInterceptor } from './logger/interceptor/loggin.interceptor';
 
 declare const module: any;
 

@@ -19,7 +19,7 @@ import { SearchModule } from './search/search.module';
 import { ExceptionLoggerFilter } from './common/filter/exception-logger.filter';
 import { CategoryModule } from './products/category/category.module';
 import { SeedModule } from './seed/seed.module';
-import { LoggerMiddleware } from './common/midleware/logger.middleware';
+import { LoggerMiddleware } from './logger/midleware/logger.middleware';
 import { ProductsModule } from './products/products.module';
 import { MailerModule } from './mailer/mailer.module';
 import { validationSchema } from './config/validation.schema';
