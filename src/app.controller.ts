@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
-  Post, Req,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
@@ -17,19 +17,15 @@ import {
 } from './authentication/dto';
 import { UserPayload } from './user/interface/user-payload';
 import { JwtRefreshAuthGuard } from './authentication/guard/jwt-refresh-auth.guard';
-import { LoggerService } from './logger/logger.service';
 
 @ApiTags('App')
 @Controller({ version: '1' })
 export class AppController {
-  constructor(
-    private authService: AuthService,
-    private readonly logger: LoggerService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Get()
   @Public()
-  getHello(@Req() req: Request): string {
+  getHello(): string {
     return 'Hello World!';
   }
 

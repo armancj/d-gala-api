@@ -198,6 +198,20 @@ model Photo {
   @@index([productId, profileId])
 }
 
+model Logs {
+  id            Int      @id @default(autoincrement())
+  statusLog     String
+  method        String?
+  originalUrl   String?
+  params        Json?
+  statusCode    Int?
+  statusMessage String?
+  user          Json?
+  contentLength String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 enum Role {
   USER
   ADMIN

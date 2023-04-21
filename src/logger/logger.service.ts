@@ -1,38 +1,72 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Logger } from 'winston';
-import {
-  WINSTON_MODULE_NEST_PROVIDER,
-} from 'nest-winston';
-
-//import { LoggerService } from '@nestjs/common';
+import { WINSTON_MODULE_NEST_PROVIDER, WinstonLogger } from 'nest-winston';
+import { PrismaService } from '../prisma/prisma.service';
+import { LoggerEnum } from './config/logger.const';
+import { LoggerDto } from './dto/logger.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class LoggerService {
   constructor(
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
-    private readonly winstonLogger: Logger,
+    private readonly _winstonLogger: WinstonLogger,
+    private readonly prismaService: PrismaService,
   ) {}
-  log(level: string, message: any, metadata?: any) {
-    this.winstonLogger.log(level, message, metadata);
+
+  log(message: any, metadata?: any) {
+    this.createLogger(LoggerEnum.http, message);
+    return this._winstonLogger.log(message, metadata);
   }
 
-  error(message: string, trace: string, metadata?: any) {
-    this.winstonLogger.error(message, { trace, metadata });
+  error(message: any, trace: string, metadata?: any) {
+    this.createLogger(LoggerEnum.error, message);
+    return this._winstonLogger.error(message, trace, metadata);
   }
 
-  warn(message: string, metadata?: any) {
-    this.winstonLogger.warn(message, metadata);
+  warn(message: any, metadata?: any) {
+    this.createLogger(LoggerEnum.warn, message);
+    return this._winstonLogger.warn(message, metadata);
   }
 
-  info(message: string, metadata?: any) {
-    this.winstonLogger.info(message, metadata);
+  private createLogger(logger: LoggerEnum, message: any): void {
+    this.prismaService.logs
+      .create({
+        data: { statusLog: logger, ...message },
+      })
+      .catch((err) => console.log(err));
   }
 
-  debug(message: string, metadata?: any) {
-    this.winstonLogger.debug(message, metadata);
-  }
+  getLogger(loggerDto: LoggerDto) {
+    const {
+      searchMessage,
+      skip,
+      contentLength,
+      statusLog,
+      statusCode,
+      take,
+      method,
+      toDate,
+      fromDate,
+    } = loggerDto;
+    const where: Prisma.LogsWhereInput = {};
 
-  verbose(message: string, metadata?: any) {
-    this.winstonLogger.verbose(message, metadata);
+    if (searchMessage)
+      where.statusMessage = {
+        contains: searchMessage,
+        mode: 'insensitive',
+      };
+    if (statusLog) where.statusLog = statusLog;
+    if (contentLength) where.contentLength = contentLength.toString();
+    if (statusCode) where.statusCode = statusCode;
+    if (method) where.method = method;
+
+    if (fromDate) where.createdAt = { gte: fromDate };
+    if (toDate) where.createdAt = { lte: toDate };
+
+    return this.prismaService.logs.findMany({
+      take,
+      skip,
+      where,
+    });
   }
 }
