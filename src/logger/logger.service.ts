@@ -56,7 +56,7 @@ export class LoggerService {
         mode: 'insensitive',
       };
     if (statusLog) where.statusLog = statusLog;
-    if (contentLength) where.contentLength = contentLength.toString();
+    if (contentLength) where.contentLength = contentLength;
     if (statusCode) where.statusCode = statusCode;
     if (method) where.method = method;
 

@@ -19,5 +19,6 @@ import { APP_CONFIG_MINIO } from './config/constant';
   ],
   controllers: [FilesController],
   providers: [FilesService],
+  exports: [FilesService],
 })
 export class FilesModule {}

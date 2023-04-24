@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+
 interface SeedProduct {
   content: string;
   photo: string[];
@@ -16,6 +18,10 @@ type ValidTypes = 'shirts' | 'pants' | 'hoodies' | 'hats';
 
 interface SeedData {
   products: SeedProduct[];
+
+  users: Prisma.UserCreateManyInput[];
+  profiles: Prisma.ProfileCreateManyInput[];
+  photos: Prisma.PhotoCreateManyInput[];
 }
 
 export const initialData: SeedData = {
@@ -690,5 +696,92 @@ export const initialData: SeedData = {
       name: 'Kids Corp Jacket',
       gender: 'kid',
     },
+  ],
+  users: [
+    {
+      id: 1,
+      email: 'jefferey_collier@hotmail.com',
+      phone: '673-683-6503',
+      username: 'Vincent_Bailey6',
+      firstname: 'Jodie',
+      lastname: 'Ledner',
+      password: '$2b$10$cvgFJg/DiGmP47AkNOVV3uomai4l1jmU3wMQC5crzRtcIwqhhziH6',
+      salt: '$2b$10$cvgFJg/DiGmP47AkNOVV3u',
+      role: 'SUADMIN',
+      status: 'ACTIVE',
+      currentHashedRefreshToken:
+        '$2b$10$jP.Pno9COfOZ4KMwrlx6ou49DKTyA7zIi1EI4c7lRatS6crqibivu',
+    },
+    {
+      id: 2,
+      email: 'morris.casper31@gmail.com',
+      phone: '921-392-8062',
+      username: 'Lavinia44',
+      firstname: 'Don',
+      lastname: 'Wilkinson',
+      password: '$2b$10$mBsuYtr9ZzR/W1SIYf0PVenNEvo2GyXvoZcY/aGDX8h1lvu1Nizdm',
+      salt: '$2b$10$mBsuYtr9ZzR/W1SIYf0PVe',
+      role: 'ADMIN',
+      status: 'ACTIVE',
+      currentHashedRefreshToken: null,
+    },
+    {
+      id: 3,
+      email: 'carter_kertzmann@yahoo.com',
+      phone: '496-241-8978',
+      username: 'Zaria.Hane',
+      firstname: 'Aliya',
+      lastname: 'Hudson',
+      password: '$2b$10$hYOVkhMFhA8J42ssIY3Sxuw0.C2eNLMOFoZJpxbbRIEUWm4VmwKdy',
+      salt: '$2b$10$hYOVkhMFhA8J42ssIY3Sxu',
+      role: 'WORKER',
+      status: 'ACTIVE',
+      currentHashedRefreshToken: null,
+    },
+    {
+      id: 4,
+      email: 'sofia46@gmail.com',
+      phone: '599-343-4978',
+      username: 'Emmie18',
+      firstname: 'Finn',
+      lastname: 'Hamill',
+      password: '$2b$10$CwkiesNrZ0/2we2Aweim9uG9k9AGva9ML1lFMPUJSGkWNqPGIrFHm',
+      salt: '$2b$10$CwkiesNrZ0/2we2Aweim9u',
+      role: 'USER',
+      status: 'ACTIVE',
+      currentHashedRefreshToken: null,
+    },
+    {
+      id: 5,
+      email: 'sylvester.von@yahoo.com',
+      phone: '741-715-9458',
+      username: 'Tad.Cremin14',
+      firstname: 'Estel',
+      lastname: 'Stiedemann',
+      password: '$2b$10$3NDCtqoHIh3SE8ph.5QUEOiDOfpvsn./Up0K2oIyXFn11aGy7Yp8K',
+      salt: '$2b$10$3NDCtqoHIh3SE8ph.5QUEO',
+      role: 'USER',
+      status: 'ACTIVE',
+      currentHashedRefreshToken: null,
+    },
+  ],
+  profiles: [
+    {
+      id: 6,
+      bio: 'this is super admin profile',
+      address: ' Las Tunas',
+      userId: 1,
+    },
+    { id: 7, bio: 'this is admin profile', address: ' Las Tunas', userId: 2 },
+    { id: 8, bio: 'this is worker profile', address: ' Las Tunas', userId: 3 },
+    { id: 9, bio: 'this is user profile', address: ' Las Tunas', userId: 4 },
+    { id: 10, bio: 'this is user profile', address: ' Las Tunas', userId: 5 },
+  ],
+  photos: [
+    { space: null, url: 'sdasd', name: 'superAdmin.jpeg', profileId: 6 },
+    { space: null, url: 'sdasd', name: 'profile/admin.webp', profileId: 7 },
+    { space: null, url: 'sdasd', name: 'worked.jpeg', profileId: 8 },
+    { space: null, url: 'sdasd', name: 'user1', profileId: 9 },
+    { space: null, url: 'sdasd', name: 'user1profile', profileId: 10 },
   ],
 };

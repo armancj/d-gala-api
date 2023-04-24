@@ -42,7 +42,7 @@ model EmailConfirmed {
   code         Int         @unique
   codeExpireAt DateTime
   status       EmailStatus @default(REGISTER_SEND_EMAIL)
-  user         User        @relation(fields: [userId], references: [id])
+  user         User        @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   userId       Int         @unique
   updatedAt    DateTime    @updatedAt
 }
@@ -54,14 +54,14 @@ model PhoneConfirmed {
   code         Int         @unique
   codeExpireAt DateTime
   status       EmailStatus @default(REGISTER_SEND_EMAIL)
-  user         User        @relation(fields: [userId], references: [id])
+  user         User        @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   userId       Int         @unique
   updatedAt    DateTime    @updatedAt
 }
 
 model PrivateMessage {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   userId    Int
   message   String
   createdAt DateTime @default(now())
@@ -72,7 +72,7 @@ model Profile {
   id        Int      @id @default(autoincrement())
   bio       String
   address   String?
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   userId    Int      @unique
   photo     Photo?
   updatedAt DateTime @updatedAt
@@ -83,7 +83,7 @@ model Post {
   createdAt  DateTime            @default(now())
   title      String
   published  Boolean?            @default(false)
-  author     User?               @relation(fields: [authorId], references: [id])
+  author     User?               @relation(fields: [authorId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   authorId   Int?
   categories CategoriesOnPosts[]
   comments   Comment[] // A post can have many comments
@@ -95,7 +95,7 @@ model Post {
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String?
-  Post      Post?    @relation(fields: [postId], references: [id]) // A comment can have one post
+  Post      Post?    @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade) // A comment can have one post
   postId    Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -107,7 +107,7 @@ model Category {
   name            String              @unique()
   generalCategory Boolean             @default(true)
   parentId        Int?
-  parent          Category?           @relation("GeneralCategory", fields: [parentId], references: [id])
+  parent          Category?           @relation("GeneralCategory", fields: [parentId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   children        Category[]          @relation("GeneralCategory")
   posts           CategoriesOnPosts[]
   products        Product[]           @relation("ProductCategory")
@@ -117,9 +117,9 @@ model Category {
 
 model CategoriesOnPosts {
   id         Int      @id @default(autoincrement())
-  post       Post     @relation(fields: [postId], references: [id])
+  post       Post     @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   postId     Int // relation scalar field (used in the `@relation` attribute above)
-  category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   categoryId Int // relation scalar field (used in the `@relation` attribute above)
   assignedAt DateTime @default(now())
   assignedBy String
@@ -163,8 +163,8 @@ model Order {
 
 model OrderItem {
   id        Int     @id @default(autoincrement())
-  order     Order   @relation(fields: [orderId], references: [id])
-  product   Product @relation(fields: [productId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   quantity  Int
   price     Float
   orderId   Int
@@ -177,9 +177,9 @@ model Review {
   text      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   productId Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   userId    Int      @unique
 }
 
@@ -189,9 +189,9 @@ model Photo {
   name      String   @unique
   space     Float
   url       String
-  product   Product? @relation(fields: [productId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   productId Int?     @unique
-  profile   Profile? @relation(fields: [profileId], references: [id], onUpdate: Cascade)
+  profile   Profile? @relation(fields: [profileId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   profileId Int?     @unique
   updatedAt DateTime @updatedAt
 
@@ -207,7 +207,7 @@ model Logs {
   statusCode    Int?
   statusMessage String?
   user          Json?
-  contentLength String?
+  contentLength Int?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

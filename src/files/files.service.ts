@@ -163,7 +163,7 @@ export class FilesService {
     }
   }
 
-  private async deleteFileMinioStorage(objectName: string): Promise<void> {
+  async deleteFileMinioStorage(objectName: string): Promise<void> {
     return await this.minioService.client
       .removeObject(this.bucket, objectName)
       .catch((err) => {
