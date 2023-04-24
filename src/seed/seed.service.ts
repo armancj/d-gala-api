@@ -13,9 +13,6 @@ export class SeedService {
 
   async executeSeed() {
     await this.prisma.category.deleteMany({});
-    await this.prisma.category
-      .createMany({ data: CategoryData })
-      .catch((err) => HandlerError(err));
     return 'Seed executed successfully';
   }
 }
