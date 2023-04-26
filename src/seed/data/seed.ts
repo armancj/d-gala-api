@@ -18,10 +18,8 @@ type ValidTypes = 'shirts' | 'pants' | 'hoodies' | 'hats';
 
 interface SeedData {
   products: SeedProduct[];
-
   users: Prisma.UserCreateManyInput[];
   profiles: Prisma.ProfileCreateManyInput[];
-  photos: Prisma.PhotoCreateManyInput[];
 }
 
 export const initialData: SeedData = {
@@ -772,16 +770,29 @@ export const initialData: SeedData = {
       address: ' Las Tunas',
       userId: 1,
     },
-    { id: 7, bio: 'this is admin profile', address: ' Las Tunas', userId: 2 },
-    { id: 8, bio: 'this is worker profile', address: ' Las Tunas', userId: 3 },
-    { id: 9, bio: 'this is user profile', address: ' Las Tunas', userId: 4 },
-    { id: 10, bio: 'this is user profile', address: ' Las Tunas', userId: 5 },
-  ],
-  photos: [
-    { space: null, url: 'sdasd', name: 'superAdmin.jpeg', profileId: 6 },
-    { space: null, url: 'sdasd', name: 'profile/admin.webp', profileId: 7 },
-    { space: null, url: 'sdasd', name: 'worked.jpeg', profileId: 8 },
-    { space: null, url: 'sdasd', name: 'user1', profileId: 9 },
-    { space: null, url: 'sdasd', name: 'user1profile', profileId: 10 },
+    {
+      id: 7,
+      bio: 'this is admin profile',
+      address: ' Las Tunas',
+      userId: 2,
+    },
+    {
+      id: 8,
+      bio: 'this is worker profile',
+      address: ' Las Tunas',
+      userId: 3,
+    },
+    {
+      id: 9,
+      bio: 'this is user profile1',
+      address: ' Las Tunas',
+      userId: 4,
+    },
+    {
+      id: 10,
+      bio: 'this is user profile',
+      address: ' Las Tunas',
+      userId: 5,
+    },
   ],
 };

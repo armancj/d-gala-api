@@ -17,7 +17,7 @@ import { MinioPolicy, MinioRoute } from './enum/minio.enum';
 import { Photo, Prisma, User } from '@prisma/client';
 import { EnumUserRole } from '../user/enum/user-role.enum';
 
-interface PhotoIdInterface {
+export interface PhotoIdInterface {
   productId?: number;
   profileId?: number;
 }
@@ -31,6 +31,12 @@ interface PhotoInterface {
       { product: boolean; profile: boolean }['profile']
     > | null;
   };
+}
+
+interface photoInput {
+  minioData: { message: string; url: string };
+  file: Express.Multer.File;
+  photoId: PhotoIdInterface;
 }
 
 @Injectable()
@@ -99,7 +105,7 @@ export class FilesService {
     return profile.id;
   }
 
-  private async photoToBd(
+  async photoToBd(
     file: Express.Multer.File,
     newFolderPath: string,
     photoId?: PhotoIdInterface,
@@ -107,15 +113,10 @@ export class FilesService {
     try {
       return await this.prisma.$transaction(async (prisma) => {
         const minioData = await this.fileToMinioStorage(file, newFolderPath);
+        const photoInput = this.createPhotoInput({ minioData, file, photoId });
         return prisma.photo
           .create({
-            data: {
-              url: minioData.url,
-              name: file.filename,
-              space: file.size,
-              profile: this.getProfileOrProductId(photoId.profileId),
-              product: this.getProfileOrProductId(photoId.productId),
-            },
+            data: photoInput,
           })
           .catch(async (err) => {
             if (minioData)
@@ -126,6 +127,20 @@ export class FilesService {
     } catch (err) {
       HandlerError(err, err?.meta);
     }
+  }
+
+  createPhotoInput(photoInput: photoInput) {
+    const { photoId, file, minioData } = photoInput;
+    const data: Prisma.PhotoCreateInput = {
+      url: minioData.url,
+      name: file.filename,
+      space: file.size,
+    };
+    if (photoId?.profileId)
+      data.profile = this.getProfileOrProductId(photoId.profileId);
+    if (photoId?.productId)
+      data.profile = this.getProfileOrProductId(photoId.productId);
+    return data;
   }
 
   private getProfileOrProductId(id?: number) {
