@@ -8,6 +8,12 @@ import { GetAllResponseDto } from '../common/dto';
 import { EnumUserRole } from './enum/user-role.enum';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 
+export interface findAllUserParams {
+  skip?: number;
+  take?: number;
+  user?: User;
+}
+
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
@@ -18,11 +24,7 @@ export class UserService {
     });
   }
 
-  async findAll(params: {
-    skip?: number;
-    take?: number;
-    user?: User;
-  }): Promise<GetAllResponseDto> {
+  async findAll(params: findAllUserParams): Promise<GetAllResponseDto> {
     const { skip, take, user } = params;
     return await this.users({
       take,
