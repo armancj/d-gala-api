@@ -27,7 +27,7 @@ export class UserService {
     return await this.users({
       take,
       skip,
-      //select: this.getSelectUser(user?.role),
+      select: this.getSelectUser(user?.role),
       where: { deleted: false },
     });
   }
