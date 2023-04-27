@@ -4,7 +4,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUrl,
 } from 'class-validator';
 
 export class CreatePostDto {

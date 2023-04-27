@@ -12,6 +12,9 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { stringReplaceUnderscore } from '../../../common/utils/check-slug-insert.function';
+
 export class CreateProductDto {
   @IsString()
   @MaxLength(80)
@@ -25,8 +28,6 @@ export class CreateProductDto {
 
   @IsString()
   @IsOptional()
-  @MaxLength(80)
-  @MinLength(4)
   slug?: string;
 
   @IsEnum(GenderType)
@@ -34,6 +35,7 @@ export class CreateProductDto {
 
   @IsArray()
   @IsOptional()
+  @Transform(({ value }) => value?.map((v) => stringReplaceUnderscore(v)))
   @IsString({ each: true })
   readonly tags?: string[];
 

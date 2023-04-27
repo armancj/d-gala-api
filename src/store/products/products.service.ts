@@ -16,16 +16,13 @@ export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createProductDto: CreateProductDto, user: User) {
-    const { categoryName, tags, ...rest } = createProductDto;
+    const { categoryName, ...rest } = createProductDto;
     const product: Prisma.ProductCreateInput = this.createProductInput(
       createProductDto.gender,
       user,
       rest,
     );
-
-    if (tags.length > 0) product.tags = this.getTags(tags);
     product.slug = this.getSlug(rest.name, rest?.slug);
-
     return this.prisma.product
       .create({
         data: product,
@@ -153,9 +150,5 @@ export class ProductsService {
         ...createReviewDto,
       },
     });
-  }
-
-  private getTags(tags: string[]) {
-    return tags.map((tag) => stringReplaceUnderscore(tag));
   }
 }
