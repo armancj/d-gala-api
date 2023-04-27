@@ -1,1 +1,1 @@
-export {EnumEnvName} from './env-name.enum';
+export { EnumEnvName } from './env-name.enum';

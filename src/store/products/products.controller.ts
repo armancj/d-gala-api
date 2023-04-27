@@ -18,11 +18,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { QueryProductsDto } from './dto/query-products.dto';
-import { Auth, GetUser, Public } from '../authentication/decorator';
-import { EnumUserRole } from '../user/enum/user-role.enum';
+import { Auth, GetUser, Public } from '../../authentication/decorator';
+import { EnumUserRole } from '../../user/enum/user-role.enum';
 import { User } from '@prisma/client';
-import { GetAllQueryDto } from '../common/dto';
-import {CreateReviewDto} from "./dto/create-review.dto";
+import { GetAllQueryDto } from '../../common/dto';
+import { CreateReviewDto } from './dto/create-review.dto';
 
 @ApiTags('Products')
 @Controller('products')

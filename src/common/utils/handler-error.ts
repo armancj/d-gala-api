@@ -11,17 +11,18 @@ import {
 
 export function HandlerError(error: any, message?: string): never {
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    // The .code property can be accessed in a type-safe manner
+    const errorMessage = message ? message : error.message;
+
     if (error.code === EnumPrismaError.UniqueConstraintViolation) {
-      throw new ConflictException(error.message);
+      throw new ConflictException(errorMessage);
     }
 
     if (error.code === EnumPrismaError.ForeignKeyConstraintFailed) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(errorMessage);
     }
 
     if (error.code === EnumPrismaError.NOT_FOUND)
-      throw new NotFoundException(message);
+      throw new NotFoundException(errorMessage);
 
     throw new InternalServerErrorException(
       `Prisma error: ${error.message}, code:${error.code}`,

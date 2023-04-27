@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { SearchServiceInterface } from './interface/search.service.interface';
 import { ElasticsearchService } from '@nestjs/elasticsearch/dist/elasticsearch.service';
-import { BulkRequest } from "@elastic/elasticsearch/lib/api/types";
+import { BulkRequest } from '@elastic/elasticsearch/lib/api/types';
 
 @Injectable()
 export class SearchService implements SearchServiceInterface<any> {

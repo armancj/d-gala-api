@@ -26,6 +26,7 @@ model User {
   status                    UserStatus       @default(ACTIVE)
   posts                     Post[]
   product                   Product[]
+  category                  Category[]
   profile                   Profile?
   Review                    Review?
   emailConfirmed            EmailConfirmed?
@@ -106,11 +107,13 @@ model Category {
   createdAt       DateTime            @default(now())
   name            String              @unique()
   generalCategory Boolean             @default(true)
-  parentId        Int?
   parent          Category?           @relation("GeneralCategory", fields: [parentId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  parentId        Int?
   children        Category[]          @relation("GeneralCategory")
   posts           CategoriesOnPosts[]
   products        Product[]           @relation("ProductCategory")
+  createBy        User?               @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId          Int?
   deleted         Boolean             @default(false)
   updatedAt       DateTime            @updatedAt
 }

@@ -20,6 +20,7 @@ interface SeedData {
   products: SeedProduct[];
   users: Prisma.UserCreateManyInput[];
   profiles: Prisma.ProfileCreateManyInput[];
+  category: Prisma.CategoryCreateManyInput[];
 }
 
 export const initialData: SeedData = {
@@ -793,6 +794,152 @@ export const initialData: SeedData = {
       bio: 'this is user profile',
       address: ' Las Tunas',
       userId: 5,
+    },
+  ],
+  category: [
+    {
+      id: 1,
+      name: 'woman',
+      generalCategory: true,
+      userId: 1,
+    },
+    {
+      id: 2,
+      name: 'man',
+      generalCategory: true,
+      userId: 3,
+    },
+    {
+      id: 3,
+      name: 'unisex',
+      generalCategory: true,
+      userId: 3,
+    },
+    {
+      id: 4,
+      name: 'shoes3',
+      generalCategory: false,
+      parentId: 1,
+      userId: 2,
+    },
+    {
+      id: 5,
+      name: 'leather bag3',
+      generalCategory: false,
+      parentId: 2,
+      userId: 3,
+    },
+    {
+      id: 6,
+      name: 'leather briefcase2',
+      generalCategory: false,
+      parentId: 1,
+      userId: 2,
+    },
+    {
+      id: 7,
+      name: 'leather bracelet2',
+      generalCategory: false,
+      parentId: 3,
+      userId: 3,
+    },
+    {
+      id: 8,
+      name: 'leather folder2',
+      generalCategory: false,
+      parentId: 1,
+      userId: 2,
+    },
+    {
+      id: 9,
+      name: 'leather belt2',
+      generalCategory: false,
+      parentId: 2,
+      userId: 1,
+    },
+    {
+      id: 10,
+      name: 'shoes2',
+      generalCategory: false,
+      parentId: 3,
+      userId: 3,
+    },
+    {
+      id: 11,
+      name: 'leather bag2',
+      generalCategory: false,
+      parentId: 2,
+      userId: 2,
+    },
+    {
+      id: 12,
+      name: 'leather briefcase2',
+      generalCategory: false,
+      parentId: 2,
+      userId: 1,
+    },
+    {
+      id: 13,
+      name: 'leather bracelet2',
+      generalCategory: false,
+      parentId: 2,
+      userId: 3,
+    },
+    {
+      id: 14,
+      name: 'leather folder2',
+      generalCategory: false,
+      parentId: 2,
+      userId: 2,
+    },
+    {
+      id: 15,
+      name: 'leather belt2',
+      generalCategory: false,
+      parentId: 2,
+      userId: 1,
+    },
+    {
+      id: 16,
+      name: 'shoes',
+      generalCategory: false,
+      parentId: 3,
+      userId: 1,
+    },
+    {
+      id: 17,
+      userId: 3,
+      name: 'leather bag',
+      generalCategory: false,
+      parentId: 3,
+    },
+    {
+      id: 18,
+      userId: 2,
+      name: 'leather briefcase',
+      generalCategory: false,
+      parentId: 3,
+    },
+    {
+      id: 19,
+      userId: 3,
+      name: 'leather bracelet',
+      generalCategory: false,
+      parentId: 3,
+    },
+    {
+      id: 20,
+      userId: 2,
+      name: 'leather folder',
+      generalCategory: false,
+      parentId: 3,
+    },
+    {
+      id: 21,
+      userId: 1,
+      name: 'leather belt',
+      generalCategory: false,
+      parentId: 3,
     },
   ],
 };

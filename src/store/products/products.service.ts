@@ -1,60 +1,78 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { HandlerError } from '../common/utils/handler-error';
-import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
+import { PrismaService } from '../../prisma/prisma.service';
+import { HandlerError } from '../../common/utils/handler-error';
+import { GetAllQueryDto, GetAllResponseDto } from '../../common/dto';
 import { QueryProductsDto } from './dto/query-products.dto';
 import { Product, User } from '@prisma/client';
 import { Prisma } from '.prisma/client';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { stringReplaceUnderscore } from '../../common/utils/check-slug-insert.function';
+import { GenderType } from './enum/gender-type.enum';
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createProductDto: CreateProductDto, user: User) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { categoryName, ...rest } = createProductDto;
-    const product: Prisma.ProductCreateInput = {
+    const { categoryName, tags, ...rest } = createProductDto;
+    const product: Prisma.ProductCreateInput = this.createProductInput(
+      createProductDto.gender,
+      user,
+      rest,
+    );
+
+    if (tags.length > 0) product.tags = this.getTags(tags);
+    product.slug = this.getSlug(rest.name, rest?.slug);
+
+    return this.prisma.product
+      .create({
+        data: product,
+      })
+      .catch((err) =>
+        HandlerError(err, `Category with id ${categoryName} not found`),
+      );
+  }
+
+  private createProductInput(
+    gender: GenderType,
+    user: User,
+    rest: Omit<CreateProductDto, 'categoryName' | 'tags'>,
+  ): Prisma.ProductCreateInput {
+    return {
       categories: {
         connectOrCreate: {
-          where: { name: createProductDto?.gender },
-          create: { name: createProductDto.gender, generalCategory: false },
+          where: { name: gender },
+          create: { name: gender, generalCategory: false },
         },
       },
       user: { connect: { id: user.id } },
       ...rest,
-    };
-
-    return this.prisma.product
-      .create({
-        data: {
-          ...product,
-        },
-      })
-      .catch((err) =>
-        HandlerError(
-          err,
-          `Category with id ${createProductDto.categoryName} not found`,
-        ),
-      );
+    } as Prisma.ProductCreateInput;
   }
 
-  async findAll(getAllQueryDto: QueryProductsDto) {
-    const findCategory: GetAllResponseDto = {
-      result: await this.prisma.product.findMany({
-        where: {
-          deleted: false,
-          gender: getAllQueryDto.gender,
-          status: getAllQueryDto.status,
-        },
-        skip: getAllQueryDto.skip,
-        take: getAllQueryDto.take,
-      }),
-      total: await this.prisma.product.count({ where: { deleted: false } }),
-    };
-    return findCategory;
+  private getSlug(name: string, slug?: string) {
+    const editSlug = slug ? slug : name;
+    return stringReplaceUnderscore(editSlug);
+  }
+
+  async findAll(getAllQueryDto: QueryProductsDto): Promise<GetAllResponseDto> {
+    const result = await this.prisma.product.findMany({
+      where: {
+        deleted: false,
+        gender: getAllQueryDto.gender,
+        status: getAllQueryDto.status,
+      },
+      skip: getAllQueryDto.skip,
+      take: getAllQueryDto.take,
+    });
+    const total = await this.prisma.product.count({
+      where: { deleted: false },
+    });
+    const count = result.length;
+
+    return { result, count, total };
   }
 
   findOneProduct(id: number) {
@@ -135,5 +153,9 @@ export class ProductsService {
         ...createReviewDto,
       },
     });
+  }
+
+  private getTags(tags: string[]) {
+    return tags.map((tag) => stringReplaceUnderscore(tag));
   }
 }

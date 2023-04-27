@@ -8,5 +8,4 @@ export interface SearchServiceInterface<T> {
   deleteIndex(indexData: T): Promise<T>;
 
   deleteDocument(indexData: T): Promise<T>;
-
 }

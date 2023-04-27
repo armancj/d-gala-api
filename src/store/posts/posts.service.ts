@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { Prisma, Post, Comment } from '@prisma/client';
-import { HandlerError } from '../common/utils/handler-error';
-import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
+import { HandlerError } from '../../common/utils/handler-error';
+import { GetAllQueryDto, GetAllResponseDto } from '../../common/dto';
 
 @Injectable()
 export class PostsService {

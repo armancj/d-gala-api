@@ -60,6 +60,5 @@ export class CommonService {
   }
 }
 function Between(arg0: any, arg1: any) {
-    throw new Error('Function not implemented.');
+  throw new Error('Function not implemented.');
 }
-

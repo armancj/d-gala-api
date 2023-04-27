@@ -4,22 +4,31 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { HandlerError } from '../../common/utils/handler-error';
 import { GetAllQueryDto, GetAllResponseDto } from '../../common/dto';
+import { UserPayload } from '../../user/interface/user-payload';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CategoryService {
   constructor(private prisma: PrismaService) {}
 
-  async createCategory(createCategoryDto: CreateCategoryDto) {
-    if (createCategoryDto.generalCategory === true)
-      delete createCategoryDto?.parentId;
-
+  async createCategory(
+    createCategoryDto: CreateCategoryDto,
+    user: UserPayload,
+  ) {
+    const { parentId, ...rest } = createCategoryDto;
+    const categoryData: Prisma.CategoryCreateInput = {
+      ...rest,
+      createBy: { connect: { id: user.id } },
+    };
+    if (parentId && createCategoryDto.generalCategory === false)
+      categoryData.parent = { connect: { id: parentId } };
     await this.findExistsDuplicatedCategoryByName(
       createCategoryDto.name,
       createCategoryDto.generalCategory,
     );
     return this.prisma.category
       .create({
-        data: { ...createCategoryDto },
+        data: categoryData,
       })
       .catch((err) =>
         HandlerError(
@@ -29,12 +38,19 @@ export class CategoryService {
       );
   }
 
-  async findAllCategory(getAllQueryDto: GetAllQueryDto) {
-    const findCategory: GetAllResponseDto = {
-      result: await this.prisma.category.findMany(),
-      total: await this.prisma.category.count(),
-    };
-    return findCategory;
+  async findAllCategory(
+    getAllQueryDto: GetAllQueryDto,
+  ): Promise<GetAllResponseDto> {
+    const where: Prisma.CategoryWhereInput = { deleted: false };
+    const result = await this.prisma.category.findMany({
+      ...getAllQueryDto,
+      where,
+    });
+    const total = await this.prisma.category.count({
+      where: { deleted: false },
+    });
+    const count = result.length;
+    return { result, count, total };
   }
 
   findOne(id: number) {

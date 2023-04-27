@@ -58,7 +58,10 @@ export class SeedService {
     await this.prisma.user
       .createMany({ data: initialData.users })
       .catch((err) => console.log(err));
-    await this.createManyProfile(initialData.profiles);
+    await this.prisma.category
+      .createMany({ data: initialData.category })
+      .catch((err) => console.log(err));
+    /*await this.createManyProfile(initialData.profiles);*/
   }
 
   private async createManyPhoto(route: ProfileOrProducts) {
