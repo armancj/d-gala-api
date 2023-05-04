@@ -6,7 +6,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { FilesService, PhotoIdInterface } from '../files/files.service';
-import { initialData } from './data/seed';
+import { initialData, SeedProduct, ValidTypes } from './data/seed';
 import { Prisma } from '@prisma/client';
 import * as fs from 'fs';
 import { appConstant, statusState } from '../config/app.constant';
@@ -14,6 +14,10 @@ import { appConstant, statusState } from '../config/app.constant';
 enum ProfileOrProducts {
   product = 'product',
   profile = 'profile',
+}
+
+interface UserConnect {
+  connect: { id: number };
 }
 
 @Injectable()
@@ -62,6 +66,75 @@ export class SeedService {
       .createMany({ data: initialData.category })
       .catch((err) => console.log(err));
     await this.createManyProfile(initialData.profiles);
+    await this.createManyProducts(initialData.products);
+  }
+
+  private async createManyProducts(products: SeedProduct[]) {
+    console.log('here');
+    await Promise.all(
+      products.map(async (product) => {
+        const { categoryName, photosName, userId, gender, ...restProduct } =
+          product;
+        const user: UserConnect = { connect: { id: userId } };
+        await this.prisma.product
+          .create({
+            data: {
+              ...restProduct,
+              gender,
+              user,
+              categories: this.getSubCategories(categoryName, user, gender),
+            },
+          })
+          .catch((err) => console.log(err));
+      }),
+    );
+  }
+
+  private getSubCategories(
+    categoryName: ValidTypes,
+    user: UserConnect,
+    gender,
+  ): Prisma.CategoryUncheckedCreateNestedManyWithoutProductsInput {
+    return {
+      connectOrCreate: {
+        where: this.connectSubcategory(categoryName),
+        create: this.createSubcategory(categoryName, user, gender),
+      },
+    };
+  }
+
+  private connectSubcategory(
+    categoryName: ValidTypes,
+  ): Prisma.CategoryWhereUniqueInput {
+    return {
+      name_generalCategory: {
+        name: categoryName,
+        generalCategory: false,
+      },
+    };
+  }
+
+  private createSubcategory(
+    categoryName: ValidTypes,
+    user: UserConnect,
+    gender,
+  ): Prisma.CategoryCreateWithoutProductsInput {
+    return {
+      ...this.getNameGeneralCategory(categoryName, false),
+      createBy: user,
+      parent: {
+        connect: {
+          name_generalCategory: this.getNameGeneralCategory(gender, true),
+        },
+      },
+    };
+  }
+
+  private getNameGeneralCategory(name: string, generalCategory: boolean) {
+    return {
+      name,
+      generalCategory,
+    };
   }
 
   private async createManyPhoto(route: ProfileOrProducts) {

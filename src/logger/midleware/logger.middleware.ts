@@ -10,7 +10,9 @@ export class LoggerMiddleware implements NestMiddleware {
     const { method, originalUrl } = req;
     res.on('finish', () => {
       const { statusMessage, statusCode } = res;
-      const contentLength: number = +res.get('content-length');
+      const contentLength: number = res?.get('content-length')
+        ? +res?.get('content-length')
+        : 0;
       const message = {
         method,
         originalUrl,
@@ -20,7 +22,6 @@ export class LoggerMiddleware implements NestMiddleware {
         user: req?.user,
         contentLength,
       };
-      console.log(req.res);
 
       if (statusCode >= 500) {
         return this.loggerServices.error(message, req.path);
