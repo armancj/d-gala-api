@@ -29,7 +29,7 @@ export class SeedService {
     if (isProd)
       throw new ForbiddenException('This is environment of production');
     await this.clearData();
-    //await this.createData();
+    await this.createData();
     return 'Seed executed successfully';
   }
 
@@ -61,7 +61,7 @@ export class SeedService {
     await this.prisma.category
       .createMany({ data: initialData.category })
       .catch((err) => console.log(err));
-    /*await this.createManyProfile(initialData.profiles);*/
+    await this.createManyProfile(initialData.profiles);
   }
 
   private async createManyPhoto(route: ProfileOrProducts) {
