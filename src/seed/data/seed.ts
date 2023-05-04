@@ -1,13 +1,12 @@
-import { Prisma, ProductStatus } from '@prisma/client';
+import {Prisma, ProductStatus} from '@prisma/client';
 
 interface SeedProduct extends Prisma.ProductCreateManyInput {
-
+  category: ValidTypes;
   photo: string[];
 }
-
-type ValidSizes = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
 const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-type ValidTypes = 'shirts' | 'pants' | 'hoodies' | 'hats';
+
+enum ValidTypes {shirts = 'shirts', pants = 'pants', hoodies = 'hoodies', hats = 'hats'}
 
 interface SeedData {
   products: SeedProduct[];
@@ -34,6 +33,7 @@ export const initialData: SeedData = {
       sizes,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -51,6 +51,7 @@ export const initialData: SeedData = {
       sizes,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
 
     {
@@ -69,6 +70,7 @@ export const initialData: SeedData = {
       sizes,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
 
     {
@@ -87,6 +89,7 @@ export const initialData: SeedData = {
       sizes,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -104,6 +107,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -121,6 +125,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -138,6 +143,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -155,6 +161,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -172,6 +179,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -189,6 +197,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -206,6 +215,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -223,6 +233,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -240,6 +251,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -257,6 +269,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -274,6 +287,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -291,6 +305,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -308,6 +323,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -325,6 +341,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -342,6 +359,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -359,6 +377,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
@@ -376,6 +395,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
@@ -393,6 +413,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
@@ -410,6 +431,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
@@ -427,23 +449,25 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.shirts
     },
     {
       content:
-        'The Unisex 3D Large Wordmark Pullover Hoodie features soft fleece and an adjustable, jersey-lined hood for comfort and coverage. Designed in a unisex style, the pullover hoodie includes a tone-on-tone 3D silicone-printed wordmark across the chest.',
+        'The Unisex 3D Large Word mark Pullover Hoodie features soft fleece and an adjustable, jersey-lined hood for comfort and coverage. Designed in a unisex style, the pullover hoodie includes a tone-on-tone 3D silicone-printed wordmark across the chest.',
       photo: ['8529107-00-A_0_2000.jpg', '8529107-00-A_1.jpg'],
       stock: 15,
       price: 70,
       sizes: ['XS', 'S', 'XL', 'XXL'],
       slug: '3d_large_wordmark_pullover_hoodie',
       tags: ['hoodie'],
-      name: '3D Large Wordmark Pullover Hoodie',
+      name: '3D Large Word mark Pullover Hoodie',
       gender: 'unisex',
       userId: 3,
       viewCount: 1,
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
@@ -461,6 +485,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
@@ -477,7 +502,8 @@ export const initialData: SeedData = {
       viewCount: 1,
       reviewsTotal: 10,
       stars: 1,
-      status: ProductStatus.IN_SUPPLIER,
+      status: ProductStatus.IN_FALT,
+      category: ValidTypes.hats
     },
     {
       content:
@@ -494,7 +520,8 @@ export const initialData: SeedData = {
       viewCount: 1,
       reviewsTotal: 10,
       stars: 1,
-      status: ProductStatus.IN_SUPPLIER,
+      status: ProductStatus.IN_COMPENSE,
+      category: ValidTypes.hats
     },
     {
       content:
@@ -512,6 +539,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.pants
     },
     {
       content:
@@ -529,10 +557,11 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hats
     },
     {
       content:
-        "Introducing the Tesla Raven Collection. The Women's Raven Slouchy Crew Sweatshirt has a premium, relaxed silhouette made from a sustainable bamboo cotton blend. The slouchy crew features a subtle thermoplastic polyurethane Tesla wordmark on the left sleeve and a french terry interior for a cozy look and feel in every season. Pair it with your Raven Joggers or favorite on the go fit. Made from 70% bamboo and 30% cotton.",
+        "Introducing the Tesla Raven Collection. The Women's Raven Slouchy Crew Sweatshirt has a premium, relaxed silhouette made from a sustainable bamboo cotton blend. The slouchy crew features a subtle thermoplastic polyurethane Tesla word mark on the left sleeve and a french terry interior for a cozy look and feel in every season. Pair it with your Raven Joggers or favorite on the go fit. Made from 70% bamboo and 30% cotton.",
       photo: ['1740260-00-A_0_2000.jpg', '1740260-00-A_1.jpg'],
       stock: 9,
       price: 110,
@@ -546,10 +575,11 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
-        "Introducing the Tesla Turbine Collection. Designed for style, comfort and everyday lifestyle, the Women's Turbine Cropped Long Sleeve Tee features a subtle, water-based Tesla wordmark across the chest and our T logo below the back collar. The lightweight material is double-dyed, creating a soft, casual style with a cropped silhouette. Made from 50% cotton and 50%",
+        "Introducing the Tesla Turbine Collection. Designed for style, comfort and everyday lifestyle, the Women's Turbine Cropped Long Sleeve Tee features a subtle, water-based Tesla word mark across the chest and our T logo below the back collar. The lightweight material is double-dyed, creating a soft, casual style with a cropped silhouette. Made from 50% cotton and 50%",
       photo: ['1740290-00-A_0_2000.jpg', '1740290-00-A_1.jpg'],
       stock: 10,
       price: 45,
@@ -563,10 +593,11 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
-        "ntroducing the Tesla Turbine Collection. Designed for style, comfort and everyday lifestyle, the Women's Turbine Cropped Short Sleeve Tee features a subtle, water-based Tesla wordmark across the chest and our T logo below the back collar. The lightweight material is double-dyed, creating a soft, casual style with a cropped silhouette. Made from 50% cotton and 50% polyester.",
+        "Introducing the Tesla Turbine Collection. Designed for style, comfort and everyday lifestyle, the Women's Turbine Cropped Short Sleeve Tee features a subtle, water-based Tesla word mark across the chest and our T logo below the back collar. The lightweight material is double-dyed, creating a soft, casual style with a cropped silhouette. Made from 50% cotton and 50% polyester.",
       photo: ['1741441-00-A_0_2000.jpg', '1741441-00-A_1.jpg'],
       stock: 0,
       price: 40,
@@ -580,6 +611,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
@@ -597,6 +629,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
@@ -614,27 +647,29 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.pants
     },
     {
       content:
-        "Designed for style and comfort, the Women's Small Wordmark Short Sleeve V-Neck Tee features a tonal 3D silicone-printed wordmark on the left chest. Made of 100% Peruvian cotton.",
+        "Designed for style and comfort, the Women's Small Word mark Short Sleeve V-Neck Tee features a tonal 3D silicone-printed wordmark on the left chest. Made of 100% Peruvian cotton.",
       photo: ['8765120-00-A_0_2000.jpg', '8765120-00-A_1.jpg'],
       stock: 18,
       price: 35,
       sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
       slug: 'women_small_wordmark_short_sleeve_v-neck_tee',
       tags: ['shirt'],
-      name: "Women's Small Wordmark Short Sleeve V-Neck Tee",
+      name: "Women's Small Word mark Short Sleeve V-Neck Tee",
       gender: 'women',
       userId: 3,
       viewCount: 1,
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hats
     },
     {
       content:
-        "Designed for style and comfort, the Women's Large Wordmark Short Sleeve Crew Neck Tee features a tonal 3D silicone-printed wordmark across the chest. Made of 100% Peruvian pima cotton.",
+        "Designed for style and comfort, the Women's Large Word mark Short Sleeve Crew Neck Tee features a tonal 3D silicone-printed wordmark across the chest. Made of 100% Peruvian pima cotton.",
       photo: ['8765115-00-A_0_2000.jpg', '8765115-00-A_1.jpg'],
       stock: 5,
       price: 35,
@@ -648,10 +683,11 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
-        "Designed to celebrate Tesla's incredible performance mode, the Plaid Mode Tee features great fit, comfort and style. Made from 100% cotton, it's the next best thing to riding shotgun at the Nürburgring.",
+        "Designed to celebrate Tesla's incredible performance mode, the Plaid Mode Tee features great fit, comfort and style. Made from 100% cotton, it's the next best thing to riding shotgun at the Nurburgring.",
       photo: ['1549275-00-A_0_2000.jpg', '1549275-00-A_1.jpg'],
       stock: 16,
       price: 35,
@@ -665,6 +701,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hoodies
     },
     {
       content:
@@ -682,6 +719,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.pants
     },
     {
       content:
@@ -699,6 +737,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hats
     },
     {
       content:
@@ -716,6 +755,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hats
     },
     {
       content:
@@ -733,6 +773,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hats
     },
     {
       content:
@@ -750,6 +791,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hats
     },
     {
       content:
@@ -767,6 +809,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hats
     },
     {
       content:
@@ -784,6 +827,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hats
     },
     {
       content:
@@ -801,6 +845,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hats
     },
     {
       content:
@@ -818,10 +863,11 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.hats
     },
     {
       content:
-        'For the future space traveler with discerning taste, a soft, cotton onesie with snap closure bottom. Clear labeling provided in case of contact with a new spacefaring civilization. 100% Cotton. Made in Peru',
+        'For the future space traveler with discerning taste, a soft, cotton once with snap closure bottom. Clear labeling provided in case of contact with a new spacefaring civilization. 100% Cotton. Made in Peru',
       photo: ['1473809-00-A_1_2000.jpg', '1473809-00-A_alt.jpg'],
       stock: 16,
       price: 25,
@@ -835,6 +881,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.pants
     },
     {
       content:
@@ -852,6 +899,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.pants
     },
     {
       content:
@@ -869,6 +917,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.pants
     },
     {
       content:
@@ -886,6 +935,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.pants
     },
     {
       content:
@@ -903,6 +953,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
+      category: ValidTypes.pants
     },
   ],
   users: [
@@ -1021,6 +1072,12 @@ export const initialData: SeedData = {
     {
       id: 3,
       name: 'unisex',
+      generalCategory: true,
+      userId: 3,
+    },
+    {
+      id: 10,
+      name: 'kid',
       generalCategory: true,
       userId: 3,
     },

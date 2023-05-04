@@ -40,7 +40,9 @@ export class ProductsService {
     return {
       categories: {
         connectOrCreate: {
-          where: { name: gender },
+          where: {
+            name_generalCategory: { name: gender, generalCategory: false },
+          },
           create: { name: gender, generalCategory: false },
         },
       },

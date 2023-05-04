@@ -105,7 +105,7 @@ model Comment {
 model Category {
   id              Int                 @id @default(autoincrement())
   createdAt       DateTime            @default(now())
-  name            String              @unique()
+  name            String
   generalCategory Boolean             @default(true)
   parent          Category?           @relation("GeneralCategory", fields: [parentId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   parentId        Int?
@@ -116,6 +116,8 @@ model Category {
   userId          Int?
   deleted         Boolean             @default(false)
   updatedAt       DateTime            @updatedAt
+
+  @@unique([name, generalCategory])
 }
 
 model CategoriesOnPosts {
