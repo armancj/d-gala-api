@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { LoggerService } from '../logger.service';
 
@@ -20,6 +20,7 @@ export class LoggerMiddleware implements NestMiddleware {
         user: req?.user,
         contentLength,
       };
+      console.log(req.res);
 
       if (statusCode >= 500) {
         return this.loggerServices.error(message, req.path);

@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, ProductStatus } from '@prisma/client';
 
 interface SeedProduct {
   content: string;
@@ -14,10 +14,11 @@ interface SeedProduct {
 }
 
 type ValidSizes = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
+const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 type ValidTypes = 'shirts' | 'pants' | 'hoodies' | 'hats';
 
 interface SeedData {
-  products: SeedProduct[];
+  products: Prisma.ProductCreateManyInput[];
   users: Prisma.UserCreateManyInput[];
   profiles: Prisma.ProfileCreateManyInput[];
   category: Prisma.CategoryCreateManyInput[];
@@ -35,6 +36,12 @@ export const initialData: SeedData = {
       tags: ['sweatshirt'],
       name: 'Men’s Chill Crew Neck Sweatshirt',
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      sizes,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -46,6 +53,12 @@ export const initialData: SeedData = {
       tags: ['jacket'],
       name: "Men's Quilted Shirt Jacket",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      sizes,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
 
     {
@@ -58,6 +71,12 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Raven Lightweight Zip Up Bomber Jacket",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      sizes,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
 
     {
@@ -70,6 +89,12 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Turbine Long Sleeve Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      sizes,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -83,6 +108,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Turbine Short Sleeve Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -96,6 +126,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Cybertruck Owl Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -109,6 +144,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Solar Roof Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -122,6 +162,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Let the Sun Shine Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -135,6 +180,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's 3D Large Wordmark Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -148,6 +198,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's 3D T Logo Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -161,6 +216,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Men’s 3D Small Wordmark Tee',
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -174,6 +234,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Plaid Mode Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -187,6 +252,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Powerwall Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -200,6 +270,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Battery Day Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -213,6 +288,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Men’s Cybertruck Bulletproof Tee',
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -226,6 +306,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Haha Yes Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -239,6 +324,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's S3XY Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -252,6 +342,12 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's 3D Wordmark Long Sleeve Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      sizes,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -265,6 +361,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's 3D T Logo Long Sleeve Tee",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -278,6 +379,11 @@ export const initialData: SeedData = {
       tags: ['hoodie'],
       name: "Men's Raven Lightweight Hoodie",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -291,6 +397,11 @@ export const initialData: SeedData = {
       tags: ['hoodie'],
       name: 'Chill Pullover Hoodie',
       gender: 'unisex',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -304,6 +415,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Chill Full Zip Hoodie",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -317,6 +433,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Chill Quarter Zip Pullover - Gray",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -330,6 +451,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Men's Chill Quarter Zip Pullover - White",
       gender: 'men',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -343,6 +469,11 @@ export const initialData: SeedData = {
       tags: ['hoodie'],
       name: '3D Large Wordmark Pullover Hoodie',
       gender: 'unisex',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -356,6 +487,11 @@ export const initialData: SeedData = {
       tags: ['hoodie'],
       name: 'Cybertruck Graffiti Hoodie',
       gender: 'unisex',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -369,6 +505,11 @@ export const initialData: SeedData = {
       tags: ['hats'],
       name: 'Relaxed T Logo Hat',
       gender: 'unisex',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -382,6 +523,11 @@ export const initialData: SeedData = {
       tags: ['hats'],
       name: 'Thermal Cuffed Beanie',
       gender: 'unisex',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -395,6 +541,11 @@ export const initialData: SeedData = {
       tags: ['hoodie'],
       name: "Women's Cropped Puffer Jacket",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -408,6 +559,11 @@ export const initialData: SeedData = {
       tags: ['hoodie'],
       name: "Women's Chill Half Zip Cropped Hoodie",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -421,6 +577,11 @@ export const initialData: SeedData = {
       tags: ['hoodie'],
       name: "Women's Raven Slouchy Crew Sweatshirt",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -434,6 +595,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Women's Turbine Cropped Long Sleeve Tee",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -447,6 +613,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Women's Turbine Cropped Short Sleeve Tee",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -460,6 +631,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Women's T Logo Short Sleeve Scoop Neck Tee",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -473,6 +649,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Women's T Logo Long Sleeve Scoop Neck Tee",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -486,6 +667,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Women's Small Wordmark Short Sleeve V-Neck Tee",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -499,6 +685,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Women's Large Wordmark Short Sleeve Crew Neck Tee",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -512,6 +703,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Women's Plaid Mode Tee",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -525,6 +721,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Women’s Powerwall Tee',
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -538,6 +739,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Women's Corp Jacket",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -551,6 +757,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: "Women's Raven Joggers",
       gender: 'women',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -564,6 +775,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Kids Cybertruck Long Sleeve Tee',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -577,6 +793,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Kids Scribble T Logo Tee',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -590,6 +811,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Kids Cybertruck Tee',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -603,6 +829,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Kids Racing Stripe Tee',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -616,6 +847,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Kids 3D T Logo Tee',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -629,6 +865,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Kids Checkered Tee',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -642,6 +883,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Made on Earth by Humans Onesie',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -655,6 +901,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Scribble T Logo Onesie',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -668,6 +919,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Zero Emissions (Almost) Onesie',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -681,6 +937,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Kids Cyberquad Bomber Jacket',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
     {
       content:
@@ -694,6 +955,11 @@ export const initialData: SeedData = {
       tags: ['shirt'],
       name: 'Kids Corp Jacket',
       gender: 'kid',
+      userId: 3,
+      viewCount: 1,
+      reviewsTotal: 10,
+      stars: 1,
+      status: ProductStatus.IN_SUPPLIER,
     },
   ],
   users: [
@@ -817,42 +1083,42 @@ export const initialData: SeedData = {
     },
     {
       id: 4,
-      name: 'shoes3',
+      name: 'shoes',
       generalCategory: false,
       parentId: 1,
       userId: 2,
     },
     {
       id: 5,
-      name: 'leather bag3',
+      name: 'leather bag',
       generalCategory: false,
       parentId: 2,
       userId: 3,
     },
     {
       id: 6,
-      name: 'leather briefcase2',
+      name: 'leather briefcase',
       generalCategory: false,
       parentId: 1,
       userId: 2,
     },
     {
       id: 7,
-      name: 'leather bracelet2',
+      name: 'leather bracelet',
       generalCategory: false,
       parentId: 3,
       userId: 3,
     },
     {
       id: 8,
-      name: 'leather folder2',
+      name: 'leather folder',
       generalCategory: false,
       parentId: 1,
       userId: 2,
     },
     {
       id: 9,
-      name: 'leather belt2',
+      name: 'leather belt',
       generalCategory: false,
       parentId: 2,
       userId: 1,
@@ -901,7 +1167,7 @@ export const initialData: SeedData = {
     },
     {
       id: 16,
-      name: 'shoes',
+      name: 'shoes3',
       generalCategory: false,
       parentId: 3,
       userId: 1,
@@ -909,35 +1175,35 @@ export const initialData: SeedData = {
     {
       id: 17,
       userId: 3,
-      name: 'leather bag',
+      name: 'leather bag4',
       generalCategory: false,
       parentId: 3,
     },
     {
       id: 18,
       userId: 2,
-      name: 'leather briefcase',
+      name: 'leather briefcase4',
       generalCategory: false,
       parentId: 3,
     },
     {
       id: 19,
       userId: 3,
-      name: 'leather bracelet',
+      name: 'leather bracelet4',
       generalCategory: false,
       parentId: 3,
     },
     {
       id: 20,
       userId: 2,
-      name: 'leather folder',
+      name: 'leather folder5',
       generalCategory: false,
       parentId: 3,
     },
     {
       id: 21,
       userId: 1,
-      name: 'leather belt',
+      name: 'leather belt6',
       generalCategory: false,
       parentId: 3,
     },

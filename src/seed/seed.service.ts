@@ -29,7 +29,7 @@ export class SeedService {
     if (isProd)
       throw new ForbiddenException('This is environment of production');
     await this.clearData();
-    await this.createData();
+    //await this.createData();
     return 'Seed executed successfully';
   }
 

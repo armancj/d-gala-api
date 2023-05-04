@@ -20,8 +20,9 @@ export class CategoryService {
       ...rest,
       createBy: { connect: { id: user.id } },
     };
-    if (parentId && createCategoryDto.generalCategory === false)
+    if (createCategoryDto.generalCategory === false) {
       categoryData.parent = { connect: { id: parentId } };
+    }
     await this.findExistsDuplicatedCategoryByName(
       createCategoryDto.name,
       createCategoryDto.generalCategory,
@@ -30,12 +31,12 @@ export class CategoryService {
       .create({
         data: categoryData,
       })
-      .catch((err) =>
+      .catch((err) => {
         HandlerError(
           err,
           `The category general parent id: ${createCategoryDto.parentId} is incorrect. Please select a other category id`,
-        ),
-      );
+        );
+      });
   }
 
   async findAllCategory(
