@@ -116,8 +116,6 @@ model Category {
   userId          Int?
   deleted         Boolean             @default(false)
   updatedAt       DateTime            @updatedAt
-
-  @@unique([name, generalCategory])
 }
 
 model CategoriesOnPosts {

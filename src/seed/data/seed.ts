@@ -1,13 +1,18 @@
-import {Prisma, ProductStatus} from '@prisma/client';
+import { Prisma, ProductStatus } from '@prisma/client';
 
 export interface SeedProduct extends Prisma.ProductCreateInput {
-  categoryName: ValidTypes;
+  categoryId: number;
   userId: number;
   photosName: string[];
 }
 const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
-export enum ValidTypes {shirts = 'shirts', pants = 'pants', hoodies = 'hoodies', hats = 'hats'}
+export enum ValidTypes {
+  shirts = 'shirts',
+  pants = 'pants',
+  hoodies = 'hoodies',
+  hats = 'hats',
+}
 
 interface SeedData {
   products: SeedProduct[];
@@ -34,7 +39,7 @@ export const initialData: SeedData = {
       sizes,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 5,
     },
     {
       content:
@@ -52,7 +57,7 @@ export const initialData: SeedData = {
       sizes,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 6,
     },
 
     {
@@ -71,7 +76,7 @@ export const initialData: SeedData = {
       sizes,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 7,
     },
 
     {
@@ -90,7 +95,7 @@ export const initialData: SeedData = {
       sizes,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 8,
     },
     {
       content:
@@ -108,7 +113,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 9,
     },
     {
       content:
@@ -126,7 +131,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 10,
     },
     {
       content:
@@ -144,7 +149,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 11,
     },
     {
       content:
@@ -162,7 +167,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 12,
     },
     {
       content:
@@ -180,7 +185,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 8,
     },
     {
       content:
@@ -198,7 +203,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 13,
     },
     {
       content:
@@ -216,7 +221,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 14,
     },
     {
       content:
@@ -234,7 +239,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 15,
     },
     {
       content:
@@ -252,11 +257,11 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 16,
     },
     {
       content:
-        'Inspired by Tesla Battery Day and featuring the unveiled tabless battery cell, Battery Day Tee celebrates the future of energy storage and cell manufacturing. Designed for fit, comfort and style, Battery Day Tee is made from 100% cotton with a stylized cell printed across the chest. Made in Peru.',
+        'Inspired by Tesla Battery Day and featuring the unveiled tables battery cell, Battery Day Tee celebrates the future of energy storage and cell manufacturing. Designed for fit, comfort and style, Battery Day Tee is made from 100% cotton with a stylized cell printed across the chest. Made in Peru.',
       photosName: ['1633802-00-A_0_2000.jpg', '1633802-00-A_2.jpg'],
       stock: 5,
       price: 30,
@@ -270,7 +275,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 17,
     },
     {
       content:
@@ -288,7 +293,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 18,
     },
     {
       content:
@@ -306,7 +311,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 19,
     },
     {
       content:
@@ -324,7 +329,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 19,
     },
     {
       content:
@@ -342,7 +347,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 20,
     },
     {
       content:
@@ -360,7 +365,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 5,
     },
     {
       content:
@@ -378,7 +383,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 6,
     },
     {
       content:
@@ -396,7 +401,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 7,
     },
     {
       content:
@@ -414,7 +419,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 8,
     },
     {
       content:
@@ -432,7 +437,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 9,
     },
     {
       content:
@@ -450,7 +455,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.shirts
+      categoryId: 10,
     },
     {
       content:
@@ -468,7 +473,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 11,
     },
     {
       content:
@@ -486,7 +491,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 12,
     },
     {
       content:
@@ -504,7 +509,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_FALT,
-      categoryName: ValidTypes.hats
+      categoryId: 13,
     },
     {
       content:
@@ -522,7 +527,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_COMPENSE,
-      categoryName: ValidTypes.hats
+      categoryId: 14,
     },
     {
       content:
@@ -540,7 +545,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.pants
+      categoryId: 15,
     },
     {
       content:
@@ -558,7 +563,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hats
+      categoryId: 16,
     },
     {
       content:
@@ -576,7 +581,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 17,
     },
     {
       content:
@@ -594,7 +599,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 18,
     },
     {
       content:
@@ -612,7 +617,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 19,
     },
     {
       content:
@@ -630,7 +635,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 20,
     },
     {
       content:
@@ -648,7 +653,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.pants
+      categoryId: 5,
     },
     {
       content:
@@ -666,7 +671,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hats
+      categoryId: 6,
     },
     {
       content:
@@ -684,7 +689,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 7,
     },
     {
       content:
@@ -702,7 +707,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hoodies
+      categoryId: 8,
     },
     {
       content:
@@ -720,7 +725,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.pants
+      categoryId: 9,
     },
     {
       content:
@@ -738,7 +743,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hats
+      categoryId: 10,
     },
     {
       content:
@@ -756,7 +761,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hats
+      categoryId: 11,
     },
     {
       content:
@@ -774,7 +779,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hats
+      categoryId: 13,
     },
     {
       content:
@@ -792,7 +797,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hats
+      categoryId: 14,
     },
     {
       content:
@@ -810,7 +815,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hats
+      categoryId: 15,
     },
     {
       content:
@@ -828,7 +833,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hats
+      categoryId: 16,
     },
     {
       content:
@@ -846,7 +851,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hats
+      categoryId: 17,
     },
     {
       content:
@@ -864,11 +869,11 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.hats
+      categoryId: 18,
     },
     {
       content:
-        'For the future space traveler with discerning taste, a soft, cotton once with snap closure bottom. Clear labeling provided in case of contact with a new spacefaring civilization. 100% Cotton. Made in Peru',
+        'For the future space traveler with discerning taste, a soft, cotton once with snap closure bottom. Clear labeling provided in case of contact with a new space faring civilization. 100% Cotton. Made in Peru',
       photosName: ['1473809-00-A_1_2000.jpg', '1473809-00-A_alt.jpg'],
       stock: 16,
       price: 25,
@@ -882,7 +887,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.pants
+      categoryId: 19,
     },
     {
       content:
@@ -900,7 +905,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.pants
+      categoryId: 20,
     },
     {
       content:
@@ -918,7 +923,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.pants
+      categoryId: 5,
     },
     {
       content:
@@ -936,7 +941,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.pants
+      categoryId: 6,
     },
     {
       content:
@@ -954,7 +959,7 @@ export const initialData: SeedData = {
       reviewsTotal: 10,
       stars: 1,
       status: ProductStatus.IN_SUPPLIER,
-      categoryName: ValidTypes.pants
+      categoryId: 7,
     },
   ],
   users: [
@@ -1077,9 +1082,121 @@ export const initialData: SeedData = {
       userId: 3,
     },
     {
-      id: 10,
+      id: 4,
       name: 'kid',
       generalCategory: true,
+      userId: 3,
+    },
+    {
+      id: 5,
+      name: ValidTypes.hats,
+      generalCategory: false,
+      parentId: 3,
+      userId: 3,
+    },
+    {
+      id: 6,
+      name: ValidTypes.hoodies,
+      generalCategory: false,
+      parentId: 3,
+      userId: 3,
+    },
+    {
+      id: 7,
+      name: ValidTypes.pants,
+      generalCategory: false,
+      parentId: 3,
+      userId: 3,
+    },
+    {
+      id: 8,
+      name: ValidTypes.shirts,
+      generalCategory: false,
+      parentId: 3,
+      userId: 3,
+    },
+    {
+      id: 9,
+      name: ValidTypes.hats,
+      generalCategory: false,
+      parentId: 4,
+      userId: 3,
+    },
+    {
+      id: 10,
+      name: ValidTypes.hoodies,
+      generalCategory: false,
+      parentId: 4,
+      userId: 3,
+    },
+    {
+      id: 11,
+      name: ValidTypes.pants,
+      generalCategory: false,
+      parentId: 4,
+      userId: 3,
+    },
+    {
+      id: 12,
+      name: ValidTypes.shirts,
+      generalCategory: false,
+      parentId: 4,
+      userId: 3,
+    },
+    {
+      id: 13,
+      name: ValidTypes.hats,
+      generalCategory: false,
+      parentId: 2,
+      userId: 3,
+    },
+    {
+      id: 14,
+      name: ValidTypes.hoodies,
+      generalCategory: false,
+      parentId: 2,
+      userId: 3,
+    },
+    {
+      id: 15,
+      name: ValidTypes.pants,
+      generalCategory: false,
+      parentId: 2,
+      userId: 3,
+    },
+    {
+      id: 16,
+      name: ValidTypes.shirts,
+      generalCategory: false,
+      parentId: 2,
+      userId: 3,
+    },
+    {
+      id: 17,
+      name: ValidTypes.hats,
+      generalCategory: false,
+      parentId: 1,
+      userId: 3,
+    },
+    {
+      id: 18,
+      name: ValidTypes.hoodies,
+      generalCategory: false,
+      parentId: 1,
+      userId: 3,
+    },
+    {
+      id: 19,
+      name: ValidTypes.pants,
+      generalCategory: false,
+      parentId: 1,
+      userId: 3,
+    },
+    {
+      id: 20,
+      name: ValidTypes.shirts,
+      generalCategory: false,
+      parentId: 1,
       userId: 3,
     },
   ],

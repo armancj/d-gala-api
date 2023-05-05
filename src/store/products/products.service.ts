@@ -9,43 +9,39 @@ import { Product, User } from '@prisma/client';
 import { Prisma } from '.prisma/client';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { stringReplaceUnderscore } from '../../common/utils/check-slug-insert.function';
-import { GenderType } from './enum/gender-type.enum';
+interface ProductInput {
+  user: User;
+  rest: Omit<CreateProductDto, 'categoryId' | 'tags'>;
+  categoryId?: number;
+}
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createProductDto: CreateProductDto, user: User) {
-    const { categoryName, ...rest } = createProductDto;
-    const product: Prisma.ProductCreateInput = this.createProductInput(
-      createProductDto.gender,
+    const { categoryId, ...rest } = createProductDto;
+    const product: Prisma.ProductCreateInput = this.createProductInput({
+      categoryId,
       user,
       rest,
-    );
+    });
     product.slug = this.getSlug(rest.name, rest?.slug);
     return this.prisma.product
       .create({
         data: product,
       })
       .catch((err) =>
-        HandlerError(err, `Category with id ${categoryName} not found`),
+        HandlerError(err, `Category with id ${categoryId} not found`),
       );
   }
 
-  private createProductInput(
-    gender: GenderType,
-    user: User,
-    rest: Omit<CreateProductDto, 'categoryName' | 'tags'>,
-  ): Prisma.ProductCreateInput {
+  private createProductInput(params: ProductInput): Prisma.ProductCreateInput {
+    const { user, rest, categoryId } = params;
+    const categories: Prisma.CategoryCreateNestedManyWithoutProductsInput = {};
+    if (categoryId) categories.connect = { id: categoryId };
     return {
-      categories: {
-        connectOrCreate: {
-          where: {
-            name_generalCategory: { name: gender, generalCategory: false },
-          },
-          create: { name: gender, generalCategory: false },
-        },
-      },
+      categories,
       user: { connect: { id: user.id } },
       ...rest,
     } as Prisma.ProductCreateInput;

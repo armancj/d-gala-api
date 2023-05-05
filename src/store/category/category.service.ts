@@ -21,7 +21,11 @@ export class CategoryService {
       createBy: { connect: { id: user.id } },
     };
     if (createCategoryDto.generalCategory === false) {
-      categoryData.parent = { connect: { id: parentId } };
+      categoryData.parent = {
+        connect: {
+          id: parentId,
+        },
+      };
     }
     await this.findExistsDuplicatedCategoryByName(
       createCategoryDto.name,
