@@ -7,12 +7,13 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { FilesService, PhotoIdInterface } from '../files/files.service';
 import { initialData, SeedProduct } from './data/seed';
-import { Prisma } from '@prisma/client';
+import { Prisma, Product } from '@prisma/client';
 import * as fs from 'fs';
 import { appConstant, statusState } from '../config/app.constant';
+import { HandlerError } from '../common/utils/handler-error';
 
 enum ProfileOrProducts {
-  product = 'product',
+  products = 'products',
   profile = 'profile',
 }
 
@@ -77,7 +78,7 @@ export class SeedService {
         product;
       const user: Connect = { connect: { id: userId } };
       const categories: Connect = { connect: { id: categoryId } };
-      await this.prisma.product
+      const productCreated: Product = await this.prisma.product
         .create({
           data: {
             ...restProduct,
@@ -86,7 +87,25 @@ export class SeedService {
             categories,
           },
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          HandlerError(err);
+        });
+      photosName.map(async (photoName) => {
+        const path: string =
+          process.cwd() + `/static/${ProfileOrProducts.products}/${photoName}`;
+        console.log(path);
+        const file: Express.Multer.File = {
+          filename: photoName,
+          path: path,
+          size: 0,
+        } as Express.Multer.File;
+        const photoId: PhotoIdInterface = { productId: productCreated.id };
+        await this.fileServices.photoToBd(
+          file,
+          `/${ProfileOrProducts.products}/`,
+          photoId,
+        );
+      });
     });
   }
   private async createManyPhoto(route: ProfileOrProducts) {
