@@ -26,7 +26,7 @@ model User {
   status                    UserStatus       @default(ACTIVE)
   posts                     Post[]
   product                   Product[]
-  category                  Category[]
+  categories                Category[]
   profile                   Profile?
   Review                    Review?
   emailConfirmed            EmailConfirmed?
@@ -122,7 +122,7 @@ model CategoriesOnPosts {
   id         Int      @id @default(autoincrement())
   post       Post     @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   postId     Int // relation scalar field (used in the `@relation` attribute above)
-  category   Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  categories Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   categoryId Int // relation scalar field (used in the `@relation` attribute above)
   assignedAt DateTime @default(now())
   assignedBy String

@@ -18,7 +18,8 @@ interface SeedData {
   products: SeedProduct[];
   users: Prisma.UserCreateManyInput[];
   profiles: Prisma.ProfileCreateManyInput[];
-  category: Prisma.CategoryCreateManyInput[];
+  categories: Prisma.CategoryCreateManyInput[];
+  photos: Prisma.PhotoCreateManyInput[];
 }
 
 export const initialData: SeedData = {
@@ -1062,7 +1063,7 @@ export const initialData: SeedData = {
       userId: 5,
     },
   ],
-  category: [
+  categories: [
     {
       id: 1,
       name: 'woman',

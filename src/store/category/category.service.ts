@@ -95,7 +95,7 @@ export class CategoryService {
     generalCategory: boolean,
   ) {
     const categoryType =
-      generalCategory === true ? 'general category' : 'id-category';
+      generalCategory === true ? 'general categories' : 'id-categories';
 
     await this.prisma.category
       .findFirst({ where: { name, generalCategory } })

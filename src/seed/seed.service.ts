@@ -65,7 +65,7 @@ export class SeedService {
       .createMany({ data: initialData.users })
       .catch((err) => console.log(err));
     await this.prisma.category
-      .createMany({ data: initialData.category })
+      .createMany({ data: initialData.categories })
       .catch((err) => console.log(err));
     await this.createManyProfile(initialData.profiles);
     await this.createManyProducts(initialData.products);
