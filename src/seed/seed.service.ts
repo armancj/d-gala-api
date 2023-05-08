@@ -21,6 +21,12 @@ interface Connect {
   connect: { id: number };
 }
 
+interface updatePhotoInterface {
+  url: string;
+  id: number;
+  space: number;
+}
+
 @Injectable()
 export class SeedService {
   constructor(
@@ -58,6 +64,7 @@ export class SeedService {
       });
     await this.prisma.user.deleteMany();
     await this.prisma.product.deleteMany();
+    await this.prisma.photo.deleteMany();
   }
 
   private async createData() {
@@ -67,12 +74,18 @@ export class SeedService {
     await this.prisma.category
       .createMany({ data: initialData.categories })
       .catch((err) => console.log(err));
-    await this.createManyProfile(initialData.profiles);
-    await this.createManyProducts(initialData.products);
+    await this.prisma.profile
+      .createMany({ data: initialData.profiles })
+      .catch((err) => console.log(err));
+    await this.prisma.photo.createMany({
+      data: initialData.photos,
+    });
+
+    await this.uploadFilePhoto();
+    //await this.createManyProducts(initialData.products);
   }
 
   private async createManyProducts(products: SeedProduct[]) {
-    console.log('here');
     products.map(async (product) => {
       const { categoryId, photosName, userId, gender, ...restProduct } =
         product;
@@ -90,10 +103,10 @@ export class SeedService {
         .catch((err) => {
           HandlerError(err);
         });
+      console.log(productCreated.id);
       photosName.map(async (photoName) => {
         const path: string =
           process.cwd() + `/static/${ProfileOrProducts.products}/${photoName}`;
-        console.log(path);
         const file: Express.Multer.File = {
           filename: photoName,
           path: path,
@@ -108,6 +121,7 @@ export class SeedService {
       });
     });
   }
+
   private async createManyPhoto(route: ProfileOrProducts) {
     const path: string = process.cwd() + `/static/${route}/`;
     const photosName = fs.readdirSync(path, 'utf8');
@@ -124,10 +138,41 @@ export class SeedService {
     });
   }
 
-  private async createManyProfile(
-    profiles: Prisma.ProfileCreateManyInput[],
-  ): Promise<void> {
-    await this.prisma.profile.createMany({ data: profiles });
-    await this.createManyPhoto(ProfileOrProducts.profile);
+  private async uploadFilePhoto() {
+    const photos = await this.prisma.photo.findMany();
+    photos.map(async (photo) => {
+      let newFolderPath;
+      if (photo?.profileId) newFolderPath = `/${ProfileOrProducts.profile}/`;
+      const cloudItemStat = await this.uploadToCloud(newFolderPath, photo.name);
+      await this.updatePhoto({
+        id: photo.id,
+        ...cloudItemStat,
+      });
+    });
+  }
+
+  private async updatePhoto(params: updatePhotoInterface) {
+    const { id, url, space } = params;
+    await this.prisma.photo.update({
+      where: { id },
+      data: { url, space },
+    });
+  }
+
+  private async uploadToCloud(newFolderPath, filename: string) {
+    const path: string = process.cwd() + `/static${newFolderPath}`;
+    const file: Express.Multer.File = {
+      filename: filename,
+      path: path + filename,
+      size: 0,
+    } as Express.Multer.File;
+    const minioFile = await this.fileServices.fileToMinioStorage(
+      file,
+      newFolderPath,
+    );
+    const space = await this.fileServices.getObjectSize(
+      newFolderPath + filename,
+    );
+    return { space, url: minioFile.url };
   }
 }

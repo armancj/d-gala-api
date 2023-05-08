@@ -139,7 +139,7 @@ export class FilesService {
     if (photoId?.profileId)
       data.profile = this.getProfileOrProductId(photoId.profileId);
     if (photoId?.productId)
-      data.profile = this.getProfileOrProductId(photoId.productId);
+      data.product = this.getProfileOrProductId(photoId.productId);
     return data;
   }
 
@@ -147,10 +147,7 @@ export class FilesService {
     return id ? { connect: { id } } : undefined;
   }
 
-  private async fileToMinioStorage(
-    file: Express.Multer.File,
-    newFolderPath: string,
-  ) {
+  async fileToMinioStorage(file: Express.Multer.File, newFolderPath: string) {
     try {
       const data = new StreamableFile(createReadStream(file.path));
       await this.minioService.client.putObject(
@@ -251,5 +248,13 @@ export class FilesService {
         );
       return MinioRoute.product + data.photo.name;
     }
+  }
+
+  async getObjectSize(objectName: string): Promise<number> {
+    const objectStat = await this.minioService.client.statObject(
+      this.bucket,
+      objectName,
+    );
+    return objectStat.size;
   }
 }

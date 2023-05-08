@@ -10,8 +10,9 @@ import {
 } from '@nestjs/common';
 
 export function HandlerError(error: any, message?: string): never {
+  console.log({ error, message });
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    const errorMessage = message ? message : error.message;
+    const errorMessage = message ? message : error?.meta?.cause;
 
     if (error.code === EnumPrismaError.UniqueConstraintViolation) {
       throw new ConflictException(errorMessage);
@@ -25,7 +26,7 @@ export function HandlerError(error: any, message?: string): never {
       throw new NotFoundException(errorMessage);
 
     throw new InternalServerErrorException(
-      `Prisma error: ${error.message}, code:${error.code}`,
+      `Prisma error: ${error?.meta}, code:${error.code}`,
     );
   }
   throw new HttpException(
