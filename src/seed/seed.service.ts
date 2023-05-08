@@ -2,13 +2,13 @@ import {
   BadGatewayException,
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { FilesService, PhotoIdInterface } from '../files/files.service';
+import { FilesService } from '../files/files.service';
 import { initialData, SeedProduct } from './data/seed';
-import { Prisma, Product } from '@prisma/client';
-import * as fs from 'fs';
+import { Product, Photo } from '@prisma/client';
 import { appConstant, statusState } from '../config/app.constant';
 import { HandlerError } from '../common/utils/handler-error';
 
@@ -80,9 +80,8 @@ export class SeedService {
     await this.prisma.photo.createMany({
       data: initialData.photos,
     });
-
+    await this.createManyProducts(initialData.products);
     await this.uploadFilePhoto();
-    //await this.createManyProducts(initialData.products);
   }
 
   private async createManyProducts(products: SeedProduct[]) {
@@ -103,38 +102,24 @@ export class SeedService {
         .catch((err) => {
           HandlerError(err);
         });
-      console.log(productCreated.id);
-      photosName.map(async (photoName) => {
-        const path: string =
-          process.cwd() + `/static/${ProfileOrProducts.products}/${photoName}`;
-        const file: Express.Multer.File = {
-          filename: photoName,
-          path: path,
-          size: 0,
-        } as Express.Multer.File;
-        const photoId: PhotoIdInterface = { productId: productCreated.id };
-        await this.fileServices.photoToBd(
-          file,
-          `/${ProfileOrProducts.products}/`,
-          photoId,
-        );
-      });
+      this.createPhoto(photosName, productCreated.id);
     });
   }
 
-  private async createManyPhoto(route: ProfileOrProducts) {
-    const path: string = process.cwd() + `/static/${route}/`;
-    const photosName = fs.readdirSync(path, 'utf8');
-    photosName.map(async (photoName) => {
-      const file: Express.Multer.File = {
-        filename: photoName,
-        path: path + photoName,
-        size: 0,
-      } as Express.Multer.File;
-      const photoId: PhotoIdInterface = {};
-      if (route === ProfileOrProducts.profile)
-        photoId.profileId = +file.filename.split('.')[0];
-      await this.fileServices.photoToBd(file, `/${route}/`, photoId);
+  private createPhoto(photosName: string[], id: number) {
+    photosName.map(async (name) => {
+      await this.prisma.photo
+        .create({
+          data: {
+            name,
+            space: 0,
+            url: '',
+            product: { connect: { id } },
+          },
+        })
+        .catch((err) => {
+          throw new InternalServerErrorException(err);
+        });
     });
   }
 
