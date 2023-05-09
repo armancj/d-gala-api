@@ -27,6 +27,7 @@ import authConfig from './authentication/config/auth.config';
 import searchConfig from './store/search/config/search.config';
 import { FilesModule } from './files/files.module';
 import { LoggerModule } from './logger/logger.module';
+import { ReviewModule } from './store/review/review.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { LoggerModule } from './logger/logger.module';
     MailerModule,
     FilesModule,
     LoggerModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [
