@@ -51,12 +51,19 @@ export class PostsService {
   }
 
   replacePost(id: number, updatePostDto: UpdatePostDto) {
-    return this.updatePosts({ where: { id }, data: updatePostDto }).then(
-      async (values) => {
-        //await this.postsSearchService.updateUser(values);
-        return values;
-      },
-    );
+    const { category, ...updateRest } = updatePostDto;
+    const categories: Prisma.CategoryUpdateManyWithoutCreateByNestedInput = {};
+    if (category.length > 0)
+      categories.connect = category.map((id) => {
+        return { id };
+      });
+    return this.updatePosts({
+      where: { id },
+      data: { ...updateRest, categories },
+    }).then(async (values) => {
+      //await this.postsSearchService.updateUser(values);
+      return values;
+    });
   }
 
   deletePost(id: number) {

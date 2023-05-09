@@ -193,7 +193,7 @@ model Photo {
   space     Float
   url       String
   product   Product? @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  productId Int?     @unique
+  productId Int?
   profile   Profile? @relation(fields: [profileId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   profileId Int?     @unique
   updatedAt DateTime @updatedAt

@@ -23,14 +23,14 @@ interface SeedData {
 }
 
 export const initialData: SeedData = {
-    photos: [
-        {id: 1, name: "6.jpeg", space: 0, url: "", profileId: 6},
-        {id: 2, name: "7.webp", space: 0, url: "", profileId: 7},
-        {id: 3, name: "8.jpeg", space: 0, url: "", profileId: 8},
-        {id: 4, name: "9.jpeg", space: 0, url: "", profileId: 9},
-        {id: 5, name: "10.jpg", space: 0, url: "", profileId: 10},
-    ],
-    products: [
+  photos: [
+    { id: 1, name: '6.jpeg', space: 0, url: '', profileId: 6 },
+    { id: 2, name: '7.webp', space: 0, url: '', profileId: 7 },
+    { id: 3, name: '8.jpeg', space: 0, url: '', profileId: 8 },
+    { id: 4, name: '9.jpeg', space: 0, url: '', profileId: 9 },
+    { id: 5, name: '10.jpg', space: 0, url: '', profileId: 10 },
+  ],
+  products: [
     {
       content:
         'Introducing the Tesla Chill Collection. The Men’s Chill Crew Neck Sweatshirt has a premium, heavyweight exterior and soft fleece interior for comfort in any season. The sweatshirt features a subtle thermoplastic polyurethane T logo on the chest and a Tesla wordmark below the back collar. Made from 60% cotton and 40% recycled polyester.',
@@ -970,7 +970,7 @@ export const initialData: SeedData = {
       categoryId: 7,
     },
   ],
-    users: [
+  users: [
     {
       id: 1,
       email: 'jefferey_collier@hotmail.com',
@@ -1038,7 +1038,7 @@ export const initialData: SeedData = {
       currentHashedRefreshToken: null,
     },
   ],
-    profiles: [
+  profiles: [
     {
       id: 6,
       bio: 'this is super admin profile',
@@ -1070,7 +1070,7 @@ export const initialData: SeedData = {
       userId: 5,
     },
   ],
-    categories: [
+  categories: [
     {
       id: 1,
       name: 'woman',
@@ -1207,5 +1207,5 @@ export const initialData: SeedData = {
       parentId: 1,
       userId: 3,
     },
-  ]
+  ],
 };

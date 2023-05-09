@@ -6,7 +6,7 @@ import {
   IsString,
 } from 'class-validator';
 
-export class CreatePostDto {
+export class CreatePostDto{
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -21,7 +21,7 @@ export class CreatePostDto {
 
   @IsNumber()
   @IsOptional()
-  categories: number[];
+  category: number[];
 
   @IsString()
   @IsNotEmpty()

@@ -85,7 +85,7 @@ export class SeedService {
   }
 
   private async createManyProducts(products: SeedProduct[]) {
-    products.map(async (product) => {
+    for (const product of products) {
       const { categoryId, photosName, userId, gender, ...restProduct } =
         product;
       const user: Connect = { connect: { id: userId } };
@@ -103,12 +103,12 @@ export class SeedService {
           HandlerError(err);
         });
       this.createPhoto(photosName, productCreated.id);
-    });
+    }
   }
 
   private createPhoto(photosName: string[], id: number) {
-    photosName.map(async (name) => {
-      await this.prisma.photo
+    photosName.forEach((name) => {
+      this.prisma.photo
         .create({
           data: {
             name,
@@ -128,6 +128,7 @@ export class SeedService {
     photos.map(async (photo) => {
       let newFolderPath;
       if (photo?.profileId) newFolderPath = `/${ProfileOrProducts.profile}/`;
+      if (photo?.productId) newFolderPath = `/${ProfileOrProducts.products}/`;
       const cloudItemStat = await this.uploadToCloud(newFolderPath, photo.name);
       await this.updatePhoto({
         id: photo.id,
