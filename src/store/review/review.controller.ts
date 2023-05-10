@@ -5,7 +5,7 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  Delete, ParseUUIDPipe,
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
@@ -24,12 +24,12 @@ export class ReviewController {
 
   @Get()
   findAll() {
-    return this.reviewService.findAll();
+    return this.reviewService.findAllReviews();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reviewService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.reviewService.findOneReview(id);
   }
 
   @Patch(':id')

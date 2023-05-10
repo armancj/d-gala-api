@@ -1,19 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { PrismaService } from '../../prisma/prisma.service';
+import { HandlerError } from '../../common/utils/handler-error';
 
 @Injectable()
 export class ReviewService {
+  constructor(private readonly prismaService: PrismaService) {}
+
   create(createReviewDto: CreateReviewDto) {
     return 'This action adds a new review';
   }
 
-  findAll() {
-    return `This action returns all review`;
+  findAllReviews() {
+    return this.prismaService.review.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} review`;
+  async findOneReview(id: string) {
+    return this.prismaService.review
+      .findUniqueOrThrow({ where: { id } })
+      .catch((err) => {
+        HandlerError(err.message);
+      });
   }
 
   update(id: number, updateReviewDto: UpdateReviewDto) {

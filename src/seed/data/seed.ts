@@ -1,4 +1,4 @@
-import { Prisma, ProductStatus } from '@prisma/client';
+import { Prisma, ProductStatus, Review } from '@prisma/client';
 
 export interface SeedProduct extends Prisma.ProductCreateInput {
   categoryId: number;
@@ -20,6 +20,8 @@ interface SeedData {
   profiles: Prisma.ProfileCreateManyInput[];
   categories: Prisma.CategoryCreateManyInput[];
   photos: Prisma.PhotoCreateManyInput[];
+
+  review: Review[];
 }
 
 export const initialData: SeedData = {
@@ -1206,6 +1208,53 @@ export const initialData: SeedData = {
       generalCategory: false,
       parentId: 1,
       userId: 3,
+    },
+  ],
+  review: [
+    {
+      createdAt: undefined,
+      id: '3842ca28-2aea-11e8-8fec-a860b60304d5',
+      productId: 0,
+      rating: 0,
+      text: '',
+      updatedAt: undefined,
+      userId: 0,
+    },
+    {
+      createdAt: undefined,
+      id: '3842ca28-2aea-11e8-8fec-a860b60304d6',
+      productId: 0,
+      rating: 0,
+      text: '',
+      updatedAt: undefined,
+      userId: 0,
+    },
+    {
+      createdAt: undefined,
+      id: '3842ca28-2aea-11e8-8fec-a860b60304d7',
+      productId: 0,
+      rating: 0,
+      text: '',
+      updatedAt: undefined,
+      userId: 0,
+    },
+    {
+      createdAt: undefined,
+      id: '3842ca28-2aea-11e8-8fec-a860b60304d8',
+      productId: 0,
+      rating: 0,
+      text: '',
+      updatedAt: undefined,
+      userId: 0,
+    },
+    {
+      createdAt: undefined,
+      id: '3842ca28-2aea-11e8-8fec-a860b60304d9',
+      productId: 0,
+      rating: 0,
+      text: '',
+      updatedAt: undefined,
+      userId: 0,
     },
   ],
 };
