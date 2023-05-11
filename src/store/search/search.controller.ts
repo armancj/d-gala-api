@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { SearchService } from './search.service';
-import { Public } from '../../authentication/decorator';
+import { Public } from '../../auth/decorator';
 import { DataBodySearchDto } from './dto/data-body-search.dto';
 import { ApiTags } from '@nestjs/swagger';
 

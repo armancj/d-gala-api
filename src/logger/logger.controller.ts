@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { LoggerService } from './logger.service';
-import { Public } from '../authentication/decorator';
+import { Public } from '../auth/decorator';
 import { LoggerDto } from './dto/logger.dto';
 import { ApiTags } from '@nestjs/swagger';
 

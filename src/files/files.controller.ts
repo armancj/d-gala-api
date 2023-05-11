@@ -30,7 +30,7 @@ import {
 import { FilesUploadDto, FileUploadDto } from './dto/file-upload.dto';
 import { FilesFilter } from './filters/files.filter';
 import { MinioPolicy } from './enum/minio.enum';
-import { Auth, GetUser, Public } from '../authentication/decorator';
+import { Auth, GetUser, Public } from '../auth/decorator';
 import { EnumUserRole } from '../user/enum/user-role.enum';
 import { User } from '@prisma/client';
 import { ExcludeInterceptor } from './decorators/exlude-interceptor.decorator';

@@ -7,16 +7,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from './authentication/guard';
-import { AuthService } from './authentication/auth.service';
-import { GetUser, Public } from './authentication/decorator';
+import { LocalAuthGuard } from './auth/guard';
+import { AuthService } from './auth/auth.service';
+import { GetUser, Public } from './auth/decorator';
 import {
   LoginDto,
   RefreshTokenDto,
   RegisterUserDto,
-} from './authentication/dto';
+} from './auth/dto';
 import { UserPayload } from './user/interface/user-payload';
-import { JwtRefreshAuthGuard } from './authentication/guard/jwt-refresh-auth.guard';
+import { JwtRefreshAuthGuard } from './auth/guard/jwt-refresh-auth.guard';
 
 @ApiTags('App')
 @Controller({ version: '1' })

@@ -18,7 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { QueryProductsDto } from './dto/query-products.dto';
-import { Auth, GetUser, Public } from '../../authentication/decorator';
+import { Auth, GetUser, Public } from '../../auth/decorator';
 import { EnumUserRole } from '../../user/enum/user-role.enum';
 import { User } from '@prisma/client';
 import { GetAllQueryDto } from '../../common/dto';

@@ -16,7 +16,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { GetAllQueryDto, GetAllResponseDto } from '../common/dto';
 import { UserResponse } from './interface/user.response';
 import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
-import { Auth, GetUser } from '../authentication/decorator';
+import { Auth, GetUser } from '../auth/decorator';
 import { EnumUserRole } from './enum/user-role.enum';
 import { UserPayload } from './interface/user-payload';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';

@@ -12,7 +12,7 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Auth, GetUser, Public } from '../../authentication/decorator';
+import { Auth, GetUser, Public } from '../../auth/decorator';
 import { GetAllQueryDto } from '../../common/dto';
 import { EnumUserRole } from '../../user/enum/user-role.enum';
 import { UserPayload } from '../../user/interface/user-payload';

@@ -5,18 +5,21 @@ import {
   Body,
   Patch,
   Param,
-  Delete, ParseUUIDPipe,
+  Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Public } from '../../auth/decorator';
 
 @ApiTags('Reviews')
 @Controller('review')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
+  @Public()
   @Post()
   create(@Body() createReviewDto: CreateReviewDto) {
     return this.reviewService.create(createReviewDto);

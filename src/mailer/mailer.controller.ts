@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { MailerService } from './mailer.service';
 import { EmailDto } from './dto/email.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Auth } from '../authentication/decorator';
+import { Auth } from '../auth/decorator';
 import { EnumUserRole } from '../user/enum/user-role.enum';
 
 @ApiTags('Email')
