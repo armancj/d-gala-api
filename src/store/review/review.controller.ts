@@ -22,7 +22,7 @@ export class ReviewController {
   @Public()
   @Post()
   create(@Body() createReviewDto: CreateReviewDto) {
-    return this.reviewService.create(createReviewDto);
+    return this.reviewService.create({ ...createReviewDto, userId: 4 });
   }
 
   @Get()

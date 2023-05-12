@@ -1,8 +1,8 @@
 /*
   Warnings:
 
-  - You are about to drop the column `categoryId` on the `Product` table. All the data in the column will be lost.
-  - You are about to drop the column `phone` on the `User` table. All the data in the column will be lost.
+  - You are about to drop the column `categoryId` on the `Product` table. All the createReviewDto in the column will be lost.
+  - You are about to drop the column `phone` on the `User` table. All the createReviewDto in the column will be lost.
   - A unique constraint covering the columns `[profileId]` on the table `Photo` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[name]` on the table `Product` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[slug]` on the table `Product` will be added. If there are existing duplicate values, this will fail.

@@ -1,19 +1,24 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { CreateReviewDto } from './dto/create-review.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { PrismaService } from '../../prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+import { HandlerError } from '../../common/utils/handler-error';
 
 @Injectable()
 export class ReviewService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(createReviewDto: CreateReviewDto) {
-    //this.prismaService.review.create({ data: createReviewDto });
-    return createReviewDto;
+  async create(createReviewDto: Prisma.ReviewUncheckedCreateInput) {
+    return this.prismaService.review
+      .create({
+        data: createReviewDto,
+      })
+      .catch((err) => {
+        HandlerError(
+          err,
+          `User with id: ${createReviewDto.userId} is duplicated`,
+        );
+      });
   }
 
   findAllReviews() {
@@ -23,7 +28,7 @@ export class ReviewService {
   async findOneReview(id: string) {
     return await this.prismaService.review
       .findUniqueOrThrow({ where: { id } })
-      .catch(async (err) => {
+      .catch(async () => {
         throw new NotFoundException(`Review with id: ${id} not found`);
       });
   }

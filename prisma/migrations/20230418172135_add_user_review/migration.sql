@@ -1,7 +1,7 @@
 /*
   Warnings:
 
-  - You are about to drop the column `start` on the `Product` table. All the data in the column will be lost.
+  - You are about to drop the column `start` on the `Product` table. All the createReviewDto in the column will be lost.
   - A unique constraint covering the columns `[userId]` on the table `Review` will be added. If there are existing duplicate values, this will fail.
   - Added the required column `userId` to the `Review` table without a default value. This is not possible if the table is not empty.
 

@@ -1,35 +1,30 @@
 import { Prisma } from '@prisma/client';
-import { OmitType } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { ReviewCreateInputDto } from './review-create-input.dto';
-import { isInt, IsNotEmpty, isNumber, isPositive } from 'class-validator';
-import { BadRequestException } from '@nestjs/common';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
-export class CreateReviewDto extends OmitType(ReviewCreateInputDto, [
-  'product',
-  'user',
-] as const) {
-  @Transform(({ value }) => connect(value))
+export class CreateReviewDto
+  implements Partial<Prisma.ReviewUncheckedCreateInput>
+{
+  @IsNumber()
+  @IsInt()
+  @IsPositive()
   @IsNotEmpty()
-  product: number;
-}
+  productId: number;
 
-function connect(id: number): Prisma.ProductCreateNestedOneWithoutReviewsInput {
-  const message = [];
-  if (!isNumber(id)) {
-    message.push(
-      'product must be a number conforming to the specified constraints',
-    );
-  }
-  if (!isPositive(id)) {
-    message.push('product must be a positive number');
-  }
+  @IsNumber()
+  @IsInt()
+  @IsPositive()
+  @IsNotEmpty()
+  rating: number;
 
-  if (!isInt(id)) {
-    message.push('product must be an integer number');
-  }
-
-  if (message.length > 0) throw new BadRequestException(message);
-
-  return { connect: { id } };
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  text?: string;
 }

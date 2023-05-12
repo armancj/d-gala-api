@@ -1,8 +1,8 @@
 /*
   Warnings:
 
-  - You are about to drop the column `height` on the `Photo` table. All the data in the column will be lost.
-  - You are about to drop the column `width` on the `Photo` table. All the data in the column will be lost.
+  - You are about to drop the column `height` on the `Photo` table. All the createReviewDto in the column will be lost.
+  - You are about to drop the column `width` on the `Photo` table. All the createReviewDto in the column will be lost.
 
 */
 -- DropForeignKey

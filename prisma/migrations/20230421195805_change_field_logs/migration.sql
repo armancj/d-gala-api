@@ -1,7 +1,7 @@
 /*
   Warnings:
 
-  - The `params` column on the `Logs` table would be dropped and recreated. This will lead to data loss if there is data in the column.
+  - The `params` column on the `Logs` table would be dropped and recreated. This will lead to createReviewDto loss if there is createReviewDto in the column.
 
 */
 -- AlterTable

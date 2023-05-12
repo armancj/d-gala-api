@@ -3,11 +3,8 @@ import { ReviewService } from './review.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { initialData } from '../../seed/data/seed';
 import { Prisma, Review } from '@prisma/client';
-import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import { HttpStatus, NotFoundException } from '@nestjs/common';
 import { v4 as uuid4 } from 'uuid';
-import { HandlerError } from '../../common/utils/handler-error';
-import { error } from 'winston';
-import { CreateReviewDto } from './dto/create-review.dto';
 
 const fakeReviews = initialData.review;
 
@@ -65,14 +62,15 @@ describe('ReviewService', () => {
   });
 
   describe('createReview', () => {
-    it('should create review', () => {
-      const createReviewDto: CreateReviewDto = {
-        product: 1,
-        rating: 2,
-        text: 'sad',
+    it('should create review', async () => {
+      const createReviewDto: Prisma.ReviewUncheckedCreateInput = {
+        ...fakeReviews[0],
       };
-      const result = reviewService.create(createReviewDto);
-      expect(result).toEqual(createReviewDto);
+      jest
+        .spyOn(prismaService.review, 'create')
+        .mockResolvedValueOnce(fakeReviews[0] as any);
+      const result = await reviewService.create(createReviewDto);
+      expect(result).toEqual(fakeReviews[0]);
     });
   });
 });

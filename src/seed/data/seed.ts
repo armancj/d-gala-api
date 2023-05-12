@@ -1214,11 +1214,11 @@ export const initialData: SeedData = {
     {
       createdAt: undefined,
       id: '3842ca28-2aea-11e8-8fec-a860b60304d5',
-      productId: 0,
-      rating: 0,
-      text: '',
+      productId: 1,
+      rating: 2,
+      text: 'this a test',
       updatedAt: undefined,
-      userId: 0,
+      userId: 3,
     },
     {
       createdAt: undefined,
