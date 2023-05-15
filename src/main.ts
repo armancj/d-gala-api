@@ -27,6 +27,8 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
+  AppSwagger(app, configService);
+
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(
     new LoggingInterceptor(),
@@ -45,8 +47,7 @@ async function bootstrap() {
       },
     }),
   );
-  app.use(helmet());
-  AppSwagger(app, configService);
+  //app.use(helmet());
 
   const port = parseInt(configService.get(EnumEnvName.PORT), 10) || 3000;
   await repl(AppModule);
