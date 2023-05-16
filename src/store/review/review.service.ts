@@ -3,12 +3,14 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { HandlerError } from '../../common/utils/handler-error';
+import { EnumUserRole } from '../../user/enum/user-role.enum';
+import { RoleIdWhere } from '../../user/interface/role-id-where';
 
 @Injectable()
 export class ReviewService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createReviewDto: Prisma.ReviewUncheckedCreateInput) {
+  async createReview(createReviewDto: Prisma.ReviewUncheckedCreateInput) {
     return this.prismaService.review
       .create({
         data: createReviewDto,
@@ -33,8 +35,25 @@ export class ReviewService {
       });
   }
 
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
+  updateReview(
+    id: string,
+    updateReviewDto: UpdateReviewDto,
+    user: RoleIdWhere,
+  ) {
+    const updateReview: Prisma.ReviewUncheckedUpdateWithoutProductInput = {
+      ...updateReviewDto,
+    };
+    const whereReview: Prisma.ReviewWhereUniqueInput =
+      user.role === EnumUserRole.USER ? { id, userId: user.id } : { id };
+
+    return this.prismaService.review
+      .update({
+        where: whereReview,
+        data: updateReview,
+      })
+      .catch((err) => {
+        HandlerError(err, 'error not found');
+      });
   }
 
   remove(id: number) {

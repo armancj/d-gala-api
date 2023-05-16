@@ -52,7 +52,7 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-  @Patch('update-profile')
+  @Patch('updateReview-profile')
   updateProfile(
     @GetUser() user: User,
     @Body() updateUserProfileDto: UpdateUserProfileDto,

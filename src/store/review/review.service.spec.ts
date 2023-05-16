@@ -3,10 +3,16 @@ import { ReviewService } from './review.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { initialData } from '../../seed/data/seed';
 import { Prisma, Review } from '@prisma/client';
-import { HttpStatus, NotFoundException } from '@nestjs/common';
+import {HttpException, HttpStatus, NotFoundException} from '@nestjs/common';
 import { v4 as uuid4 } from 'uuid';
+import { RoleIdWhere } from '../../user/interface/role-id-where';
+import { id } from 'date-fns/locale';
+import {EnumPrismaError} from "../../common/utils/prisma-error.enum";
+import {HandlerError} from "../../common/utils/handler-error";
 
 const fakeReviews = initialData.review;
+const fakeUser = initialData.users[0];
+const user: RoleIdWhere = { id: fakeUser.id, role: fakeUser.role };
 
 describe('ReviewService', () => {
   let reviewService: ReviewService;
@@ -62,15 +68,48 @@ describe('ReviewService', () => {
   });
 
   describe('createReview', () => {
-    it('should create review', async () => {
+    it('should createReview review', async () => {
       const createReviewDto: Prisma.ReviewUncheckedCreateInput = {
         ...fakeReviews[0],
       };
       jest
         .spyOn(prismaService.review, 'create')
         .mockResolvedValueOnce(fakeReviews[0] as any);
-      const result = await reviewService.create(createReviewDto);
+      const result = await reviewService.createReview(createReviewDto);
       expect(result).toEqual(fakeReviews[0]);
+    });
+  });
+
+  describe('updateReview', () => {
+    describe('when review with ID exists', () => {
+      it('should return updateReview', async () => {
+        const reviewId = fakeReviews[0].id;
+        jest
+          .spyOn(prismaService.review, 'update')
+          .mockResolvedValueOnce(fakeReviews[0]);
+        const result = await reviewService.updateReview(
+          reviewId,
+          fakeReviews[0],
+          user,
+        );
+        expect(result).toEqual(fakeReviews[0]);
+      });
+    });
+    describe('OtherWise', () => {
+      it('should throw the "NotFoundException"', async () => {
+        const reviewId = fakeReviews[0].id;
+        jest
+          .spyOn(prismaService.review, 'update')
+          .mockRejectedValueOnce(EnumPrismaError.NOT_FOUND);
+
+        try {
+          await reviewService.updateReview(reviewId, fakeReviews[0], user);
+        } catch (error) {
+          await expect(HandlerError(error)).rejects.toBeInstanceOf(HttpException);
+          expect(error.message).toEqual('error not found');
+          expect(error.getStatus()).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      });
     });
   });
 });
