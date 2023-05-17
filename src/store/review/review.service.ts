@@ -53,6 +53,7 @@ export class ReviewService {
       })
       .catch((err) => {
         HandlerError(err, 'error not found');
+        //throw new NotFoundException('...err');
       });
   }
 
