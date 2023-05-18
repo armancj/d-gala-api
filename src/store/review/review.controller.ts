@@ -46,7 +46,7 @@ export class ReviewController {
   ) {
     return this.reviewService.updateReview(id, updateReviewDto, user);
   }
-  
+
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string, @GetUser() user: User) {
     return this.reviewService.removeReview(id, user);

@@ -8,7 +8,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { FilesService } from '../files/files.service';
 import { initialData, SeedProduct } from './data/seed';
-import { Product, Photo } from '@prisma/client';
+import { Product } from '@prisma/client';
 import { appConstant, statusState } from '../config/app.constant';
 import { HandlerError } from '../common/utils/handler-error';
 
