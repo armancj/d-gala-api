@@ -12,7 +12,7 @@ import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { GetUser, Public } from '../../auth/decorator';
+import { GetUser } from '../../auth/decorator';
 import { User } from '@prisma/client';
 
 @ApiTags('Reviews')
@@ -46,10 +46,9 @@ export class ReviewController {
   ) {
     return this.reviewService.updateReview(id, updateReviewDto, user);
   }
-
-  @Public()
+  
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.reviewService.removeReview(id);
+  remove(@Param('id', ParseUUIDPipe) id: string, @GetUser() user: User) {
+    return this.reviewService.removeReview(id, user);
   }
 }

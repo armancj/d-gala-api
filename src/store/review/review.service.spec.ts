@@ -112,7 +112,7 @@ describe('ReviewService', () => {
         jest
           .spyOn(prismaService.review, 'delete')
           .mockResolvedValueOnce(fakeReviews[0]);
-        const result = await reviewService.removeReview(reviewId);
+        const result = await reviewService.removeReview(reviewId, user);
         expect(result).toBe(fakeReviews[0]);
       });
     });
@@ -123,7 +123,7 @@ describe('ReviewService', () => {
           .spyOn(prismaService.review, 'delete')
           .mockResolvedValueOnce(undefined);
         try {
-          await reviewService.removeReview(reviewId);
+          await reviewService.removeReview(reviewId, user);
         } catch (e) {
           expect(e).toBeInstanceOf(NotFoundException);
           expect(e.message).toBe(`Review with id: ${reviewId} not found`);
