@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Prisma, Review, Role } from '@prisma/client';
+import { Prisma, Review } from '@prisma/client';
 import { HandlerError } from '../../common/utils/handler-error';
 import { EnumUserRole } from '../../user/enum/user-role.enum';
 import { RoleIdWhere } from '../../user/interface/role-id-where';
