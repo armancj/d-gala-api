@@ -40,15 +40,16 @@ export class ReviewController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateReviewDto: UpdateReviewDto,
     @GetUser() user: User,
   ) {
     return this.reviewService.updateReview(id, updateReviewDto, user);
   }
 
+  @Public()
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reviewService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.reviewService.removeReview(id);
   }
 }

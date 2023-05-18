@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, Review } from '@prisma/client';
 import { HandlerError } from '../../common/utils/handler-error';
 import { EnumUserRole } from '../../user/enum/user-role.enum';
 import { RoleIdWhere } from '../../user/interface/role-id-where';
@@ -51,13 +51,15 @@ export class ReviewService {
         where: whereReview,
         data: updateReview,
       })
-      .catch((err) => {
-        HandlerError(err, 'error not found');
-        //throw new NotFoundException('...err');
+      .catch(() => {
+        throw new NotFoundException(`Review with id: ${id} not found`);
       });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  removeReview(id: string): Promise<Review> {
+    const where: Prisma.ReviewWhereUniqueInput = { id };
+    return this.prismaService.review.delete({ where }).catch(() => {
+      throw new NotFoundException(`Review with id: ${id} not found`);
+    });
   }
 }

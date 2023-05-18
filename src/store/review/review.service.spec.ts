@@ -3,12 +3,9 @@ import { ReviewService } from './review.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { initialData } from '../../seed/data/seed';
 import { Prisma, Review } from '@prisma/client';
-import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import { HttpStatus, NotFoundException } from '@nestjs/common';
 import { v4 as uuid4 } from 'uuid';
 import { RoleIdWhere } from '../../user/interface/role-id-where';
-import { id } from 'date-fns/locale';
-import { EnumPrismaError } from '../../common/utils/prisma-error.enum';
-import { HandlerError } from '../../common/utils/handler-error';
 
 const fakeReviews = initialData.review;
 const fakeUser = initialData.users[0];
@@ -98,29 +95,39 @@ describe('ReviewService', () => {
     describe('OtherWise', () => {
       it('should throw the "NotFoundException"', async () => {
         const reviewId = fakeReviews[0].id;
-        jest.spyOn(prismaService.review, 'update').mockResolvedValueOnce(undefined);
-
-        //await expect(reviewService.updateReview(reviewId, fakeReviews[0], user)).rejects.toBeInstanceOf(NotFoundException);
         try {
-          HandlerError(
-            async () =>
-              await reviewService.updateReview(reviewId, fakeReviews[0], user),
-          );
-        } catch (e) {
-          expect(e).toEqual(e);
-        }
-
-        /*await expect(
-          reviewService.updateReview(reviewId, fakeReviews[0], user),
-        ).rejects.toBeInstanceOf(HttpException);*/
-
-        /*try {
           await reviewService.updateReview(reviewId, fakeReviews[0], user);
-        } catch (error) {
-          await expect(HandlerError(error)).rejects.toBeInstanceOf(HttpException);
-          expect(error.message).toEqual('error not found');
-          expect(error.getStatus()).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
-        }*/
+        } catch (e) {
+          expect(e).toBeInstanceOf(NotFoundException);
+          expect(e.message).toBe(`Review with id: ${reviewId} not found`);
+        }
+      });
+    });
+  });
+
+  describe('removeReview', () => {
+    describe('when review with ID exists', () => {
+      it('should return removeReview', async () => {
+        const reviewId = fakeReviews[0].id;
+        jest
+          .spyOn(prismaService.review, 'delete')
+          .mockResolvedValueOnce(fakeReviews[0]);
+        const result = await reviewService.removeReview(reviewId);
+        expect(result).toBe(fakeReviews[0]);
+      });
+    });
+    describe('OtherWise', () => {
+      it('should throw the "NotFoundException" ', async () => {
+        const reviewId = fakeReviews[0].id;
+        jest
+          .spyOn(prismaService.review, 'delete')
+          .mockResolvedValueOnce(undefined);
+        try {
+          await reviewService.removeReview(reviewId);
+        } catch (e) {
+          expect(e).toBeInstanceOf(NotFoundException);
+          expect(e.message).toBe(`Review with id: ${reviewId} not found`);
+        }
       });
     });
   });
