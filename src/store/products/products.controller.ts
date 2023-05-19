@@ -65,7 +65,7 @@ export class ProductsController {
     return this.productsService.rankinProduct(paginateProduct);
   }
 
-  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.WORKER)
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: string) {
     return this.productsService.findOneProduct(+id);

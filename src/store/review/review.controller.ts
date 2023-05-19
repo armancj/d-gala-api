@@ -13,7 +13,7 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { GetUser } from '../../auth/decorator';
-import { User } from '@prisma/client';
+import {Review, User} from '@prisma/client';
 
 @ApiTags('Reviews')
 @Controller('review')
@@ -29,7 +29,7 @@ export class ReviewController {
   }
 
   @Get()
-  findAll() {
+  findAllReview(): Promise<Review[]>{
     return this.reviewService.findAllReviews();
   }
 

@@ -59,6 +59,10 @@ export class ProductsService {
         gender: getAllQueryDto.gender,
         status: getAllQueryDto.status,
       },
+      include: {
+        photo: { select: { id: true, name: true, url: true }, take: 1 },
+        reviews: { select: { id: true, rating: true } },
+      },
       skip: getAllQueryDto.skip,
       take: getAllQueryDto.take,
     });
