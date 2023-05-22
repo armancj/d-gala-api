@@ -13,7 +13,7 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { GetUser } from '../../auth/decorator';
-import {Review, User} from '@prisma/client';
+import { Review, User } from '@prisma/client';
 
 @ApiTags('Reviews')
 @Controller('review')
@@ -21,7 +21,7 @@ export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
-  create(@Body() createReviewDto: CreateReviewDto, @GetUser() user: User) {
+  createReview(@Body() createReviewDto: CreateReviewDto, @GetUser() user: User) {
     return this.reviewService.createReview({
       ...createReviewDto,
       userId: user.id,
@@ -29,7 +29,7 @@ export class ReviewController {
   }
 
   @Get()
-  findAllReview(): Promise<Review[]>{
+  findAllReview(): Promise<Review[]> {
     return this.reviewService.findAllReviews();
   }
 

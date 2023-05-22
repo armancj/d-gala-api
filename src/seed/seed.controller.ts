@@ -9,7 +9,7 @@ import { EnumUserRole } from '../user/enum/user-role.enum';
 export class SeedController {
   constructor(private readonly seedService: SeedService) {}
 
-  @Auth(EnumUserRole.SUADMIN)
+  //@Auth(EnumUserRole.SUADMIN)
   @Get()
   executeSeed() {
     return this.seedService.executeSeed();

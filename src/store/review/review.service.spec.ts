@@ -126,7 +126,7 @@ describe('ReviewService', () => {
           await reviewService.removeReview(reviewId, user);
         } catch (e) {
           expect(e).toBeInstanceOf(NotFoundException);
-          expect(e.message).toBe(`Review with id: ${reviewId} not found`);
+          expect(e.message).toEqual(`Review with id: ${reviewId} not found`);
         }
       });
     });
