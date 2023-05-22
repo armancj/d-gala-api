@@ -21,7 +21,10 @@ export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
-  createReview(@Body() createReviewDto: CreateReviewDto, @GetUser() user: User) {
+  createReview(
+    @Body() createReviewDto: CreateReviewDto,
+    @GetUser() user: User,
+  ) {
     return this.reviewService.createReview({
       ...createReviewDto,
       userId: user.id,
