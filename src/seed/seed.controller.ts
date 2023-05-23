@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { SeedService } from './seed.service';
-import { Auth } from '../auth/decorator';
+import { Auth, Public } from '../auth/decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { EnumUserRole } from '../user/enum/user-role.enum';
 
@@ -10,6 +10,7 @@ export class SeedController {
   constructor(private readonly seedService: SeedService) {}
 
   //@Auth(EnumUserRole.SUADMIN)
+  @Public()
   @Get()
   executeSeed() {
     return this.seedService.executeSeed();

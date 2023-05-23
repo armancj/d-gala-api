@@ -1,5 +1,6 @@
 export const appConstant = {
   STATE: 'STATE',
+  HOST: 'HOST',
 };
 
 export enum statusState {

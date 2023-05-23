@@ -16,6 +16,7 @@ import { appConstant } from '../config/app.constant';
 import { MinioPolicy, MinioRoute } from './enum/minio.enum';
 import { Photo, Prisma, User } from '@prisma/client';
 import { EnumUserRole } from '../user/enum/user-role.enum';
+import * as process from 'process';
 
 export interface PhotoIdInterface {
   productId?: number;
@@ -51,7 +52,8 @@ export class FilesService {
     return this._configService.get<string>(MINIO_ENV.MINIO_BUCKET);
   }
   private url(bucket: string): string {
-    const host = this._configService.get<string>(MINIO_ENV.MINIO_ENDPOINT);
+    //this._configService.get<string>(MINIO_ENV.MINIO_ENDPOINT);
+    const host = this._configService.get<string>(appConstant.HOST);
     const port = this._configService.get<string>(MINIO_ENV.MINIO_PORT);
     const protocol =
       this._configService.get(appConstant.STATE) === 'dev'
