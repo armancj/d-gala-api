@@ -2,7 +2,8 @@ import { GenderType } from '../enum/gender-type.enum';
 import { ProductStatus } from '../enum/product-status.enum';
 import {
   IsArray,
-  IsEnum, IsInt,
+  IsEnum,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -62,4 +63,9 @@ export class CreateProductDto {
   @IsString({ each: true })
   @IsOptional()
   sizes: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  colors?: string[];
 }

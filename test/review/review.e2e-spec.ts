@@ -1,4 +1,7 @@
-import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+  INestApplication,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ReviewService } from '../../src/store/review/review.service';
 import { Test } from '@nestjs/testing';
 import { ReviewModule } from '../../src/store/review/review.module';
@@ -37,12 +40,9 @@ describe('[Feature] Reviews - /review', () => {
   });
 
   it(`/GET reviews`, () => {
-    return request(app.getHttpServer())
-      .get('/review')
-      .expect(HttpStatus.OK)
-      .expect({
-        data: reviewService.findAllReview(),
-      });
+    return request(app.getHttpServer()).get('/review').expect({
+      data: reviewService.findAllReview(),
+    });
   });
 
   afterAll(async () => {

@@ -17,6 +17,7 @@ import {
 } from './auth/dto';
 import { UserPayload } from './user/interface/user-payload';
 import { JwtRefreshAuthGuard } from './auth/guard/jwt-refresh-auth.guard';
+import * as process from "process";
 
 @ApiTags('App')
 @Controller({ version: '1' })
@@ -25,7 +26,7 @@ export class AppController {
 
   @Get()
   @Public()
-  getHello(): string {
+  getHello() {
     return 'Hello World!';
   }
 
