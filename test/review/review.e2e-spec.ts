@@ -13,7 +13,7 @@ const fakeReviews = initialData.review;
 const fakeUser = initialData.users[0];
 const user: RoleIdWhere = { id: fakeUser.id, role: fakeUser.role };
 
-describe('[Feature] Reviews - /review', () => {
+describe('ReviewController (e2e)', () => {
   let app: INestApplication;
   const reviewService = { findAllReview: () => fakeReviews };
 

@@ -7,25 +7,16 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { FilesService } from '../files/files.service';
-import { initialData, SeedProduct } from './data/seed';
+import { initialData } from './data/seed';
 import { Product } from '@prisma/client';
 import { appConstant, statusState } from '../config/app.constant';
 import { HandlerError } from '../common/utils/handler-error';
-
-enum ProfileOrProducts {
-  products = 'products',
-  profile = 'profile',
-}
-
-interface Connect {
-  connect: { id: number };
-}
-
-interface updatePhotoInterface {
-  url: string;
-  id: number;
-  space: number;
-}
+import {
+  Connect,
+  SeedProduct,
+  updatePhotoInterface,
+} from './interface/seed.interface';
+import { ProfileOrProducts } from './enum/seed.enum';
 
 @Injectable()
 export class SeedService {
