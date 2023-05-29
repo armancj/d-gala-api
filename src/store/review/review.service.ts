@@ -4,11 +4,11 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { Prisma, Review, User } from '@prisma/client';
 import { HandlerError } from '../../common/utils/handler-error';
 import { EnumUserRole } from '../../user/enum/user-role.enum';
-import { RoleIdWhere } from '../../user/interface/role-id-where';
 import {
-  ReviewTransactionInterface,
+  ReviewTransactionCreate,
+  ReviewTransactionRemove,
   ReviewTransactionUpdate,
-} from './interface/review-transaction.interface';
+} from './interface/review-transaction.create';
 
 @Injectable()
 export class ReviewService {
@@ -28,7 +28,7 @@ export class ReviewService {
   }
 
   private async createReview(
-    params: Partial<ReviewTransactionInterface>,
+    params: Partial<ReviewTransactionCreate>,
     createReviewDto: Prisma.ReviewUncheckedCreateInput,
   ) {
     const { prisma } = params;
@@ -44,7 +44,7 @@ export class ReviewService {
       });
   }
 
-  private async updateProductReviewsTotal(params: ReviewTransactionInterface) {
+  private async updateProductReviewsTotal(params: ReviewTransactionCreate) {
     const { prisma, productId } = params;
     const reviewsAvg = await prisma.review.aggregate({
       _avg: { rating: true },
@@ -86,10 +86,11 @@ export class ReviewService {
       });
   }
 
-  removeReview(id: string, user: RoleIdWhere): Promise<Review> {
+  removeReview(params: ReviewTransactionRemove): Promise<Review> {
+    const { prisma, user, id } = params;
     const where: Prisma.ReviewWhereUniqueInput =
       user.role !== EnumUserRole.USER ? { id } : { userId: user.id };
-    return this.prismaService.review.delete({ where }).catch(() => {
+    return prisma.review.delete({ where }).catch(() => {
       throw new NotFoundException(`Review with id: ${id} not found`);
     });
   }
@@ -106,6 +107,17 @@ export class ReviewService {
         user,
         id,
       });
+      await this.updateProductReviewsTotal({
+        prisma,
+        productId: review.productId,
+      });
+      return review;
+    });
+  }
+
+  transactionRemoveReview(id: string, user: User) {
+    return this.prismaService.$transaction(async (prisma) => {
+      const review = await this.removeReview({ id, user, prisma });
       await this.updateProductReviewsTotal({
         prisma,
         productId: review.productId,
