@@ -16,29 +16,11 @@ import { appConstant } from '../config/app.constant';
 import { MinioPolicy, MinioRoute } from './enum/minio.enum';
 import { Photo, Prisma, User } from '@prisma/client';
 import { EnumUserRole } from '../user/enum/user-role.enum';
-import * as process from 'process';
-
-export interface PhotoIdInterface {
-  productId?: number;
-  profileId?: number;
-}
-
-interface PhotoInterface {
-  photo: Photo & {
-    product: Prisma.ProductGetPayload<
-      { product: boolean; profile: boolean }['product']
-    > | null;
-    profile: Prisma.ProfileGetPayload<
-      { product: boolean; profile: boolean }['profile']
-    > | null;
-  };
-}
-
-interface photoInput {
-  minioData: { message: string; url: string };
-  file: Express.Multer.File;
-  photoId: PhotoIdInterface;
-}
+import {
+  PhotoIdInterface,
+  photoInput,
+  PhotoInterface,
+} from './interface/minio.interface';
 
 @Injectable()
 export class FilesService {

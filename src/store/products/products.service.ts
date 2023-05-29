@@ -1,19 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  CreateProductDto,
+  UpdateProductDto,
+  QueryProductsDto,
+  CreateReviewDto,
+} from './dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { HandlerError } from '../../common/utils/handler-error';
 import { GetAllQueryDto, GetAllResponseDto } from '../../common/dto';
-import { QueryProductsDto } from './dto/query-products.dto';
 import { Product, User } from '@prisma/client';
-import { Prisma } from '.prisma/client';
-import { CreateReviewDto } from './dto/create-review.dto';
+import { Prisma } from '@prisma/client';
 import { stringReplaceUnderscore } from '../../common/utils/check-slug-insert.function';
-interface ProductInput {
-  user: User;
-  rest: Omit<CreateProductDto, 'categoryId' | 'tags'>;
-  categoryId?: number;
-}
+import {ProductInput} from "./interface/product-input.interface";
+
 
 @Injectable()
 export class ProductsService {
@@ -52,7 +51,9 @@ export class ProductsService {
     return stringReplaceUnderscore(editSlug);
   }
 
-  async findAll(getAllQueryDto: QueryProductsDto): Promise<GetAllResponseDto> {
+  async findAllProduct(
+    getAllQueryDto: QueryProductsDto,
+  ): Promise<GetAllResponseDto> {
     const result = await this.prisma.product.findMany({
       where: {
         deleted: false,
@@ -63,6 +64,7 @@ export class ProductsService {
         photo: { select: { id: true, name: true, url: true }, take: 1 },
         reviews: { select: { id: true, rating: true } },
       },
+      orderBy: getAllQueryDto.orderBy,
       skip: getAllQueryDto.skip,
       take: getAllQueryDto.take,
     });
@@ -119,8 +121,8 @@ export class ProductsService {
       );
   }
 
-  rankinProduct(paginateProduct: GetAllQueryDto) {
-    return this.prisma.product.findMany({
+  rankinProduct(paginateProduct: GetAllQueryDto): Promise<GetAllResponseDto> {
+    return this.findAllProduct({
       orderBy: { reviewsTotal: 'desc' },
       skip: paginateProduct.skip,
       take: paginateProduct.take,

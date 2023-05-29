@@ -56,7 +56,7 @@ export class ProductsController {
   @Public()
   @Get()
   findAll(@Query() queryProductsDto: QueryProductsDto) {
-    return this.productsService.findAll(queryProductsDto);
+    return this.productsService.findAllProduct(queryProductsDto);
   }
 
   @Public()

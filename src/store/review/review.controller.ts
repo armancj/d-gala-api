@@ -25,7 +25,7 @@ export class ReviewController {
     @Body() createReviewDto: CreateReviewDto,
     @GetUser() user: User,
   ) {
-    return this.reviewService.createReview({
+    return this.reviewService.transactionCreateReview({
       ...createReviewDto,
       userId: user.id,
     });
@@ -47,7 +47,11 @@ export class ReviewController {
     @Body() updateReviewDto: UpdateReviewDto,
     @GetUser() user: User,
   ) {
-    return this.reviewService.updateReview(id, updateReviewDto, user);
+    return this.reviewService.transactionUpdateReview(
+      id,
+      updateReviewDto,
+      user,
+    );
   }
 
   @Delete(':id')

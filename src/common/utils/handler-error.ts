@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 
 export function HandlerError(error: any, message?: string): never {
-  console.log({ error, message });
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     const errorMessage = message ? message : error?.meta?.cause;
 
@@ -25,6 +24,7 @@ export function HandlerError(error: any, message?: string): never {
     if (error.code === EnumPrismaError.NOT_FOUND)
       throw new NotFoundException(errorMessage);
 
+    console.log({ error, message });
     throw new InternalServerErrorException(
       `Prisma error: ${error?.meta}, code:${error.code}`,
     );

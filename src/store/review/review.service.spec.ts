@@ -65,14 +65,14 @@ describe('ReviewService', () => {
   });
 
   describe('createReview', () => {
-    it('should createReview review', async () => {
+    it('should transactionCreateReview review', async () => {
       const createReviewDto: Prisma.ReviewUncheckedCreateInput = {
         ...fakeReviews[0],
       };
       jest
         .spyOn(prismaService.review, 'create')
         .mockResolvedValueOnce(fakeReviews[0] as any);
-      const result = await reviewService.createReview(createReviewDto);
+      const result = await reviewService.transactionCreateReview(createReviewDto);
       expect(result).toEqual(fakeReviews[0]);
     });
   });

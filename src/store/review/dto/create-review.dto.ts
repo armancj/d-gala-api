@@ -5,7 +5,7 @@ import {
   IsNumber,
   IsOptional,
   IsPositive,
-  IsString,
+  IsString, Max, Min,
 } from 'class-validator';
 
 export class CreateReviewDto
@@ -21,6 +21,8 @@ export class CreateReviewDto
   @IsInt()
   @IsPositive()
   @IsNotEmpty()
+  @Min(1)
+  @Max(5)
   rating: number;
 
   @IsString()

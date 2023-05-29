@@ -67,10 +67,10 @@ describe('ReviewController', () => {
   });
 
   describe('createReview', () => {
-    it('should return one review createReview', async () => {
+    it('should return one review transactionCreateReview', async () => {
       const createReviewDto: CreateReviewDto = { ...fakeReviews[0] };
       jest
-        .spyOn(reviewServices, 'createReview')
+        .spyOn(reviewServices, 'transactionCreateReview')
         .mockImplementation(() => fakeReviews[0] as unknown as Promise<Review>);
       expect(
         await reviewController.createReview(createReviewDto, user as User),
