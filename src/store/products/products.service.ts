@@ -8,11 +8,9 @@ import {
 import { PrismaService } from '../../prisma/prisma.service';
 import { HandlerError } from '../../common/utils/handler-error';
 import { GetAllQueryDto, GetAllResponseDto } from '../../common/dto';
-import { Product, User } from '@prisma/client';
-import { Prisma } from '@prisma/client';
+import { User, Prisma } from '@prisma/client';
 import { stringReplaceUnderscore } from '../../common/utils/check-slug-insert.function';
-import {ProductInput} from "./interface/product-input.interface";
-
+import { ProductInput } from './interface/product-input.interface';
 
 @Injectable()
 export class ProductsService {
@@ -93,18 +91,17 @@ export class ProductsService {
       );
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
+  async updateProduct(id: number, updateProductDto: UpdateProductDto) {
+    const { price, ...productData } = updateProductDto;
+    const data: Prisma.ProductUncheckedUpdateInput = { ...productData, price };
+    const product = await this.findOneProduct(id);
+    if (price && price !== product.price) data.priceCut = product.price;
     return this.prisma.product
       .update({
         where: { id },
-        data: updateProductDto as unknown as Product,
+        data,
       })
-      .catch((err) =>
-        HandlerError(
-          err,
-          `The product id: ${id} is incorrect or not exists. Please select a other product id`,
-        ),
-      );
+      .catch((err) => console.log(err));
   }
 
   remove(id: number) {

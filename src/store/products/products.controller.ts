@@ -77,13 +77,14 @@ export class ProductsController {
     return this.productsService.seeOneProduct(+id);
   }
 
-  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.WORKER)
+  //@Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.WORKER)
+  @Public()
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateProductDto: UpdateProductDto,
   ) {
-    return this.productsService.update(+id, updateProductDto);
+    return this.productsService.updateProduct(+id, updateProductDto);
   }
 
   @Delete(':id')

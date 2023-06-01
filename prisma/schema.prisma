@@ -136,6 +136,7 @@ model Product {
   updatedAt    DateTime      @updatedAt
   name         String        @unique
   content      String?       @db.Text
+  priceCut     Float?        @map("price_cut")
   price        Float         @default(0) @db.DoublePrecision
   slug         String        @unique()
   sizes        String[]      @default([])

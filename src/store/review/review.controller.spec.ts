@@ -80,7 +80,7 @@ describe('ReviewController', () => {
 
   describe('update', () => {
     describe('when review with ID exists', () => {
-      it('should update one review', async () => {
+      it('should updateProduct one review', async () => {
         const updateReviewDto: UpdateReviewDto = { text: fakeReviews[0].text };
         jest
           .spyOn(reviewServices, 'updateReview')
