@@ -36,7 +36,7 @@ export class CreateProductDto {
 
   @IsArray()
   @IsOptional()
-  @Transform(({ value }) => value?.map((v) => stringReplaceUnderscore(v)))
+  @Transform(({ value }) => value?.map((tag) => stringReplaceUnderscore(tag)))
   @IsString({ each: true })
   readonly tags?: string[];
 

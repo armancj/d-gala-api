@@ -34,13 +34,10 @@ services:
     image: elasticsearch:7.17.8
     restart: always
     environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - node.name=${ELASTIC_SEARCH_NODE}
       - ELASTIC_USERNAME=${ELASTIC_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - xpack.security.enabled=true
-    volumes:
-      - ./storage/elasticsearch:/usr/share/elasticsearch/data
+      - discovery.type=single-node
     ports:
-      - target: 9200
-        published: 9200
+      - "9200:9200"
+      - "9300:9300"

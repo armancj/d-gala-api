@@ -9,8 +9,8 @@ import { ApiTags } from '@nestjs/swagger';
 export class SearchController {
   constructor(private readonly search: SearchService) {}
 
-  @Post()
   @Public()
+  @Post()
   testInsert(@Body() data: DataBodySearchDto) {
     return this.search.insertIndex(data);
   }
