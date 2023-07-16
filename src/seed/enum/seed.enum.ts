@@ -8,4 +8,5 @@ export enum ValidTypes {
 export enum ProfileOrProducts {
   products = 'products',
   profile = 'profile',
+  colors = 'colors',
 }

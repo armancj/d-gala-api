@@ -1,5 +1,6 @@
-import { User } from '@prisma/client';
+import { User, Prisma } from '@prisma/client';
 import { CreateProductDto } from '../dto';
+import { OmitType } from '@nestjs/mapped-types';
 
 export interface ProductInput {
   user: User;

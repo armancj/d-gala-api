@@ -73,6 +73,7 @@ export class SeedService {
     });
     await this.createManyProducts(initialData.products);
     await this.uploadFilePhoto();
+    await this.uploadFileColors();
   }
 
   private async createManyProducts(products: SeedProduct[]) {
@@ -151,5 +152,19 @@ export class SeedService {
       newFolderPath + filename,
     );
     return { space, url: minioFile.url };
+  }
+
+  private async uploadFileColors() {
+    const colors = await this.prisma.colors.findMany();
+    colors.map(async (color) => {
+      const cloudItemStat = await this.uploadToCloud(
+        `/${ProfileOrProducts.colors}/`,
+        color.url,
+      );
+      await this.prisma.colors.update({
+        where: { id: color.id },
+        data: { url: cloudItemStat.url},
+      });
+    });
   }
 }

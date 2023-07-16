@@ -7,10 +7,11 @@ import {
 } from './dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { HandlerError } from '../../common/utils/handler-error';
-import { GetAllQueryDto, GetAllResponseDto } from '../../common/dto';
+import { GetAllResponseDto } from '../../common/dto';
 import { User, Prisma } from '@prisma/client';
 import { stringReplaceUnderscore } from '../../common/utils/check-slug-insert.function';
 import { ProductInput } from './interface/product-input.interface';
+import { ExcludeFieldFunction } from '../../common/utils/exclude-fields.function';
 
 @Injectable()
 export class ProductsService {
@@ -51,20 +52,28 @@ export class ProductsService {
 
   async findAllProduct(
     getAllQueryDto: QueryProductsDto,
+    select?: Prisma.ProductSelect,
   ): Promise<GetAllResponseDto> {
+    const { orderBy, skip, take, status, gender, takeImage, colors } =
+      getAllQueryDto;
     const result = await this.prisma.product.findMany({
       where: {
         deleted: false,
-        gender: getAllQueryDto.gender,
-        status: getAllQueryDto.status,
+        gender,
+        status,
       },
-      include: {
-        photo: { select: { id: true, name: true, url: true }, take: 1 },
+      select: {
+        id: true,
+        ...this.selectProductInput(select),
+        photo: { select: { id: true, name: true, url: true }, take: takeImage },
         reviews: { select: { id: true, rating: true } },
+        colors,
+        createdAt: true,
+        updatedAt: true,
       },
-      orderBy: getAllQueryDto.orderBy,
-      skip: getAllQueryDto.skip,
-      take: getAllQueryDto.take,
+      skip,
+      take,
+      orderBy,
     });
     const total = await this.prisma.product.count({
       where: { deleted: false },
@@ -93,7 +102,10 @@ export class ProductsService {
 
   async updateProduct(id: number, updateProductDto: UpdateProductDto) {
     const { price, ...productData } = updateProductDto;
-    const data: Prisma.ProductUncheckedUpdateInput = { ...productData, price };
+    const data: Prisma.ProductUncheckedUpdateInput = {
+      ...productData,
+      price,
+    };
     const product = await this.findOneProduct(id);
     if (price && price !== product.price) data.priceCut = product.price;
     return this.prisma.product
@@ -118,12 +130,27 @@ export class ProductsService {
       );
   }
 
-  rankinProduct(paginateProduct: GetAllQueryDto): Promise<GetAllResponseDto> {
-    return this.findAllProduct({
-      orderBy: { reviewsTotal: 'desc' },
-      skip: paginateProduct.skip,
-      take: paginateProduct.take,
-    });
+  async rankinProduct(): Promise<GetAllResponseDto> {
+    return this.findAllProduct(
+      {
+        orderBy: { reviewsTotal: 'desc' },
+        colors: true,
+        takeImage: 1,
+        take: 10,
+      },
+      {
+        component: true,
+        tags: false,
+        gender: false,
+        stock: false,
+        content: false,
+        slug: false,
+        sizes: false,
+        stars: false,
+        viewCount: false,
+        //reviewsTotal: false,
+      },
+    );
   }
 
   async seeOneProduct(id: number) {
@@ -151,5 +178,36 @@ export class ProductsService {
         ...createReviewDto,
       },
     });
+  }
+
+  private selectProductInput(
+    select?: Prisma.ProductSelect | null,
+  ): Prisma.ProductSelect {
+    const defaultSelect: Prisma.ProductSelect = {
+      name: true,
+      price: true,
+      priceCut: true,
+      content: true,
+      component: false,
+      gender: true,
+      sizes: true,
+      stock: true,
+      slug: true,
+      tags: true,
+      stars: true,
+      viewCount: true,
+      reviewsTotal: true,
+      _count: false,
+      status: false,
+      categories: false,
+      items: false,
+      deleted: false,
+      user: false,
+      userId: false,
+    };
+    return {
+      ...defaultSelect,
+      ...select,
+    };
   }
 }

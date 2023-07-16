@@ -1,3 +1,4 @@
+export { QueryColorImagesLimitDto } from './query-color-images-limit.dto';
 export { CreateProductDto } from './create-product.dto';
 export { CreateReviewDto } from './create-review.dto';
 export { GetStatusFilterDto } from './get-status-filter.dto';

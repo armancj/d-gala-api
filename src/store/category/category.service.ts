@@ -46,7 +46,10 @@ export class CategoryService {
   async findAllCategory(
     getAllQueryDto: GetAllQueryDto,
   ): Promise<GetAllResponseDto> {
-    const where: Prisma.CategoryWhereInput = { deleted: false };
+    const where: Prisma.CategoryWhereInput = {
+      deleted: false,
+      generalCategory: false,
+    };
     const result = await this.prisma.category.findMany({
       ...getAllQueryDto,
       where,
@@ -62,7 +65,9 @@ export class CategoryService {
     return this.prisma.category
       .findUniqueOrThrow({
         where: { id },
-        include: { products: true },
+        include: {
+          products: { include: { photo: { select: { url: true } } } },
+        },
       })
       .catch((err) =>
         HandlerError(

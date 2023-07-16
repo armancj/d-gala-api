@@ -61,8 +61,8 @@ export class ProductsController {
 
   @Public()
   @Get('ranking')
-  rankinProduct(@Query() paginateProduct: GetAllQueryDto) {
-    return this.productsService.rankinProduct(paginateProduct);
+  rankinProduct() {
+    return this.productsService.rankinProduct();
   }
 
   @Public()
