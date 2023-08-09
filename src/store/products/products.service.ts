@@ -56,6 +56,9 @@ export class ProductsService {
   ): Promise<GetAllResponseDto> {
     const { orderBy, skip, take, status, gender, takeImage, colors } =
       getAllQueryDto;
+    const filterColors = colors
+      ? colors
+      : { select: { hexadecimal: true }, take: 1 };
     const result = await this.prisma.product.findMany({
       where: {
         deleted: false,
@@ -67,7 +70,7 @@ export class ProductsService {
         ...this.selectProductInput(select),
         photo: { select: { id: true, name: true, url: true }, take: takeImage },
         reviews: { select: { id: true, rating: true } },
-        colors,
+        colors: filterColors,
         createdAt: true,
         updatedAt: true,
       },
