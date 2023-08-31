@@ -10,19 +10,20 @@ import {
   Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  CreateProductDto,
+  QueryProductsDto,
+  UpdateProductDto,
+  CreateReviewDto,
+} from './dto';
 import {
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { QueryProductsDto } from './dto/query-products.dto';
 import { Auth, GetUser, Public } from '../../auth/decorator';
 import { EnumUserRole } from '../../user/enum/user-role.enum';
 import { User } from '@prisma/client';
-import { GetAllQueryDto } from '../../common/dto';
-import { CreateReviewDto } from './dto/create-review.dto';
 
 @ApiTags('Products')
 @Controller('products')

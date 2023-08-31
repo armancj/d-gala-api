@@ -156,7 +156,7 @@ model Product {
   userId       Int?
   items        OrderItem[]
   colors       Colors[]
-  colorDefault String        @default("updated_Color")
+  colorDefault String        @default("updated_color")
 
   @@index([userId])
 }
@@ -166,7 +166,7 @@ model Colors {
   hexadecimal String
   product     Product @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   productId   Int
-  url         String
+  url         String? @default("updated_url")
 }
 
 model Order {

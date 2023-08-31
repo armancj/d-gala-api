@@ -96,6 +96,22 @@ export class FilesController {
     return await this.filesService.uploadsFileToProduct(files, productId);
   }
 
+  @Post('uploads/color/:colorId')
+  @UseFilters(new FilesFilter())
+  @UseInterceptors(filesInterceptor())
+  @Auth(EnumUserRole.WORKER, EnumUserRole.ADMIN, EnumUserRole.SUADMIN)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Images of Colors',
+    type: FilesUploadDto,
+  })
+  async uploadsFileColors(
+    @Param('colorId', ParseIntPipe) colorId: number,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    return await this.filesService.uploadsFileToColors(files, colorId);
+  }
+
   @Delete('delete/photo/:fileName')
   @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')

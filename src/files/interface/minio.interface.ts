@@ -3,6 +3,7 @@ import { Photo, Prisma } from '@prisma/client';
 export interface PhotoIdInterface {
   productId?: number;
   profileId?: number;
+  colorId?: number;
 }
 
 export interface PhotoInterface {

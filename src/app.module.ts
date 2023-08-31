@@ -28,6 +28,7 @@ import searchConfig from './store/search/config/search.config';
 import { FilesModule } from './files/files.module';
 import { LoggerModule } from './logger/logger.module';
 import { ReviewModule } from './store/review/review.module';
+import { ColorsModule } from './store/colors/colors.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { ReviewModule } from './store/review/review.module';
     FilesModule,
     LoggerModule,
     ReviewModule,
+    ColorsModule,
   ],
   controllers: [AppController],
   providers: [

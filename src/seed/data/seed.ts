@@ -38,16 +38,19 @@ export const initialData: SeedData = {
       gender: 'men',
       userId: 3,
       viewCount: 1,
+      colorDefault: '#FFFF00',
       reviewsTotal: 150,
       sizes,
       component,
       stars: 1,
       colors: {
-        createMany: { data: [
+        createMany: {
+          data: [
             { id: 1, url: '1-amarillo.jpg', hexadecimal: '#FFFF00' },
             { id: 2, url: '1-azul.jpg', hexadecimal: '#0000FF' },
             { id: 3, url: '1-verde.jpg', hexadecimal: '#008000' },
-          ] },
+          ],
+        },
       },
       status: ProductStatus.IN_SUPPLIER,
       categoryId: 5,
@@ -67,12 +70,15 @@ export const initialData: SeedData = {
       reviewsTotal: 250,
       sizes,
       component,
+      colorDefault: '#C0C0C0',
       stars: 1,
       colors: {
-        createMany: { data: [
+        createMany: {
+          data: [
             { id: 4, url: '2-gris.jpg', hexadecimal: '#C0C0C0' },
             { id: 5, url: '2-rojo.jpg', hexadecimal: '#FF0000' },
-          ] },
+          ],
+        },
       },
       status: ProductStatus.IN_SUPPLIER,
       categoryId: 6,
@@ -93,11 +99,14 @@ export const initialData: SeedData = {
       sizes,
       component,
       stars: 1,
+      colorDefault: '#0000FF',
       colors: {
-        createMany: { data: [
+        createMany: {
+          data: [
             { id: 6, url: '3-azul.jpg', hexadecimal: '#0000FF' },
             { id: 7, url: '3-morado.jpg', hexadecimal: '#4B0082' },
-          ] },
+          ],
+        },
       },
       status: ProductStatus.IN_SUPPLIER,
       categoryId: 7,

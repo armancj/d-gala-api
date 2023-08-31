@@ -3,7 +3,8 @@ export enum MinioPolicy {
   private = 'private',
 }
 
-export enum MinioRoute {
+export const enum MinioRoute {
   product = '/product/',
   profile = '/profile/',
+  colors = '/profile/',
 }

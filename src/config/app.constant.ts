@@ -3,9 +3,13 @@ export const appConstant = {
   HOST: 'HOST',
 };
 
-export enum statusState {
+export const enum statusState {
   development = 'dev',
   production = 'prod',
   test = 'test',
   provision = 'prov',
+}
+
+export const enum prismaTable {
+  colors = 'colors',
 }

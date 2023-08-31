@@ -14,7 +14,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { HandlerError } from '../common/utils/handler-error';
 import { appConstant } from '../config/app.constant';
 import { MinioPolicy, MinioRoute } from './enum/minio.enum';
-import { Photo, Prisma, User } from '@prisma/client';
+import { Colors, Photo, Prisma, User } from '@prisma/client';
 import { EnumUserRole } from '../user/enum/user-role.enum';
 import {
   PhotoIdInterface,
@@ -93,22 +93,26 @@ export class FilesService {
     file: Express.Multer.File,
     newFolderPath: string,
     photoId?: PhotoIdInterface,
-  ): Promise<Photo> {
+  ): Promise<Photo | Colors> {
     try {
       return await this.prisma.$transaction(async (prisma) => {
         const minioData = await this.fileToMinioStorage(file, newFolderPath);
         const photoInput = this.createPhotoInput({ minioData, file, photoId });
-        return prisma.photo
-          .create({
-            data: photoInput,
-          })
-          .catch(async (err) => {
-            if (minioData)
-              await this.deleteFileMinioStorage(newFolderPath + file.filename);
-            throw err;
+
+        if (photoId?.colorId)
+          return prisma.colors.update({
+            where: { id: photoId.colorId },
+            data: { url: photoInput.url },
           });
+
+        return prisma.photo.create({
+          data: photoInput,
+        });
       });
     } catch (err) {
+      await this.deleteFileMinioStorage(newFolderPath + file.filename).catch(
+        (err) => console.log(err),
+      );
       HandlerError(err, err?.meta);
     }
   }
@@ -240,5 +244,19 @@ export class FilesService {
       objectName,
     );
     return objectStat.size;
+  }
+
+  async uploadsFileToColors(
+    files: Array<Express.Multer.File>,
+    colorId: number,
+  ) {
+    await this.createOrExistsBucket(this.bucket);
+    return Promise.all(
+      files.map(async (file) => {
+        return this.photoToBd(file, MinioRoute.colors, {
+          colorId,
+        });
+      }),
+    );
   }
 }
