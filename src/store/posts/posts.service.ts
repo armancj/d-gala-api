@@ -40,6 +40,7 @@ export class PostsService {
     return this.posts({
       where: { id: { in: ids } },
     });*/
+    return text;
   }
 
   async getAllPosts(query: GetAllQueryDto) {

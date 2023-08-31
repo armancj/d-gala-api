@@ -11,7 +11,7 @@ import { GetAllResponseDto } from '../../common/dto';
 import { User, Prisma } from '@prisma/client';
 import { stringReplaceUnderscore } from '../../common/utils/check-slug-insert.function';
 import { ProductInput } from './interface/product-input.interface';
-import { ExcludeFieldFunction } from '../../common/utils/exclude-fields.function';
+import { Products } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {
@@ -56,10 +56,7 @@ export class ProductsService {
   ): Promise<GetAllResponseDto> {
     const { orderBy, skip, take, status, gender, takeImage, colors } =
       getAllQueryDto;
-    const filterColors = colors
-      ? colors
-      : { select: { hexadecimal: true }, take: 1 };
-    const result = await this.prisma.product.findMany({
+    const result = (await this.prisma.product.findMany({
       where: {
         deleted: false,
         gender,
@@ -70,14 +67,14 @@ export class ProductsService {
         ...this.selectProductInput(select),
         photo: { select: { id: true, name: true, url: true }, take: takeImage },
         reviews: { select: { id: true, rating: true } },
-        colors: filterColors,
+        colors,
         createdAt: true,
         updatedAt: true,
       },
       skip,
       take,
       orderBy,
-    });
+    })) as unknown as Products[];
     const total = await this.prisma.product.count({
       where: { deleted: false },
     });
@@ -207,6 +204,7 @@ export class ProductsService {
       deleted: false,
       user: false,
       userId: false,
+      colorDefault: true,
     };
     return {
       ...defaultSelect,

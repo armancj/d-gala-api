@@ -87,8 +87,8 @@ model Post {
   author     User?               @relation(fields: [authorId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   authorId   Int?
   categories CategoriesOnPosts[]
-  comments   Comment[]           // A post can have many comments
-  keywords   String[]            // A scalar list
+  comments   Comment[] // A post can have many comments
+  keywords   String[] // A scalar list
   deleted    Boolean             @default(false)
   updatedAt  DateTime            @updatedAt
 }
@@ -121,9 +121,9 @@ model Category {
 model CategoriesOnPosts {
   id         Int      @id @default(autoincrement())
   post       Post     @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  postId     Int      // relation scalar field (used in the `@relation` attribute above)
+  postId     Int // relation scalar field (used in the `@relation` attribute above)
   categories Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  categoryId Int      // relation scalar field (used in the `@relation` attribute above)
+  categoryId Int // relation scalar field (used in the `@relation` attribute above)
   assignedAt DateTime @default(now())
   assignedBy String
   createdAt  DateTime @default(now())
@@ -156,6 +156,7 @@ model Product {
   userId       Int?
   items        OrderItem[]
   colors       Colors[]
+  colorDefault String        @default("updated_Color")
 
   @@index([userId])
 }
