@@ -1,3 +1,4 @@
+export { ColorFilterDto } from './color-filter.dto';
 export { CustomResult } from './commonResult.dto';
 export { ChangePasswordDTO } from './changePasswordDTO.dto';
 export { DateRangeDTO } from './date-range.dto';

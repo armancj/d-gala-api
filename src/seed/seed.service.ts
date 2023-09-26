@@ -17,7 +17,7 @@ import {
   updatePhotoInterface,
 } from './interface/seed.interface';
 import { ProfileOrProducts } from './enum/seed.enum';
-
+import { faker } from '@faker-js/faker';
 @Injectable()
 export class SeedService {
   constructor(
@@ -132,9 +132,10 @@ export class SeedService {
 
   private async updatePhoto(params: updatePhotoInterface) {
     const { id, url, space } = params;
+    const color = faker.internet.color();
     await this.prisma.photo.update({
       where: { id },
-      data: { url, space },
+      data: { url, space, color },
     });
   }
 
@@ -164,7 +165,7 @@ export class SeedService {
       );
       await this.prisma.colors.update({
         where: { id: color.id },
-        data: { url: cloudItemStat.url},
+        data: { url: cloudItemStat.url },
       });
     });
   }

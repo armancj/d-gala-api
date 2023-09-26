@@ -15,6 +15,8 @@ export class SeedController {
   executeSeed() {
     return this.seedService.executeSeed();
   }
+
+  //@Auth(EnumUserRole.SUADMIN)
   @Public()
   @Delete()
   clearSeed() {

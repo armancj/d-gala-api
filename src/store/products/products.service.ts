@@ -90,7 +90,7 @@ export class ProductsService {
         include: {
           photo: {
             where: { color: { equals: hexadecimal } },
-            select: { id: true, name: true, url: true },
+            select: { id: true, name: true, url: true, color: true },
           },
           reviews: { select: { id: true, rating: true } },
         },

@@ -1,11 +1,14 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Delete,
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
+  Put,
   Query,
   Res,
   StreamableFile,
@@ -20,6 +23,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
+  ApiCreatedResponse,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
@@ -33,7 +37,9 @@ import { MinioPolicy } from './enum/minio.enum';
 import { Auth, GetUser, Public } from '../auth/decorator';
 import { EnumUserRole } from '../user/enum/user-role.enum';
 import { User } from '@prisma/client';
-import { ExcludeInterceptor } from './decorators/exlude-interceptor.decorator';
+import { ExcludeInterceptor } from './decorators/exclude-interceptor.decorator';
+import { ColorFilterDto } from '../common/dto';
+import { FilesProductResponseDto } from './dto/files-product-response.dto';
 
 @ApiTags('Files - Download and Upload')
 @Controller('files')
@@ -82,6 +88,10 @@ export class FilesController {
 
   @Post('uploads/photo/:productId')
   @UseFilters(new FilesFilter())
+  @ApiCreatedResponse({
+    description: 'Uploading photo product',
+    type: FilesProductResponseDto,
+  })
   @UseInterceptors(filesInterceptor())
   @Auth(EnumUserRole.WORKER, EnumUserRole.ADMIN, EnumUserRole.SUADMIN)
   @ApiConsumes('multipart/form-data')
@@ -91,9 +101,15 @@ export class FilesController {
   })
   async uploadsFile(
     @Param('productId', ParseIntPipe) productId: number,
-    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Query() color: ColorFilterDto,
+    @UploadedFiles()
+    files: Array<Express.Multer.File>,
   ) {
-    return await this.filesService.uploadsFileToProduct(files, productId);
+    return await this.filesService.uploadsFileToProduct(
+      files,
+      productId,
+      color?.hexadecimal,
+    );
   }
 
   @Post('uploads/color/:colorId')
@@ -110,6 +126,18 @@ export class FilesController {
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
     return await this.filesService.uploadsFileToColors(files, colorId);
+  }
+
+  @Public()
+  @Patch('changeColor/:id')
+  async changeColorPhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() colorFilterDto: ColorFilterDto,
+  ) {
+    return this.filesService.updateColorPhotoFile(
+      id,
+      colorFilterDto?.hexadecimal,
+    );
   }
 
   @Delete('delete/photo/:fileName')

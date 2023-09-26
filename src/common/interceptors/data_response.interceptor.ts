@@ -7,7 +7,7 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Reflector } from '@nestjs/core';
-import { IS_EXCLUDE_KEY } from '../../files/decorators/exlude-interceptor.decorator';
+import { IS_EXCLUDE_KEY } from '../../files/decorators/exclude-interceptor.decorator';
 
 export interface Response<T> {
   data: T;

@@ -21,6 +21,7 @@ import {
   photoInput,
   PhotoInterface,
 } from './interface/minio.interface';
+import { ColorFilterDto } from '../common/dto';
 
 @Injectable()
 export class FilesService {
@@ -60,13 +61,23 @@ export class FilesService {
   async uploadsFileToProduct(
     files: Array<Express.Multer.File>,
     productId: number,
+    color?: string,
   ) {
     await this.createOrExistsBucket(this.bucket);
+    await this.prisma.product
+      .findUniqueOrThrow({ where: { id: productId } })
+      .catch((err) => HandlerError(err, 'Product not found '));
+
     return Promise.all(
       files.map(async (file) => {
-        return await this.photoToBd(file, MinioRoute.product, {
-          productId,
-        });
+        return await this.photoToBd(
+          file,
+          MinioRoute.product,
+          {
+            productId,
+          },
+          color,
+        );
       }),
     );
   }
@@ -93,6 +104,7 @@ export class FilesService {
     file: Express.Multer.File,
     newFolderPath: string,
     photoId?: PhotoIdInterface,
+    color?: string,
   ): Promise<Photo | Colors> {
     try {
       return await this.prisma.$transaction(async (prisma) => {
@@ -106,7 +118,7 @@ export class FilesService {
           });
 
         return prisma.photo.create({
-          data: photoInput,
+          data: { ...photoInput, color },
         });
       });
     } catch (err) {
@@ -258,5 +270,13 @@ export class FilesService {
         });
       }),
     );
+  }
+
+  async updateColorPhotoFile(id: number, color?: string) {
+    if (color)
+      await this.prisma.photo
+        .update({ where: { id }, data: { color } })
+        .catch((err) => HandlerError(err, 'Imagen no encontrada'));
+    return 'Updated color of photo';
   }
 }

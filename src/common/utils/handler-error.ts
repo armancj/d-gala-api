@@ -24,11 +24,11 @@ export function HandlerError(error: any, message?: string): never {
     if (error.code === EnumPrismaError.NOT_FOUND)
       throw new NotFoundException(errorMessage);
 
-    console.log({ error, message });
     throw new InternalServerErrorException(
       `Prisma error: ${error?.meta}, code:${error.code}`,
     );
   }
+    console.log({ error, message });
   throw new HttpException(
     error.message,
     error.status || HttpStatus.INTERNAL_SERVER_ERROR,
