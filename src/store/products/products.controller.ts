@@ -24,6 +24,7 @@ import {
 import { Auth, GetUser, Public } from '../../auth/decorator';
 import { EnumUserRole } from '../../user/enum/user-role.enum';
 import { User } from '@prisma/client';
+import { ColorFilterDto } from './dto/color-filter.dto';
 
 @ApiTags('Products')
 @Controller('products')
@@ -68,12 +69,15 @@ export class ProductsController {
 
   @Public()
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: string) {
-    return this.productsService.findOneProduct(+id);
+  findOne(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() color: ColorFilterDto,
+  ) {
+    return this.productsService.findOneProduct(+id, color?.hexadecimal);
   }
 
   @Public()
-  @Get(':id')
+  @Get('seedOne/:id')
   seeOneProduct(@Param('id', ParseIntPipe) id: string) {
     return this.productsService.seeOneProduct(+id);
   }

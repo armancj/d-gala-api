@@ -83,12 +83,15 @@ export class ProductsService {
     return { result, count, total };
   }
 
-  findOneProduct(id: number) {
+  findOneProduct(id: number, hexadecimal?: string) {
     return this.prisma.product
       .findFirstOrThrow({
         where: { id, deleted: false },
         include: {
-          photo: { select: { id: true, name: true, url: true } },
+          photo: {
+            where: { color: { equals: hexadecimal } },
+            select: { id: true, name: true, url: true },
+          },
           reviews: { select: { id: true, rating: true } },
         },
       })
