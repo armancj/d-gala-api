@@ -1,4 +1,6 @@
-import { PartialType } from '@nestjs/swagger';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import { CreateColorDto } from './create-color.dto';
 
-export class UpdateColorDto extends PartialType(CreateColorDto) {}
+export class UpdateColorDto extends PartialType(
+  OmitType(CreateColorDto, ['productId'] as const),
+) {}

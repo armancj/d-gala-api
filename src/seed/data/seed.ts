@@ -46,7 +46,12 @@ export const initialData: SeedData = {
       colors: {
         createMany: {
           data: [
-            { id: 1, url: '1-amarillo.jpg', hexadecimal: '#FFFF00' },
+            {
+              id: 1,
+              url: '1-amarillo.jpg',
+              hexadecimal: '#FFFF00',
+              colorDefault: true,
+            },
             { id: 2, url: '1-azul.jpg', hexadecimal: '#0000FF' },
             { id: 3, url: '1-verde.jpg', hexadecimal: '#008000' },
           ],
@@ -75,7 +80,12 @@ export const initialData: SeedData = {
       colors: {
         createMany: {
           data: [
-            { id: 4, url: '2-gris.jpg', hexadecimal: '#C0C0C0' },
+            {
+              id: 4,
+              url: '2-gris.jpg',
+              hexadecimal: '#C0C0C0',
+              colorDefault: true,
+            },
             { id: 5, url: '2-rojo.jpg', hexadecimal: '#FF0000' },
           ],
         },
@@ -103,7 +113,12 @@ export const initialData: SeedData = {
       colors: {
         createMany: {
           data: [
-            { id: 6, url: '3-azul.jpg', hexadecimal: '#0000FF' },
+            {
+              id: 6,
+              url: '3-azul.jpg',
+              hexadecimal: '#0000FF',
+              colorDefault: true,
+            },
             { id: 7, url: '3-morado.jpg', hexadecimal: '#4B0082' },
           ],
         },

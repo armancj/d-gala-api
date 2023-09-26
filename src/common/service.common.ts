@@ -110,12 +110,11 @@ export class CommonService {
       (this.prisma[tableName] as any).count({ where }),
     ]);
 
-    const currentPage = page;
     const prevPage = page > 1 ? page - 1 : null;
     const totalPage = Math.ceil(count / take);
     const nextPage = page < totalPage ? page + 1 : null;
 
-    return { result, prevPage, currentPage, nextPage, totalPage, count };
+    return { result, prevPage, page, nextPage, totalPage, count };
   }
 }
 function Between(arg0: any, arg1: any) {

@@ -56,6 +56,7 @@ export class SeedService {
     await this.prisma.user.deleteMany();
     await this.prisma.product.deleteMany();
     await this.prisma.photo.deleteMany();
+    await this.prisma.logs.deleteMany();
   }
 
   private async createData() {
@@ -166,5 +167,13 @@ export class SeedService {
         data: { url: cloudItemStat.url},
       });
     });
+  }
+
+  async deleteAllDataDb() {
+    const isProd: boolean = this.getProd();
+    if (isProd)
+      throw new ForbiddenException('This is environment of production');
+    await this.clearData();
+    return 'Seed deleted successfully';
   }
 }

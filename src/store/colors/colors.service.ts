@@ -6,8 +6,8 @@ import { SearchAndFilterDto } from './dto/filter-by-color.dto';
 import { CommonService } from '../../common/service.common';
 import { prismaTable } from '../../config/app.constant';
 import { ProductsService } from '../products/products.service';
-import { id } from 'date-fns/locale';
-import { Prisma } from '@prisma/client';
+import { HandlerError } from '../../common/utils/handler-error';
+import { Colors, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ColorsService {
@@ -20,21 +20,30 @@ export class ColorsService {
   async create(createColorDto: CreateColorDto) {
     const { productId, hexadecimal } = createColorDto;
     const product = await this.productsService.findOneProduct(productId);
-    if (product.colorDefault === 'updated_color')
-      await this.prisma.product.update({
-        where: { id: productId },
-        data: { colorDefault: hexadecimal },
-      });
+    const newColor: Prisma.ColorsUncheckedCreateInput = { ...createColorDto };
+    if (product.colorDefault === 'updated_color') {
+      await this.checkColorDefault(productId, hexadecimal);
+      newColor.colorDefault = true;
+    }
     return this.prisma.colors
-      .create({ data: createColorDto })
+      .create({
+        data: newColor,
+      })
       .catch(async (err) => {
-        console.log(err);
         if (product)
           await this.prisma.product.update({
             where: { id: productId },
             data: { colorDefault: product.colorDefault },
           });
+        HandlerError(err, err?.message);
       });
+  }
+
+  private async checkColorDefault(productId: number, hexadecimal: string) {
+    await this.prisma.product.update({
+      where: { id: productId },
+      data: { colorDefault: hexadecimal },
+    });
   }
 
   async findAll(searchAndFilterDto: SearchAndFilterDto) {
@@ -64,15 +73,28 @@ export class ColorsService {
     });
   }
 
-  findOne(id: number) {
-    return this.prisma.colors.findUniqueOrThrow({ where: { id } });
+  async findOne(id: number) {
+    return this.prisma.colors
+      .findUniqueOrThrow({ where: { id } })
+      .catch((err) => HandlerError(err, err?.message));
   }
 
-  update(id: number, updateColorDto: UpdateColorDto) {
-    return `This action updates a #${id} color`;
+  async update(id: number, updateColorDto: UpdateColorDto): Promise<Colors> {
+    const color = await this.findOne(id);
+    if (color.hexadecimal === updateColorDto?.hexadecimal) return color;
+
+    if (color.colorDefault)
+      await this.checkColorDefault(
+        color.productId,
+        updateColorDto?.hexadecimal,
+      );
+    return this.prisma.colors.update({ where: { id }, data: updateColorDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} color`;
+  async remove(id: number) {
+    const color = await this.findOne(id);
+    if (color.colorDefault)
+      await this.checkColorDefault(color.productId, 'updated_color');
+    return this.prisma.colors.delete({ where: { id } });
   }
 }

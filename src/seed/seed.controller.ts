@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Delete, Post } from '@nestjs/common';
 import { SeedService } from './seed.service';
 import { Auth, Public } from '../auth/decorator';
 import { ApiTags } from '@nestjs/swagger';
@@ -11,8 +11,13 @@ export class SeedController {
 
   //@Auth(EnumUserRole.SUADMIN)
   @Public()
-  @Get()
+  @Post()
   executeSeed() {
     return this.seedService.executeSeed();
+  }
+  @Public()
+  @Delete()
+  clearSeed() {
+    return this.seedService.deleteAllDataDb();
   }
 }
