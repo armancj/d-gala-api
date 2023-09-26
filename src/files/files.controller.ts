@@ -128,7 +128,7 @@ export class FilesController {
     return await this.filesService.uploadsFileToColors(files, colorId);
   }
 
-  @Public()
+  @Auth(EnumUserRole.WORKER, EnumUserRole.ADMIN, EnumUserRole.SUADMIN)
   @Patch('changeColor/:id')
   async changeColorPhoto(
     @Param('id', ParseIntPipe) id: number,
