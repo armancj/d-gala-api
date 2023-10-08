@@ -20,7 +20,7 @@ export class AuthService {
     registrationData: RegisterUserDto,
     userRole?: EnumUserRole.SUADMIN,
   ) {
-    const role: EnumUserRole = userRole ? userRole : EnumUserRole.USER;
+    const role: EnumUserRole = userRole || EnumUserRole.USER;
 
     const salt = await bcrypt.genSalt();
     const password = await bcrypt.hash(registrationData.password, salt);
