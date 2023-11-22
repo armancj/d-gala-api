@@ -107,7 +107,7 @@ export class CommonService {
         },
         where,
       }),
-      (this.prisma[tableName] as any).count({ where }),
+      (this.prisma[tableName] as any)?.count({ where }) || 0,
     ]);
 
     const prevPage = page > 1 ? page - 1 : null;
