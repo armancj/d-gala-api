@@ -21,7 +21,6 @@ import {
   photoInput,
   PhotoInterface,
 } from './interface/minio.interface';
-import { ColorFilterDto } from '../common/dto';
 
 @Injectable()
 export class FilesService {
@@ -35,7 +34,6 @@ export class FilesService {
     return this._configService.get<string>(MINIO_ENV.MINIO_BUCKET);
   }
   private url(bucket: string): string {
-    //this._configService.get<string>(MINIO_ENV.MINIO_ENDPOINT);
     const host = this._configService.get<string>(appConstant.HOST);
     const port = this._configService.get<string>(MINIO_ENV.MINIO_PORT);
     const protocol =
@@ -149,6 +147,7 @@ export class FilesService {
 
   async fileToMinioStorage(file: Express.Multer.File, newFolderPath: string) {
     try {
+      this.createOrExistsBucket(this.bucket)
       const data = new StreamableFile(createReadStream(file.path));
       await this.minioService.client.putObject(
         this.bucket,
@@ -162,6 +161,7 @@ export class FilesService {
         message: 'Successfully uploaded to MinIO S3',
       };
     } catch (err) {
+      console.log(err);
       throw new BadGatewayException(err);
     }
   }
@@ -176,6 +176,7 @@ export class FilesService {
   }
 
   async deleteFileMinioStorage(objectName: string): Promise<void> {
+    await this.createOrExistsBucket(this.bucket);
     return await this.minioService.client
       .removeObject(this.bucket, objectName)
       .catch((err) => {
