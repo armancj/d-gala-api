@@ -45,7 +45,7 @@ export class FilesService {
 
   async downloadFile(fileName: string) {
     const photo = await this.findOnePhotoByName(fileName);
-    let routePhoto;
+    let routePhoto: string;
     if (photo?.product) routePhoto = MinioRoute.product + fileName;
     if (photo?.profile) routePhoto = MinioRoute.profile + fileName;
     try {
