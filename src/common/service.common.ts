@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import * as pcg from 'generate-pincode';
 import { format } from 'date-fns';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetAllQueryV2Dto } from './dto/get-all-query-v2.dto';
 import { PrismaClient } from '@prisma/client';
+import { DateTime } from 'luxon';
 
 export interface FindAllGeneric {
   tableName: keyof PrismaClient;
@@ -34,22 +34,24 @@ export class CommonService {
 
   generateRandomHash(): string {
     return (
-      Math.random().toString(36).substr(2) +
-      Math.random().toString(36).substr(2)
+      Math.random().toString(36).substring(2) +
+      Math.random().toString(36).substring(2)
     );
   }
 
   roundDecimals(num: number, decimals: number): number {
-    const numeroRegexp = new RegExp('\\d\\.(\\d){' + decimals + ',}');
-    if (numeroRegexp.test(num.toString())) {
+    const numberRegexp = new RegExp('\\d\\.(\\d){' + decimals + ',}');
+    if (numberRegexp.test(num.toString())) {
       return Number(num.toFixed(decimals));
     } else {
       return Number(num.toFixed(decimals)) === 0 ? 0 : num;
     }
   }
 
-  generatePin(digits: number): string {
-    return pcg(digits);
+  generatePinCodes(length: number): string {
+    return Array.from({ length }, () =>
+      Math.floor(Math.random() * 10).toString(),
+    ).join('');
   }
   getInString(strings: string[]) {
     let cad = '(';
@@ -60,14 +62,10 @@ export class CommonService {
     return cad;
   }
 
-  betweenDates(from: Date | string, to: Date | string) {
-    return Between(
-      format(
-        typeof from === 'string' ? new Date(from) : from,
-        'YYYY-MM-DD HH:MM:SS',
-      ),
-      format(typeof to === 'string' ? new Date(to) : to, 'YYYY-MM-DD HH:MM:SS'),
-    );
+  betweenDates(from: string, to: string) {
+    return DateTime.fromISO(from).plus({
+      days: DateTime.fromISO(to).diff(DateTime.fromISO(from), 'days').days / 2,
+    });
   }
 
   async findAll(params: FindAllGeneric) {
@@ -116,7 +114,8 @@ export class CommonService {
 
     return { result, prevPage, page, nextPage, totalPage, count };
   }
-}
-function Between(arg0: any, arg1: any) {
-  throw new Error('Function not implemented.');
+
+  Between(arg0: number, arg1: number) {
+    return Math.min(arg0, arg1) + Math.abs(arg0 - arg1) / 2;
+  }
 }
