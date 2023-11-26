@@ -4,8 +4,8 @@ import {
   ApiForbiddenResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { RolesGuard, JwtAuthGuard } from '../../authentication/guard';
 import { EnumUserRole } from '../../user/enum/user-role.enum';
+import { JwtAuthGuard, RolesGuard } from '../../auth/guard';
 export function Auth() {
   return applyDecorators(
     SetMetadata('roles', EnumUserRole.SUADMIN),

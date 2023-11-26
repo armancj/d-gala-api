@@ -8,7 +8,12 @@ import { ConfigService } from '@nestjs/config';
 import { Stream } from 'stream';
 import { APP_CONFIG_MINIO, MINIO_BUCKET } from './config/constant';
 import * as process from 'process';
-import { MinioService as Minio, MinioClient, MinioCopyConditions, ExtraConfiguration } from 'nestjs-minio-client';
+import {
+  MinioService as Minio,
+  MinioClient,
+  MinioCopyConditions,
+  ExtraConfiguration,
+} from 'nestjs-minio-client';
 
 @Injectable()
 export class MinioService {

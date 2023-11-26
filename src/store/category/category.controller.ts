@@ -36,7 +36,7 @@ export class CategoryController {
   findAll(@Query() getAllQueryDto: GetAllQueryDto) {
     return this.categoryService.findAllCategory(getAllQueryDto);
   }
-  
+
   @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {

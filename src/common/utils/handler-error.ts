@@ -28,7 +28,7 @@ export function HandlerError(error: any, message?: string): never {
       `Prisma error: ${error?.meta}, code:${error.code}`,
     );
   }
-    console.log({ error, message });
+  console.log({ error, message });
   throw new HttpException(
     error.message,
     error.status || HttpStatus.INTERNAL_SERVER_ERROR,

@@ -1,7 +1,4 @@
-import {
-  INestApplication,
-  ValidationPipe,
-} from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { ReviewService } from '../../src/store/review/review.service';
 import { Test } from '@nestjs/testing';
 import { ReviewModule } from '../../src/store/review/review.module';

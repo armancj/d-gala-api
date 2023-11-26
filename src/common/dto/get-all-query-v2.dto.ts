@@ -4,7 +4,8 @@ import {
   IsString,
   IsIn,
   IsOptional,
-  IsNotEmpty, IsDate,
+  IsNotEmpty,
+  IsDate,
 } from 'class-validator';
 
 export class GetAllQueryV2Dto {

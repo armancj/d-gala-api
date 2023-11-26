@@ -27,7 +27,6 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
-
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(
     new LoggingInterceptor(),
