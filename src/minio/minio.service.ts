@@ -8,12 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { Stream } from 'stream';
 import { APP_CONFIG_MINIO, MINIO_BUCKET } from './config/constant';
 import * as process from 'process';
-import {
-  MinioService as Minio,
-  MinioClient,
-  MinioCopyConditions,
-  ExtraConfiguration,
-} from 'nestjs-minio-client';
+import { MinioService as Minio } from 'nestjs-minio-client';
 
 @Injectable()
 export class MinioService {
@@ -22,7 +17,7 @@ export class MinioService {
     private readonly configService: ConfigService,
   ) {}
 
-  private readonly _baseBucket = this.configService.get(APP_CONFIG_MINIO);
+  //private readonly _baseBucket = this.configService.get(APP_CONFIG_MINIO);
 
   /**
    *
@@ -145,7 +140,10 @@ export class MinioService {
       throw new BadRequestException('No MINIO_BUCKET environment found');
     return await this.minioClient.client.makeBucket(bucketName, 'us-east-1');
   }
-  async delete(objetName: string, baseBucket: string = this._baseBucket) {
+  async delete(
+    objetName: string,
+    baseBucket: string = this.configService.get<string>(APP_CONFIG_MINIO),
+  ) {
     this.minioClient.client.removeObject(baseBucket, objetName, (err) => {
       if (err)
         throw new HttpException(
