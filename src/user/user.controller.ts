@@ -1,12 +1,12 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
   ParseIntPipe,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -36,12 +36,14 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.USER)
   @Get()
   @ApiOkResponse({ type: GetAllResponseDto })
   findAllUser(@Query() query: GetAllQueryDto) {
     return this.userService.findAll({ skip: +query?.skip, take: +query?.take });
   }
 
+  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.USER)
   @Get('profile')
   getProfile(@GetUser() user: UserPayload) {
     return this.userService.findOne(+user.id);
@@ -52,6 +54,7 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
+  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.USER)
   @Patch('updateReview-profile')
   updateProfile(
     @GetUser() user: User,
@@ -61,6 +64,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
   updateUser(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,

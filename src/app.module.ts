@@ -29,6 +29,7 @@ import { FilesModule } from './files/files.module';
 import { LoggerModule } from './logger/logger.module';
 import { ReviewModule } from './store/review/review.module';
 import { ColorsModule } from './store/colors/colors.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ColorsModule } from './store/colors/colors.module';
       load: [authConfig, searchConfig],
       validationSchema,
     }),
+    EventEmitterModule.forRoot(),
     UserModule,
     CommonModule,
     PrismaModule,

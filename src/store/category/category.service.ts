@@ -77,7 +77,7 @@ export class CategoryService {
       );
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     return this.prisma.category
       .update({
         where: { id },

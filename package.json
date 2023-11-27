@@ -32,7 +32,8 @@
     "@nestjs/common": "^9.4.0",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.4.0",
-    "@nestjs/elasticsearch": "^9.0.0",
+    "@nestjs/elasticsearch": "^10.0.1",
+    "@nestjs/event-emitter": "^2.0.3",
     "@nestjs/jwt": "^10.0.3",
     "@nestjs/mapped-types": "^1.2.2",
     "@nestjs/passport": "^9.0.3",
@@ -49,6 +50,7 @@
     "date-fns": "^2.29.3",
     "deta": "^1.1.0",
     "ejs": "^3.1.2",
+    "elasticsearch": "^16.7.3",
     "faker": "^6.6.6",
     "generate-pincode": "^6.0.0",
     "handlebars": "^4.7.6",
@@ -65,6 +67,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.4.1",
     "rxjs": "^7.8.0",
+    "uuid": "^9.0.1",
     "winston": "^3.8.2"
   },
   "devDependencies": {

@@ -1,23 +1,41 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { SearchService } from './search.service';
-import { Public } from '../../auth/decorator';
-import { DataBodySearchDto } from './dto/data-body-search.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Search')
 @Controller('search')
 export class SearchController {
-  constructor(private readonly search: SearchService) {}
+  constructor(private readonly searchService: SearchService) {}
 
-  @Public()
-  @Post()
-  testInsert(@Body() data: DataBodySearchDto) {
-    return this.search.insertIndex(data);
+  @Post(':index')
+  insert(@Param('index') index: string, @Body() product: any) {
+    return this.searchService.insertIndex({ index, product });
   }
 
-  @Public()
-  @Get()
-  testGet(@Query() data: DataBodySearchDto) {
-    return this.search.searchIndex(data);
+  @Delete(':index/:id')
+  delete(@Param('index') index: string, @Param('id') id: string) {
+    return this.searchService.deleteIndex(index, id);
+  }
+
+  @Put(':index/:id')
+  update(
+    @Param('index') index: string,
+    @Param('id') id: string,
+    @Body() body: any,
+  ) {
+    return this.searchService.updateIndex(index, id, body);
+  }
+
+  @Get(':index/:name')
+  search(@Param('index') index: string, @Body() body: any) {
+    return this.searchService.searchIndex(index, body);
   }
 }

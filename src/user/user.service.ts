@@ -7,8 +7,9 @@ import { HandlerError } from '../common/utils/handler-error';
 import { GetAllResponseDto } from '../common/dto';
 import { EnumUserRole } from './enum/user-role.enum';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
+import { User as UserEntity } from './entities/user.entity';
 
-export interface findAllUserParams {
+export interface FindAllUserParams {
   skip?: number;
   take?: number;
   user?: User;
@@ -24,7 +25,7 @@ export class UserService {
     });
   }
 
-  async findAll(params: findAllUserParams): Promise<GetAllResponseDto> {
+  async findAll(params: FindAllUserParams): Promise<GetAllResponseDto> {
     const { skip, take, user } = params;
     return await this.users({
       take,
@@ -66,7 +67,7 @@ export class UserService {
     });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto, user?: User) {
+  async update(id: number, updateUserDto: UpdateUserDto, user?: User) {
     let data: Prisma.UserUpdateArgs;
     if (user?.role === Role.ADMIN || user.role === Role.SUADMIN) {
       data = { where: { id }, data: { ...updateUserDto } as User };
@@ -76,23 +77,26 @@ export class UserService {
       const { status, role, ...rest } = updateUserDto;
       data = { where: { id }, data: { ...rest } as User };
     }
-    return this.prisma.user.update(data);
+    return UserEntity.from(await this.prisma.user.update(data));
   }
 
-  remove(id: number) {
-    return this.updateUser({ where: { id }, data: { deleted: true } });
+  async remove(id: number) {
+    return UserEntity.from(
+      await this.updateUser({ where: { id }, data: { deleted: true } }),
+    );
   }
 
   async userWhereUnique(
     params: Prisma.UserFindUniqueOrThrowArgs,
   ): Promise<User | null> {
-    return this.prisma.user
+    const user = await this.prisma.user
       .findUniqueOrThrow(params)
       .catch((err) => HandlerError(err));
+    return UserEntity.from(user);
   }
 
   async userFindFirstArgs(params: Prisma.UserFindFirstArgsBase): Promise<User> {
-    return await this.prisma.user
+    const user = await this.prisma.user
       .findFirst(params)
       .catch((err) =>
         HandlerError(
@@ -100,6 +104,7 @@ export class UserService {
           `The user not found in the Site. Please select a other user id`,
         ),
       );
+    return UserEntity.from(user);
   }
 
   async userWhereUniqueOrThrow(
@@ -113,7 +118,7 @@ export class UserService {
           `The user not found in the Site. Please select a other user id`,
         ),
       );
-    return user as User;
+    return UserEntity.from(user);
   }
 
   async users(params: Prisma.UserFindManyArgs): Promise<GetAllResponseDto> {
@@ -128,30 +133,33 @@ export class UserService {
   async createUser(params: Prisma.UserCreateArgs): Promise<User> {
     if (params?.data?.email)
       params.data.email = params.data.email.toLowerCase();
-    return (await this.prisma.user
+    const user = await this.prisma.user
       .create(params)
       .catch((err) =>
         HandlerError(err, `Email. username or Phone is duplicated`),
-      )) as unknown as Promise<User>;
+      );
+    return UserEntity.from(user);
   }
 
   async updateUser(params: Prisma.UserUpdateArgs): Promise<User> {
-    return (await this.prisma.user
+    const user = await this.prisma.user
       .update(params)
       .catch((err) =>
         HandlerError(err, `Email. username or Phone is duplicated`),
-      )) as unknown as Promise<User>;
+      );
+    return UserEntity.from(user);
   }
 
   async deleteUser(params: Prisma.UserDeleteArgs): Promise<User> {
-    return this.prisma.user
+    const user = await this.prisma.user
       .delete(params)
       .catch((err) =>
         HandlerError(
           err,
           `The user not found in the Site. Please select a other user id`,
         ),
-      ) as unknown as User;
+      );
+    return UserEntity.from(user);
   }
 
   async findOneUserInit(su_admin: EnumUserRole.SUADMIN) {
@@ -160,9 +168,12 @@ export class UserService {
     return true;
   }
 
-  updateProfileUser(user: User, updateUserProfileDto: UpdateUserProfileDto) {
+  async updateProfileUser(
+    user: User,
+    updateUserProfileDto: UpdateUserProfileDto,
+  ) {
     const { bio, ...rest } = updateUserProfileDto;
-    return this.updateUser({
+    const userUpdated = await this.updateUser({
       where: { id: user.id },
       select: {
         ...this.getSelectUser(user?.role),
@@ -173,7 +184,8 @@ export class UserService {
         profile: {
           upsert: { create: { bio }, update: { bio } },
         },
-      } as unknown as User,
+      },
     });
+    return UserEntity.from(userUpdated);
   }
 }

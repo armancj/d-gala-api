@@ -1,11 +1,27 @@
+import {
+  IndicesIndexState,
+  SearchHitsMetadata,
+  UpdateResponse,
+  WriteResponseBase,
+} from '@elastic/elasticsearch/lib/api/types';
+import { SearchServiceInsert } from '../search.service';
+
 export interface SearchServiceInterface<T> {
-  insertIndex(bulkData: T): Promise<T>;
+  insertIndex(
+    searchServiceInsert: SearchServiceInsert,
+  ): Promise<WriteResponseBase>;
 
-  updateIndex(updateData: T): Promise<T>;
+  updateIndex(
+    index: string,
+    id: string,
+    body: T,
+  ): Promise<UpdateResponse<unknown>>;
 
-  searchIndex(searchData: T): Promise<T>;
+  searchIndex(index: string, body: T): Promise<SearchHitsMetadata<unknown>>;
 
-  deleteIndex(indexData: T): Promise<T>;
+  deleteIndex(index: string, id: string): Promise<WriteResponseBase>;
 
-  deleteDocument(indexData: T): Promise<T>;
+  getIndex(index: string): Promise<IndicesIndexState>;
+
+  getIndexes(): Promise<string[]>;
 }
