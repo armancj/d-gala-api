@@ -2,7 +2,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { INestApplication, ModuleMetadata } from '@nestjs/common';
 
 export async function importAdminModule(app: INestApplication) {
-  const { AdminModule, AdminResourceModule,  } = await import('@adminjs/nestjs');
+  const { AdminModule, AdminResourceModule } = await import('@adminjs/nestjs');
   const { Database, Resource, getModelByName } = await import(
     '@adminjs/prisma'
   );
@@ -13,7 +13,6 @@ export async function importAdminModule(app: INestApplication) {
     Resource,
   });
 
-  AdminResourceModule.
   const adminJsOptions = {
     rootPath: '/admin',
     branding: {

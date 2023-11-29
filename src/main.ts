@@ -54,7 +54,7 @@ async function bootstrap() {
   AppSwagger(app, configService);
   //app.use(helmet());
 
-  app.use('/admin', await importAdminModule(app));
+  //app.use('/admin', await importAdminModule(app));
   const port = parseInt(configService.get(EnumEnvName.PORT), 10) || 3000;
 
   await repl(AppModule);
