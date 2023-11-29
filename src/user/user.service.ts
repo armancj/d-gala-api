@@ -97,7 +97,7 @@ export class UserService {
 
   async userFindFirstArgs(params: Prisma.UserFindFirstArgsBase): Promise<User> {
     const user = await this.prisma.user
-      .findFirst(params)
+      .findFirstOrThrow(params)
       .catch((err) =>
         HandlerError(
           err,

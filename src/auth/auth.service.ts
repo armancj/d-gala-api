@@ -43,11 +43,17 @@ export class AuthService {
   }
 
   async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.userService.userFindFirstArgs({
-      where: {
-        OR: [{ username: username }, { email: username }, { phone: username }],
-      },
-    });
+    const user = await this.userService
+      .userFindFirstArgs({
+        where: {
+          OR: [
+            { username: username },
+            { email: username },
+            { phone: username },
+          ],
+        },
+      })
+      .catch(() => null);
     if (user && (await this.verifyPassword(pass, user?.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, salt, deleted, currentHashedRefreshToken, ...result } =
