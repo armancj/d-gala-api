@@ -83,8 +83,17 @@ export class ProductsService {
     return { result, count, total };
   }
 
-  findOneProduct(id: number, hexadecimal?: string) {
-    return this.prisma.product
+  async findOneProduct(id: number, hexadecimal?: string) {
+    const colors = (
+      await this.prisma.colors.findMany({
+        where: { productId: id },
+        select: { hexadecimal: true },
+      })
+    ).map((color) => {
+      return color?.hexadecimal || null;
+    });
+
+    const result = await this.prisma.product
       .findFirstOrThrow({
         where: { id, deleted: false },
         include: {
@@ -101,6 +110,7 @@ export class ProductsService {
           `The product id: ${id} is incorrect or not exists. Please select a other product id`,
         ),
       );
+    return Products.from(result, colors);
   }
 
   async updateProduct(id: number, updateProductDto: UpdateProductDto) {

@@ -21,15 +21,17 @@ export class Products implements Product {
   readonly reviewsTotal: number;
   readonly userId: number;
   readonly colorDefault: string;
+  readonly colors?: string[];
 
   @Exclude()
   readonly deleted: boolean;
 
-  constructor(product: Partial<Product>) {
+  constructor(product: Partial<Product>, colors: string[]) {
     Object.assign(this, product);
+    this.colors = colors;
   }
 
-  static from(product: Partial<Product>): Product {
-    return new Products(product);
+  static from(product: Partial<Product>, colors: string[]): Product {
+    return new Products(product, colors);
   }
 }
