@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -8,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -23,6 +25,7 @@ import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 import { User } from '@prisma/client';
 
 @ApiTags('User')
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -63,13 +66,14 @@ export class UserController {
     return this.userService.updateProfileUser(user, updateUserProfileDto);
   }
 
-  @Patch(':id')
   @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
+  @Patch(':id')
   updateUser(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
+    @GetUser() user: User,
   ) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(+id, updateUserDto, user);
   }
 
   @Delete(':id')
