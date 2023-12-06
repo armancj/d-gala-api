@@ -58,8 +58,17 @@ export class SearchService implements SearchServiceInterface<Products> {
     index: string,
     product: Products,
   ): Promise<SearchHitsMetadata<unknown>> {
-    const { id, sizes, tags, createdAt, updatedAt, component, ...rest } =
-      product;
+    const {
+      id,
+      sizes,
+      tags,
+      createdAt,
+      updatedAt,
+      component,
+      colors,
+      ...rest
+    } = product;
+    this.logger.log(id, sizes, tags, createdAt, updatedAt, component, colors);
 
     const { hits } = await this.elasticsearchService.search({
       index,
