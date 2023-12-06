@@ -82,7 +82,7 @@ export class ProductsController {
     return this.productsService.seeOneProduct(+id);
   }
 
-  //@Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.WORKER)
+  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.WORKER)
   @Public()
   @Patch(':id')
   update(
