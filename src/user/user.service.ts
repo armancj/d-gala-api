@@ -8,6 +8,7 @@ import { GetAllResponseDto } from '../common/dto';
 import { EnumUserRole } from './enum/user-role.enum';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 import { User as UserEntity } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 export interface FindAllUserParams {
   skip?: number;
@@ -19,8 +20,10 @@ export interface FindAllUserParams {
 export class UserService {
   constructor(private prisma: PrismaService) {}
   async create(createUserDto: CreateUserDto, user?: User): Promise<User> {
+    const salt = await bcrypt.genSalt();
+    const password = await bcrypt.hash('12344567', salt);
     return await this.createUser({
-      data: { ...createUserDto, password: '12344567' } as User,
+      data: { ...createUserDto, password, salt } as User,
       select: this.getSelectUser(user?.role),
     });
   }
@@ -173,7 +176,7 @@ export class UserService {
     updateUserProfileDto: UpdateUserProfileDto,
   ) {
     const { bio, ...rest } = updateUserProfileDto;
-    const userUpdated = await this.updateUser({
+    return await this.updateUser({
       where: { id: user.id },
       select: {
         ...this.getSelectUser(user?.role),
@@ -186,6 +189,5 @@ export class UserService {
         },
       },
     });
-    return UserEntity.from(userUpdated);
   }
 }
