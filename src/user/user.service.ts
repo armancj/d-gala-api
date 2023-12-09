@@ -73,14 +73,14 @@ export class UserService {
   async update(id: number, updateUserDto: UpdateUserDto, user?: User) {
     let data: Prisma.UserUpdateArgs;
     if (user?.role === Role.ADMIN || user.role === Role.SUADMIN) {
-      data = { where: { id }, data: { ...updateUserDto } as User };
+      data = { where: { id }, data: { ...updateUserDto } };
     }
     if (user?.role === Role.WORKER || user.role === Role.USER) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { status, role, ...rest } = updateUserDto;
-      data = { where: { id }, data: { ...rest } as User };
+      data = { where: { id }, data: { ...rest } };
     }
-    return UserEntity.from(await this.prisma.user.update(data));
+    return this.updateUser(data);
   }
 
   async remove(id: number) {
@@ -145,6 +145,7 @@ export class UserService {
   }
 
   async updateUser(params: Prisma.UserUpdateArgs): Promise<User> {
+    await this.userWhereUniqueOrThrow({ where: params.where });
     const user = await this.prisma.user
       .update(params)
       .catch((err) =>
