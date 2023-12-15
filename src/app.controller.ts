@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   ClassSerializerInterceptor,
   Controller,
@@ -79,7 +78,7 @@ export class AppController {
   }
 
   @Public()
-  @Post('auth/register_init')
+  @Post('auth/registerInit')
   async registerCpanel(@Body() registerUserDto: RegisterUserDto) {
     return this.authService.registerInit(registerUserDto);
   }

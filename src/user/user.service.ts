@@ -167,7 +167,9 @@ export class UserService {
   }
 
   async findOneUserInit(su_admin: EnumUserRole.SUADMIN) {
-    const user = await this.userFindFirstArgs({ where: { role: su_admin } });
+    const user = await this.userFindFirstArgs({
+      where: { role: su_admin },
+    }).catch(() => null);
     if (user) throw new ConflictException(`Already have a user super admin`);
     return true;
   }
