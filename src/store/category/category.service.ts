@@ -48,10 +48,8 @@ export class CategoryService {
   ): Promise<GetAllResponseDto> {
     const where: Prisma.CategoryWhereInput = {
       deleted: false,
-      generalCategory: false,
     };
     const result = await this.prisma.category.findMany({
-      ...getAllQueryDto,
       where,
     });
     const total = await this.prisma.category.count({
