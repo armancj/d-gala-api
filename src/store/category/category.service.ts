@@ -61,7 +61,7 @@ export class CategoryService {
     return { result, count, total };
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.prisma.category
       .findUniqueOrThrow({
         where: { id },
