@@ -9,6 +9,7 @@ import { EnumUserRole } from './enum/user-role.enum';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 import { User as UserEntity } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { Users } from './entities/users.entity';
 
 export interface FindAllUserParams {
   skip?: number;
@@ -49,6 +50,7 @@ export class UserService {
       phone: true,
       role: true,
       status: true,
+      profile: { select: { photo: { select: { url: true } } } },
     };
     if (role && [Role.ADMIN, Role.SUADMIN].includes(role as any)) {
       return {
@@ -130,7 +132,9 @@ export class UserService {
       .findMany(params)
       .catch((err) => HandlerError(err))) as unknown as User[];
     const total = await this.prisma.user.count({ where: { deleted: false } });
-    return { result: data, total };
+
+    const result = Users.from(data).users;
+    return { result, total };
   }
 
   async createUser(params: Prisma.UserCreateArgs): Promise<User> {

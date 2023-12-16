@@ -8,6 +8,7 @@ export class User implements Users {
   readonly username: string;
   readonly firstname: string;
   readonly lastname: string;
+  readonly avatar?: string;
   readonly role: Role;
   readonly status: UserStatus;
   readonly createdAt: Date;
@@ -26,7 +27,12 @@ export class User implements Users {
   readonly currentHashedRefreshToken: string;
 
   constructor(user: Partial<Users>) {
-    Object.assign(this, user);
+    const { profile, ...rest } = user as any;
+    Object.assign(this, rest);
+
+    if (profile?.photo?.url) {
+      this.avatar = profile.photo.url;
+    }
   }
 
   static from(user: Partial<Users>): User {

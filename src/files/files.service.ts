@@ -147,7 +147,7 @@ export class FilesService {
 
   async fileToMinioStorage(file: Express.Multer.File, newFolderPath: string) {
     try {
-      this.createOrExistsBucket(this.bucket);
+      await this.createOrExistsBucket(this.bucket);
       const data = new StreamableFile(createReadStream(file.path));
       await this.minioService.client.putObject(
         this.bucket,

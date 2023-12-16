@@ -34,30 +34,40 @@ export class UserController {
   @ApiCreatedResponse({
     type: UserResponse,
   })
-  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
+  @Auth(EnumUserRole.WORKER, EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.USER)
+  @Auth(EnumUserRole.WORKER, EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
   @Get()
   @ApiOkResponse({ type: GetAllResponseDto })
   findAllUser(@Query() query: GetAllQueryDto) {
     return this.userService.findAll({ skip: +query?.skip, take: +query?.take });
   }
 
-  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.USER)
+  @Auth(
+    EnumUserRole.WORKER,
+    EnumUserRole.SUADMIN,
+    EnumUserRole.ADMIN,
+    EnumUserRole.USER,
+  )
   @Get('profile')
   getProfile(@GetUser() user: UserPayload) {
     return this.userService.findOne(+user.id);
   }
   @Get(':id')
-  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
+  @Auth(EnumUserRole.WORKER, EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
   findOneUser(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findOne(+id);
   }
 
-  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN, EnumUserRole.USER)
+  @Auth(
+    EnumUserRole.WORKER,
+    EnumUserRole.SUADMIN,
+    EnumUserRole.ADMIN,
+    EnumUserRole.USER,
+  )
   @Patch('updateReview-profile')
   updateProfile(
     @GetUser() user: User,
@@ -66,7 +76,7 @@ export class UserController {
     return this.userService.updateProfileUser(user, updateUserProfileDto);
   }
 
-  @Auth(EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
+  @Auth(EnumUserRole.WORKER, EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
   @Patch(':id')
   updateUser(
     @Param('id', ParseIntPipe) id: string,
@@ -76,6 +86,7 @@ export class UserController {
     return this.userService.update(+id, updateUserDto, user);
   }
 
+  @Auth(EnumUserRole.WORKER, EnumUserRole.SUADMIN, EnumUserRole.ADMIN)
   @Delete(':id')
   removeUser(@Param('id', ParseIntPipe) id: string) {
     return this.userService.remove(+id);
