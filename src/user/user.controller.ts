@@ -54,7 +54,7 @@ export class UserController {
   )
   @Get('profile')
   getProfile(@GetUser() user: UserPayload) {
-    return this.userService.findOne(+user.id);
+    return this.userService.findOneProfile(+user.id);
   }
   @Get(':id')
   @Auth(EnumUserRole.WORKER, EnumUserRole.SUADMIN, EnumUserRole.ADMIN)

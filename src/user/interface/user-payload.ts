@@ -8,4 +8,5 @@ export interface UserPayload {
   role: string;
   status: string;
   createdAt: string;
+  avatar?: string;
 }

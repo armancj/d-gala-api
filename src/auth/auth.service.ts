@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { EnumEnvAuth } from './config/env-auth.enum';
 import { UserStatus } from '@prisma/client';
 import { EnumUserRole } from '../user/enum/user-role.enum';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -49,13 +50,14 @@ export class AuthService {
             { phone: username },
           ],
         },
+        include: { profile: { select: { photo: true } } },
       })
       .catch(() => null);
     if (user && (await this.verifyPassword(pass, user?.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, salt, deleted, currentHashedRefreshToken, ...result } =
         user;
-      return result;
+      return User.from(result);
     }
     return null;
   }

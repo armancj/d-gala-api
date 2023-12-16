@@ -63,6 +63,16 @@ export class UserService {
   }
 
   async findOne(id: number, user?: User) {
+    const userData = await this.userWhereUnique({
+      where: { id },
+      select: {
+        ...this.getSelectUser(user?.role),
+        profile: { include: { photo: { select: { name: true, url: true } } } },
+      },
+    });
+    return UserEntity.from(userData);
+  }
+  async findOneProfile(id: number, user?: User) {
     return await this.userWhereUnique({
       where: { id },
       select: {
@@ -94,10 +104,9 @@ export class UserService {
   async userWhereUnique(
     params: Prisma.UserFindUniqueOrThrowArgs,
   ): Promise<User | null> {
-    const user = await this.prisma.user
+    return await this.prisma.user
       .findUniqueOrThrow(params)
       .catch((err) => HandlerError(err));
-    return UserEntity.from(user);
   }
 
   async userFindFirstArgs(params: Prisma.UserFindFirstArgsBase): Promise<User> {
