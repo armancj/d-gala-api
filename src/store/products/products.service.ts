@@ -12,6 +12,7 @@ import { User, Prisma } from '@prisma/client';
 import { stringReplaceUnderscore } from '../../common/utils/check-slug-insert.function';
 import { ProductInput } from './interface/product-input.interface';
 import { Products } from './entities/product.entity';
+import { ProductsAll } from './entities/products.entity';
 
 @Injectable()
 export class ProductsService {
@@ -56,7 +57,7 @@ export class ProductsService {
   ): Promise<GetAllResponseDto> {
     const { orderBy, skip, take, status, gender, takeImage, colors } =
       getAllQueryDto;
-    const result = (await this.prisma.product.findMany({
+    const products = (await this.prisma.product.findMany({
       where: {
         deleted: false,
         gender,
@@ -68,6 +69,7 @@ export class ProductsService {
         photo: { select: { id: true, name: true, url: true }, take: takeImage },
         reviews: { select: { id: true, rating: true } },
         colors,
+        categories: { select: { name: true } },
         createdAt: true,
         updatedAt: true,
       },
@@ -78,7 +80,9 @@ export class ProductsService {
     const total = await this.prisma.product.count({
       where: { deleted: false },
     });
-    const count = result.length;
+    const count = products.length;
+
+    const result = ProductsAll.from(products).products;
 
     return { result, count, total };
   }
@@ -102,6 +106,7 @@ export class ProductsService {
             select: { id: true, name: true, url: true, color: true },
           },
           reviews: { select: { id: true, rating: true } },
+          categories: { select: { name: true } },
         },
       })
       .catch((err) =>
@@ -208,10 +213,10 @@ export class ProductsService {
       slug: true,
       tags: true,
       stars: true,
+	    status: true,
       viewCount: true,
       reviewsTotal: true,
       _count: false,
-      status: false,
       categories: false,
       items: false,
       deleted: false,
