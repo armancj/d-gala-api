@@ -109,11 +109,10 @@ export class FilesService {
         const minioData = await this.fileToMinioStorage(file, newFolderPath);
         const photoInput = this.createPhotoInput({ minioData, file, photoId });
 
-        if (photoId?.colorId)
-          return prisma.colors.update({
-            where: { id: photoId.colorId },
-            data: { url: photoInput.url },
-          });
+        prisma.colors.update({
+          where: { id: photoId.colorId },
+          data: { url: photoInput.url },
+        });
 
         return prisma.photo.create({
           data: { ...photoInput, color },
