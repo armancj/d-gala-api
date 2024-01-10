@@ -213,7 +213,7 @@ export class ProductsService {
       slug: true,
       tags: true,
       stars: true,
-	    status: true,
+      status: true,
       viewCount: true,
       reviewsTotal: true,
       _count: false,

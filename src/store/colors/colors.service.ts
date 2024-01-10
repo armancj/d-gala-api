@@ -81,6 +81,7 @@ export class ColorsService {
 
   async update(id: number, updateColorDto: UpdateColorDto): Promise<Colors> {
     const color = await this.findOne(id);
+
     if (color.hexadecimal === updateColorDto?.hexadecimal) return color;
 
     if (color.colorDefault)
@@ -88,7 +89,20 @@ export class ColorsService {
         color.productId,
         updateColorDto?.hexadecimal,
       );
-    return this.prisma.colors.update({ where: { id }, data: updateColorDto });
+
+    const colorUpdated: Prisma.ColorsUpdateInput = { ...updateColorDto };
+
+    if (color.url === 'updated_url')
+      colorUpdated.url = (
+        await this.prisma.photo.findFirst({
+          where: { productId: color.productId, color: color.hexadecimal },
+        })
+      ).url;
+
+    return this.prisma.colors.update({
+      where: { id },
+      data: colorUpdated,
+    });
   }
 
   async remove(id: number) {
