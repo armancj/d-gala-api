@@ -7,5 +7,6 @@ import { ProductsModule } from '../products/products.module';
   imports: [ProductsModule],
   controllers: [ColorsController],
   providers: [ColorsService],
+  exports: [ColorsService],
 })
 export class ColorsModule {}

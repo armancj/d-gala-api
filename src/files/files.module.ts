@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import minioConfig from './config/minio.config';
 import { MinioModule } from 'nestjs-minio-client';
 import { APP_CONFIG_MINIO } from './config/constant';
+import { ColorsModule } from '../store/colors/colors.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { APP_CONFIG_MINIO } from './config/constant';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => config.get(APP_CONFIG_MINIO),
     }),
+    ColorsModule,
   ],
   controllers: [FilesController],
   providers: [FilesService],

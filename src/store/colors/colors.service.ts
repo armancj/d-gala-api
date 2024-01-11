@@ -8,6 +8,7 @@ import { prismaTable } from '../../config/app.constant';
 import { ProductsService } from '../products/products.service';
 import { HandlerError } from '../../common/utils/handler-error';
 import { Colors, Prisma } from '@prisma/client';
+import { id } from 'date-fns/locale';
 
 @Injectable()
 export class ColorsService {
@@ -101,6 +102,29 @@ export class ColorsService {
 
     return this.prisma.colors.update({
       where: { id },
+      data: colorUpdated,
+    });
+  }
+  async updateByColorAndProductId(
+    productId: number,
+    hexadecimal: string,
+  ): Promise<Colors> {
+    const color = await this.prisma.colors.findFirst({
+      where: { productId, hexadecimal },
+    });
+
+    if (!color) return;
+
+    const colorUpdated: Prisma.ColorsUpdateInput = { ...color };
+
+    colorUpdated.url = (
+      await this.prisma.photo.findFirst({
+        where: { productId, color: hexadecimal },
+      })
+    ).url;
+
+    return this.prisma.colors.update({
+      where: { id: color.id },
       data: colorUpdated,
     });
   }

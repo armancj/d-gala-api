@@ -40,11 +40,15 @@ import { User } from '@prisma/client';
 import { ExcludeInterceptor } from './decorators/exclude-interceptor.decorator';
 import { ColorFilterDto } from '../common/dto';
 import { FilesProductResponseDto } from './dto/files-product-response.dto';
+import { ColorsService } from '../store/colors/colors.service';
 
 @ApiTags('Files - Download and Upload')
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(
+    private readonly filesService: FilesService,
+    private readonly colorsService: ColorsService,
+  ) {}
 
   @Public()
   @ExcludeInterceptor()
@@ -105,11 +109,18 @@ export class FilesController {
     @UploadedFiles()
     files: Array<Express.Multer.File>,
   ) {
-    return await this.filesService.uploadsFileToProduct(
+    const data = await this.filesService.uploadsFileToProduct(
       files,
       productId,
       color?.hexadecimal,
     );
+    if (color?.hexadecimal)
+      await this.colorsService.updateByColorAndProductId(
+        productId,
+        color.hexadecimal,
+      );
+
+    return data;
   }
 
   @Post('uploads/color/:colorId')
