@@ -8,7 +8,6 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Put,
   Query,
   Res,
   StreamableFile,
@@ -114,6 +113,7 @@ export class FilesController {
       productId,
       color?.hexadecimal,
     );
+
     if (color?.hexadecimal)
       await this.colorsService.updateByColorAndProductId(
         productId,
@@ -136,6 +136,7 @@ export class FilesController {
     @Param('colorId', ParseIntPipe) colorId: number,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
+    console.log('here');
     return await this.filesService.uploadsFileToColors(files, colorId);
   }
 
