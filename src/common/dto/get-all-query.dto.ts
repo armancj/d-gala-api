@@ -1,5 +1,11 @@
 import { DefaultValue } from '../enum/default-value.enum';
-import { IsNumber, IsOptional, IsPositive, Min } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Min,
+} from 'class-validator';
 
 export class GetAllQueryDto {
   @IsOptional()
@@ -11,4 +17,8 @@ export class GetAllQueryDto {
   @IsNumber()
   @IsPositive()
   take?: number = DefaultValue.Limit;
+
+  @IsString()
+  @IsOptional()
+  search?: string;
 }
