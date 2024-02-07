@@ -55,14 +55,25 @@ export class ProductsService {
     getAllQueryDto: QueryProductsDto,
     select?: Prisma.ProductSelect,
   ): Promise<GetAllResponseDto> {
-    const { search, orderBy, skip, take, status, gender, takeImage, colors } =
-      getAllQueryDto;
+    const {
+      categoryId,
+      search,
+      orderBy,
+      skip,
+      take,
+      status,
+      gender,
+      takeImage,
+      colors,
+    } = getAllQueryDto;
 
     const where: Prisma.ProductWhereInput = {
       deleted: false,
       gender,
       status,
     };
+
+    if (categoryId) where.categories = { every: { id: categoryId } };
 
     if (search) where.name = { contains: search, mode: 'insensitive' };
 

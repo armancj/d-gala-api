@@ -1,4 +1,4 @@
-import { IsIn, IsOptional } from 'class-validator';
+import { IsIn, IsInt, IsNumber, IsOptional, IsPositive } from 'class-validator';
 import { GenderType } from '../enum/gender-type.enum';
 import { ProductStatus } from '../enum/product-status.enum';
 
@@ -10,4 +10,10 @@ export class GetStatusFilterDto {
   @IsOptional()
   @IsIn([GenderType])
   readonly status?: ProductStatus;
+
+  @IsOptional()
+  @IsNumber()
+  @IsInt()
+  @IsPositive()
+  readonly categoryId?: number;
 }
